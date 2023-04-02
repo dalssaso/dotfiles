@@ -12,5 +12,5 @@ PS1='[\u@\h \W]\$ '
 source .workrc
 source .personalrc
 
-EDITOR=nvim
-BAT_THEME="Catppuccin-frappe"
+export EDITOR=nvim
+export BAT_THEME="Catppuccin-frappe"
