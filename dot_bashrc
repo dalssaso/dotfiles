@@ -13,3 +13,4 @@ source .workrc
 source .personalrc
 
 EDITOR=nvim
+BAT_THEME="Catppuccin-frappe"
