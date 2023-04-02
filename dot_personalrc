@@ -1,0 +1,7 @@
+# vim set ft=sh
+export LS_COLORS=$(vivid generate catppuccin-frappe)
+
+alias vim='nvim'
+alias v='nvim'
+alias ls='exa --git --icons'
+
