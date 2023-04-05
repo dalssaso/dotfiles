@@ -2,6 +2,10 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
+if test "$TERM" = "xterm-kitty"
+    alias ssh="kitty +kitten ssh"
+end
+
 starship init fish | source
 zoxide init fish | source
 
