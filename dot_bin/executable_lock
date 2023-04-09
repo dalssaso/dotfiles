@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -x
+
+wallpaper_path=$(tail -1 $HOME/.fehbg | cut -d" " -f4 |tr -d "'")
+wallpaper_blurred="$(echo $wallpaper_path | cut -d"." -f1-2)-blurred.png"
+
+if [[ -f "$wallpaper_blurred" ]]; then
+    :
+else
+    convert $wallpaper_path -blur 0x9 $wallpaper_blurred
+fi
+
+i3lock -i $wallpaper_blurred
+
+
