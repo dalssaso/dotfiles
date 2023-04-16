@@ -10,5 +10,3 @@ mason_null_ls.setup({
 })
 
 null_ls.setup()
-
-mason_null_ls.setup_handlers()
