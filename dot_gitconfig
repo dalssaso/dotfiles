@@ -1,8 +1,13 @@
 # set ft=git_config
 
 [user]
-	name = Henrique Dalssaso
-	email = henrique@dalssaso.com.br
+    name = Henrique Dalssaso
+
+[includeIf "gitdir:~/src/work/"]
+    path = ~/.gitconfig-work
+
+[includeIf "gitdir:~/src/personal/"]
+    path = ~/.gitconfig-personal
 
 [core]
     pager = delta
