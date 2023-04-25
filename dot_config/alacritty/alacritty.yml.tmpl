@@ -1,3 +1,4 @@
+# vi: set ft=yaml
 # Configuration for Alacritty, the GPU enhanced terminal emulator.
 
 # Import additional configuration files
@@ -165,7 +166,16 @@ font:
     style: Bold Italic
 
   # Point size
+  
+{{- if eq .chezmoi.os "linux" }}
+{{-   if eq .chezmoi.osRelease.id "arch" }}
+{{-     if contains "desktop" (output "hostnamectl" "chassis") }}
+  size: 10.0
+{{-     else if contains "laptop" (output "hostnamectl" "chassis") }}
   size: 8.0
+{{-    end }}
+{{-  end }}
+{{- end }}
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
