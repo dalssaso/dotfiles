@@ -29,6 +29,10 @@ if test -f $HOME/.asdf/asdf.fish
     source $HOME/.asdf/asdf.fish
 end
 
+set -xg GDK_SCALE "2"
+set -xg GDK_DPI_SCALE "0.5"
+# set -xg QT_AUTO_SCREEN_SCALE_FACTOR "1"
+
 # Disable greeting message
 set fish_greeting
 
