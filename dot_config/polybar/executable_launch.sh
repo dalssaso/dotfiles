@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 if [[ ! $(pidof polybar) ]]; then
-    polybar -q -c $HOME/.config/polybar/config.ini top &
+    for m in $(polybar --list-monitors | cut -d":" -f1); do
+        MONITOR=$m polybar --reload top &
+    done
 else
     polybar-msg cmd restart
 fi
-
