@@ -1,0 +1,7 @@
+Xft.dpi: 163
+Xft.antialias: 1
+Xft.hinting: 1
+Xft.hintstyle: hintsfull
+Xft.rgba: rgb
+Xcursor.size: 32
+! Xcursor.theme: Catppuccin-Mocha-Dark-Cursors
