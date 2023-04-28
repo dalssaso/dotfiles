@@ -9,7 +9,7 @@ end
 starship init fish | source
 enable_transience
 
-if test "$TERM" = "xterm-kitty"
+if test "$TERM" = xterm-kitty
     alias ssh="kitty +kitten ssh"
 end
 
@@ -29,7 +29,7 @@ if test -f $HOME/.asdf/asdf.fish
     source $HOME/.asdf/asdf.fish
 end
 
-set -xg GDK_SCALE "2"
+set -xg GDK_SCALE 2
 set -xg GDK_DPI_SCALE "0.5"
 # set -xg QT_AUTO_SCREEN_SCALE_FACTOR "1"
 
@@ -37,8 +37,8 @@ set -xg GDK_DPI_SCALE "0.5"
 set fish_greeting
 
 
-set -xg BAT_THEME "Catppuccin-mocha"
-set -xg EDITOR "nvim"
+set -xg BAT_THEME Catppuccin-mocha
+set -xg EDITOR nvim
 set -xg SSH_AUTH_SOCK $XDG_RUNTIME_DIR/keyring/ssh
 set -xg LS_COLORS (vivid generate catppuccin-mocha)
 
