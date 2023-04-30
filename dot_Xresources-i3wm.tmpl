@@ -1,0 +1,13 @@
+{{- if eq .chezmoi.os "linux" }}
+{{-   if eq .chezmoi.osRelease.id "arch" }}
+{{-     if contains "desktop" (output "hostnamectl" "chassis") }}
+Xft.dpi: 163
+Xft.antialias: 1
+Xft.hinting: 1
+Xft.hintstyle: hintsfull
+Xft.rgba: rgb
+Xcursor.size: 32
+! Xcursor.theme: Catppuccin-Mocha-Dark-Cursors
+{{-    end }}
+{{-  end }}
+{{- end }}
