@@ -29,9 +29,11 @@ if test -f $HOME/.asdf/asdf.fish
     source $HOME/.asdf/asdf.fish
 end
 
-set -xg GDK_SCALE 2
-set -xg GDK_DPI_SCALE "0.5"
-# set -xg QT_AUTO_SCREEN_SCALE_FACTOR "1"
+if test (hostnamectl chassis) = desktop
+    set -xg GDK_SCALE 2
+    set -xg GDK_DPI_SCALE "0.5"
+    # set -xg QT_AUTO_SCREEN_SCALE_FACTOR "1"
+end
 
 # Disable greeting message
 set fish_greeting
@@ -42,17 +44,24 @@ set -xg EDITOR nvim
 set -xg SSH_AUTH_SOCK $XDG_RUNTIME_DIR/keyring/ssh
 set -xg LS_COLORS (vivid generate catppuccin-mocha)
 
+# catppuccin-frappe
 # set -xg FZF_DEFAULT_OPTS "\
 # --color=bg+:#414559,bg:#303446,spinner:#f2d5cf,hl:#e78284 \
 # --color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
 # --color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"
 
-set -xg FZF_DEFAULT_OPTS "\
---color=fg:#c0caf5,bg:#1a1b26,hl:#ff9e64 \
---color=fg+:#c0caf5,bg+:#1a1b26,hl+:#ff9e64 \
---color=info:#7aa2f7,prompt:#7aa2f7,pointer:#db4b4b \
---color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a"
+# tokyonight
+# set -xg FZF_DEFAULT_OPTS "\
+# --color=fg:#c0caf5,bg:#1a1b26,hl:#ff9e64 \
+# --color=fg+:#c0caf5,bg+:#1a1b26,hl+:#ff9e64 \
+# --color=info:#7aa2f7,prompt:#7aa2f7,pointer:#db4b4b \
+# --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a"
 
+# catppuccin-mocha
+set -Ux FZF_DEFAULT_OPTS "\
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
 alias vim='nvim'
 alias v='nvim'
