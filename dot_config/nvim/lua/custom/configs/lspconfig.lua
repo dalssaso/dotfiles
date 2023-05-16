@@ -15,7 +15,6 @@ local servers = {
   "pylsp",
   "rust_analyzer",
   "terraformls",
-  "yamlls",
 }
 
 for _, lsp in ipairs(servers) do
@@ -25,5 +24,13 @@ for _, lsp in ipairs(servers) do
   }
 end
 
--- 
+--
 -- lspconfig.pyright.setup { blabla}
+--
+lspconfig.yamlls.setup {
+  settings = {
+    yaml = {
+      keyOrdering = false,
+    }
+  }
+}
