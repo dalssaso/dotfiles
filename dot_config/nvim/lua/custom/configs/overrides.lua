@@ -67,7 +67,6 @@ M.mason = {
     "fixjson",
     "gofumpt",
     "goimports",
-    "hclfmt",
     "isort",
     "nixfmt",
     "nixpkgs_fmt",
@@ -86,7 +85,7 @@ M.mason = {
     "hadolint",
     "jsonlint",
     "markdownlint",
-    "shellsheck",
+    "shellcheck",
     "staticcheck",
 
 
@@ -107,6 +106,42 @@ M.nvimtree = {
       },
     },
   },
+}
+
+M.telescope = {
+  defaults = {
+    initial_mode = "insert",
+    -- mappings = {
+    --   n = {
+    --     ["q"] = require("telescope.actions").close
+    --   },
+    --   i = {
+    --     ["<C-n>"] = require("telescope.actions").cycle_history_next,
+    --     ["<C-p>"] = require("telescope.actions").cycle_history_prev,
+    --     ["<C-j>"] = require("telescope.actions").move_selection_next,
+    --     ["<C-k>"] = require("telescope.actions").move_selection_previous,
+    --   }
+    -- }
+  }
+}
+
+M.cmp = {
+  options = {
+    mapping = {
+    ["<C-k>"] = require("cmp").mapping.select_prev_item(),
+    ["<C-j>"] = require("cmp").mapping.select_next_item(),
+    ["<Tab>"] = require("cmp").mapping(function(fallback)
+      if require("cmp").visible() then
+        require("cmp").select_next_item()
+      else
+        fallback()
+      end
+    end, {
+      "i",
+      "s",
+    }),
+    }
+  }
 }
 
 return M
