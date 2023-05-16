@@ -52,6 +52,16 @@ local plugins = {
     ft = "helm",
   },
 
+  {
+    "nvim-telescope/telescope.nvim",
+    opts = overrides.telescope,
+  },
+
+  {
+    "hrsh7th/nvim-cmp",
+    opts = overrides.cmp
+  },
+
   -- To make a plugin not be loaded
   -- {
   --   "NvChad/nvim-colorizer.lua",
