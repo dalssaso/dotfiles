@@ -25,6 +25,12 @@ if test -d $HOME/.local/bin
     end
 end
 
+if test -d $HOME/.cargo/bin
+    if not contains -- $HOME/.cargo/bin $PATH
+        set -p PATH $PATH $HOME/.cargo/bin
+    end
+end
+
 if test -f $HOME/.asdf/asdf.fish
     source $HOME/.asdf/asdf.fish
 end
@@ -37,7 +43,6 @@ end
 
 # Disable greeting message
 set fish_greeting
-
 
 set -xg BAT_THEME Catppuccin-mocha
 set -xg EDITOR nvim
@@ -70,3 +75,4 @@ alias vi='nvim'
 alias ls='exa --git --group-directories-first --icons'
 alias cat='bat'
 alias kslack='pkill slack'
+
