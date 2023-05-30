@@ -11,7 +11,7 @@ set $mod Mod4
 
 include ~/.config/i3/theme
 
-for_window [class=".*"] border pixel 1 #*
+for_window [class=".*"] border pixel 1
 gaps inner 5
 gaps outer 1
 
@@ -57,9 +57,12 @@ bindsym XF86AudioMute exec --no-startup-id $HOME/.bin/volumectl mute
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 bindsym XF86MonBrightnessUp exec --no-startup-id $HOME/.bin/brightness-ctl up
 bindsym XF86MonBrightnessDown exec --no-startup-id $HOME/.bin/brightness-ctl down
-bindsym XF86AudioNext exec --no-startup-id playerctl -p spotify,%any,brave next
-bindsym XF86AudioPrev exec --no-statup-id playerctl -p spotify,%any,brave previous
-bindsym XF86AudioPlay exec --no-startup-id playerctl -p spotify,%any,brave play-pause
+# I3 is dumb enough to not undestand comman in commands and complain so that's why the wrapper
+bindsym XF86AudioNext exec --no-startup-id $HOME/.bin/playerctl-i3-wrapper.sh next
+bindsym XF86AudioPrev exec --no-startup-id $HOME/.bin/playerctl-i3-wrapper.sh previous
+bindsym XF86AudioPlay exec --no-startup-id $HOME/.bin/playerctl-i3-wrapper.sh play-pause
+
+# playerctl -p spotify,%any,firefox,chromium,brave,mpd
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
