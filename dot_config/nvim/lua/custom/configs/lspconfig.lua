@@ -29,8 +29,18 @@ end
 --
 lspconfig.yamlls.setup {
   settings = {
+    redhat = {
+      telemetry = {
+        enabled = false,
+      },
+    },
     yaml = {
       keyOrdering = false,
-    }
+      customTags = {
+        "!reference sequence",
+        "!RequiredEnv scalar",
+        "!SecretEnv scalar",
+      },
+    },
   }
 }
