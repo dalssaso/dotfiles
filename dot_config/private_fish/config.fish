@@ -31,6 +31,8 @@ if test -d $HOME/.cargo/bin
     end
 end
 
+set -gx PATH $PATH $HOME/.krew/bin
+
 if test -f $HOME/.asdf/asdf.fish
     source $HOME/.asdf/asdf.fish
 end
