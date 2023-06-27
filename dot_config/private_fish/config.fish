@@ -1,3 +1,7 @@
+if test -d /opt/homebrew/bin
+    set -p PATH $PATH /opt/homebrew/bin
+end
+
 if status is-interactive
     zoxide init fish | source
 end
@@ -37,18 +41,12 @@ if test -f $HOME/.asdf/asdf.fish
     source $HOME/.asdf/asdf.fish
 end
 
-if test (hostnamectl chassis) = desktop
-    set -xg GDK_SCALE 2
-    set -xg GDK_DPI_SCALE "0.5"
-    # set -xg QT_AUTO_SCREEN_SCALE_FACTOR "1"
-end
 
 # Disable greeting message
 set fish_greeting
 
 set -xg BAT_THEME Catppuccin-mocha
 set -xg EDITOR nvim
-set -xg SSH_AUTH_SOCK $XDG_RUNTIME_DIR/keyring/ssh
 set -xg LS_COLORS (vivid generate catppuccin-mocha)
 
 # catppuccin-frappe
@@ -58,11 +56,11 @@ set -xg LS_COLORS (vivid generate catppuccin-mocha)
 # --color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"
 
 # tokyonight
-# set -xg FZF_DEFAULT_OPTS "\
-# --color=fg:#c0caf5,bg:#1a1b26,hl:#ff9e64 \
-# --color=fg+:#c0caf5,bg+:#1a1b26,hl+:#ff9e64 \
-# --color=info:#7aa2f7,prompt:#7aa2f7,pointer:#db4b4b \
-# --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a"
+set -xg FZF_DEFAULT_OPTS "\
+--color=fg:#c0caf5,bg:#1a1b26,hl:#ff9e64 \
+--color=fg+:#c0caf5,bg+:#1a1b26,hl+:#ff9e64 \
+--color=info:#7aa2f7,prompt:#7aa2f7,pointer:#db4b4b \
+--color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a"
 
 # catppuccin-mocha
 set -Ux FZF_DEFAULT_OPTS "\
@@ -76,5 +74,4 @@ alias vi='nvim'
 
 alias ls='exa --git --group-directories-first --icons'
 alias cat='bat'
-alias kslack='pkill slack'
-
+# alias docker='podman'
