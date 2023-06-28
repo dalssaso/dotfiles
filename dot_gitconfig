@@ -2,6 +2,7 @@
 
 [user]
     name = Henrique Dalssaso
+    email = henrique@dalssaso.com.br
 
 [includeIf "gitdir:~/src/work/"]
     path = ~/.gitconfig-work
