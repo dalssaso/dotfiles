@@ -34,7 +34,6 @@ local sources = {
   diagnostics.fish,
   diagnostics.gitlint,
   diagnostics.golangci_lint,
-  diagnostics.gospel,
   diagnostics.hadolint,
   diagnostics.jsonlint,
   diagnostics.markdownlint,
