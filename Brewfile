@@ -18,6 +18,7 @@ cask "skype"
 cask "slack"
 cask "wezterm"
 cask "zoom"
+cask "whatsapp"
 
 
 brew "age"
