@@ -12,3 +12,5 @@ direnv system
 glab system
 vault system
 helmfile 0.137.0
+kustomize 3.8.9
+pluto 5.17.0

@@ -120,6 +120,12 @@
         "options": {
           "full_name": "jetbrains-toolbox"
         }
+      },
+      "orbstack": {
+        "version": "0.14.1_2053",
+        "options": {
+          "full_name": "orbstack"
+        }
       }
     },
     "brew": {
@@ -212,7 +218,7 @@
         }
       },
       "neovim": {
-        "version": "HEAD-e85e7fc",
+        "version": "HEAD-957d05d",
         "bottle": {
           "rebuild": 0,
           "root_url": "https://ghcr.io/v2/homebrew/core",
@@ -1982,7 +1988,7 @@
     },
     "tap": {
       "homebrew/cask-fonts": {
-        "revision": "ab8647b238b73b8e512c08280a07511fa53a567b"
+        "revision": "5213034442c299c6321e36064c195ea0b6fe8b68"
       },
       "hashicorp/tap": {
         "revision": "6be9ed289d01b1abb21dc3da5144bd2ec4d2a0fe"
