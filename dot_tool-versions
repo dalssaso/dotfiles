@@ -6,7 +6,7 @@ task 3.26.0
 yq v4.25.2
 helm 3.8.2
 vcluster 0.15.2
-awscli 2.12.3
+awscli system
 kops v1.22.5
 direnv system
 glab system

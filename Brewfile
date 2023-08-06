@@ -26,6 +26,7 @@ cask "zoom"
 
 
 brew "age"
+brew "awscli"
 brew "bat"
 brew "btop"
 brew "chezmoi"
@@ -58,6 +59,7 @@ brew "neovim", args: ["HEAD"]
 brew "nmap"
 brew "openconnect"
 brew "openssl"
+brew "pulumi"
 brew "readline"
 brew "ripgrep"
 brew "rustup-init"
