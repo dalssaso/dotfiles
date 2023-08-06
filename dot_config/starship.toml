@@ -18,6 +18,9 @@ truncation_length = 4
 # Catppuccin 'lavender'
 style = "bold blue"
 
+[battery]
+disabled = true
+
 [aws]
 symbol = " "
 
