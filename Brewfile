@@ -72,3 +72,5 @@ brew "xz"
 brew "zellij"
 brew "zlib"
 brew "zoxide"
+
+mas "Tailscale", id: 1475387142
