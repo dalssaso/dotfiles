@@ -23,6 +23,12 @@ if test -d $HOME/.bin
     end
 end
 
+if test -d /opt/homebrew/opt/gnupg@2.2/bin
+  if not contains -- /opt/homebrew/opt/gnupg@2.2/bin $PATH
+    set -p PATH /opt/homebrew/opt/gnupg@2.2/bin $PATH
+  end
+end
+
 if test -d $HOME/.local/bin
     if not contains -- $HOME/.local/bin $PATH
         set -p PATH $PATH $HOME/.local/bin
