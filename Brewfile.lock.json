@@ -62,7 +62,7 @@
         }
       },
       "zoom": {
-        "version": "5.15.6.21146",
+        "version": "5.15.7.21404",
         "options": {
           "full_name": "zoom"
         }
@@ -248,7 +248,7 @@
         }
       },
       "neovim": {
-        "version": "HEAD-e85e7fc",
+        "version": "HEAD-957d05d",
         "bottle": {
           "rebuild": 0,
           "root_url": "https://ghcr.io/v2/homebrew/core",
@@ -2569,10 +2569,10 @@
         "revision": "af21856f6d11cbf0833adda6d62d742f76154e36"
       },
       "hashicorp/tap": {
-        "revision": "9fd4648803b4ca8f7156fe81bf336b0716842383"
+        "revision": "047e0e35e133c77c1bf6fc5468bde7dc272500b0"
       },
       "railwaycat/emacsmacport": {
-        "revision": "047e0e35e133c77c1bf6fc5468bde7dc272500b0"
+        "revision": "7af2b70165371d01b569ef3089f49045079b3218"
       },
       "tilt-dev/tap": {
         "revision": "a8c73acec919d29eeb12c69b92400af8acecb85b"
@@ -2593,7 +2593,7 @@
         "Homebrew/homebrew-core": "api",
         "CLT": "14.3.1.0.1.1683849156",
         "Xcode": "14.3",
-        "macOS": "13.5"
+        "macOS": "13.4.1"
       }
     }
   }
