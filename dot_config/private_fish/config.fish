@@ -41,6 +41,15 @@ if test -d $HOME/.cargo/bin
     end
 end
 
+if test -d /opt/homebrew/opt/postgresql@15/bin
+  set -g LDFLAGS "-L/opt/homebrew/opt/postgresql@15/lib"
+  set -g CPPFLAGS "-I/opt/homebrew/opt/postgresql@15/include"
+
+  if not contains -- /opt/homebrew/opt/postgresql@15/bin $PATH
+    set -p PATH /opt/homebrew/opt/postgresql@15/bin $PATH
+  end
+end
+
 set -gx PATH $PATH $HOME/.krew/bin
 
 if test -f $HOME/.asdf/asdf.fish
