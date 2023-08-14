@@ -162,6 +162,12 @@
         "options": {
           "full_name": "visual-studio-code"
         }
+      },
+      "font-meslo-lg-nerd-font": {
+        "version": "3.0.2",
+        "options": {
+          "full_name": "font-meslo-lg-nerd-font"
+        }
       }
     },
     "brew": {
