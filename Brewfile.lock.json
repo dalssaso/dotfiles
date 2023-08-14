@@ -156,6 +156,12 @@
         "options": {
           "full_name": "vlc"
         }
+      },
+      "visual-studio-code": {
+        "version": "1.81.1",
+        "options": {
+          "full_name": "visual-studio-code"
+        }
       }
     },
     "brew": {
@@ -248,7 +254,7 @@
         }
       },
       "neovim": {
-        "version": "HEAD-957d05d",
+        "version": "HEAD-e85e7fc",
         "bottle": {
           "rebuild": 0,
           "root_url": "https://ghcr.io/v2/homebrew/core",
@@ -2616,7 +2622,7 @@
         "revision": "047e0e35e133c77c1bf6fc5468bde7dc272500b0"
       },
       "railwaycat/emacsmacport": {
-        "revision": "7af2b70165371d01b569ef3089f49045079b3218"
+        "revision": "cdfc9ac0b6ba8229ecf6b7d54c3b3d136f2eb69e"
       },
       "tilt-dev/tap": {
         "revision": "a8c73acec919d29eeb12c69b92400af8acecb85b"
@@ -2632,12 +2638,12 @@
   "system": {
     "macos": {
       "ventura": {
-        "HOMEBREW_VERSION": "4.1.4",
+        "HOMEBREW_VERSION": "4.1.5",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "14.3.1.0.1.1683849156",
         "Xcode": "14.3",
-        "macOS": "13.4.1"
+        "macOS": "13.5"
       }
     }
   }
