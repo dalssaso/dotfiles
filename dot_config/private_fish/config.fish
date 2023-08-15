@@ -78,6 +78,8 @@ end
 
 set -gx PATH $PATH $HOME/.krew/bin
 
+varclear PATH
+
 if test -f $HOME/.asdf/asdf.fish
   source $HOME/.asdf/asdf.fish
 end
