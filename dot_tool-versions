@@ -16,3 +16,5 @@ vcluster 0.15.2
 yq v4.25.2
 shfmt system
 shellcheck system
+make system
+pre-commit system
