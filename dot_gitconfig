@@ -35,3 +35,6 @@
 	autoSetupRemote = true
 [remote "origin"]
 	fetch = +refs/merge-requests/*:refs/remotes/origin/merge-requests/*
+
+[github]
+  user = dalssaso

@@ -10,3 +10,4 @@ honnef.co/go/tools/cmd/staticcheck@latest
 github.com/golangci/golangci-lint/cmd/golangci-lint@v1.54.2
 golang.org/x/tools/cmd/goimports@latest
 github.com/securego/gosec/v2/cmd/gosec@latest
+github.com/cosmtrek/air@latest
