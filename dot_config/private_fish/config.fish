@@ -84,6 +84,7 @@ if test -f $HOME/.asdf/asdf.fish
   source $HOME/.asdf/asdf.fish
 end
 
+source ~/.asdf/plugins/golang/set-env.fish
 
 # Disable greeting message
 set fish_greeting

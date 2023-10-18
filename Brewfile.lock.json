@@ -2652,7 +2652,12 @@
         "bottle": false,
         "options": {
           "args": [
-            "with-modules"
+            "with-modules",
+            "with-native-compilation",
+            "with-emacs-sexy-icon",
+            "with-imagemagick",
+            "with-librsvg",
+            "with-no-title-bars"
           ]
         }
       },

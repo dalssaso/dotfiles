@@ -1,7 +1,7 @@
 awscli system
 direnv system
 glab system
-golang 1.20.5
+golang 1.21.3
 helm 3.8.2
 helmfile 0.137.0
 kops v1.22.5

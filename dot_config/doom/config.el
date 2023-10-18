@@ -25,7 +25,7 @@
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 (setq doom-font (font-spec :family "Dank Mono" :size 17 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Dank Mono" :size 17 :weight 'regular)
-      doom-unicode-font (font-spec :family "MesloLGS Nerd Font Mono" :size 17 :weight 'regular)
+      doom-symbol-font (font-spec :family "MesloLGS Nerd Font Mono" :size 17 :weight 'regular)
       doom-big-font (font-spec :family "Dank Mono" :size 22 :weight 'regular))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
@@ -36,7 +36,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-vibrant)
+(setq doom-theme 'doom-tokyo-night)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -106,9 +106,14 @@
 (require 'org-crypt)
 (require 'epa-file)
 (custom-set-variables
-  '(epg-gpg-program "/opt/homebrew/opt/gnupg@2.2/bin/gpg")
-)
+ '(epg-gpg-program "/opt/homebrew/opt/gnupg@2.2/bin/gpg")
+ )
 (epa-file-enable)
 (org-crypt-use-before-save-magic)
 (setq org-tags-exclude-from-inheritance (quote ("crypt")))
 (setq org-crypt-key nil)
+
+;; Fix bash configuration
+(setq shell-file-name (executable-find "bash"))
+(setq-default vterm-shell (executable-find "fish"))
+(setq-default explicit-shell-file-name (executable-find "fish"))
