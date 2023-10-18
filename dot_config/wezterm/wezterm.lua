@@ -13,8 +13,8 @@ end
 -- This is where you actually apply your config choices
 
 -- For example, changing the color scheme:
-config.color_scheme = 'Catppuccin Mocha'
-config.font = wezterm.font 'Cartograph CF'
+config.color_scheme = 'Tokyo Night'
+config.font = wezterm.font 'Dank Mono'
 config.font_size = 17
 
 -- and finally, return the configuration to wezterm
