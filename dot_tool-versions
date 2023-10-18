@@ -7,7 +7,7 @@ helmfile 0.137.0
 kops v1.22.5
 kubectl system
 kustomize 3.8.9
-nodejs 20.3.1
+nodejs 20.8.1
 pluto 5.17.0
 poetry 1.4.2
 task 3.26.0
