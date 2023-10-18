@@ -90,8 +90,9 @@ source ~/.asdf/plugins/golang/set-env.fish
 set fish_greeting
 
 set -xg BAT_THEME Catppuccin-mocha
-set -xg EDITOR nvim
+set -xg EDITOR "emacsclient -t -a ''"
 set -xg LS_COLORS (vivid generate catppuccin-mocha)
+set -xg VISUAL "emacsclient -c -a emacs"
 
 # catppuccin-frappe
 # set -xg FZF_DEFAULT_OPTS "\
