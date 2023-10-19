@@ -15,7 +15,7 @@
 ;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
 ;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
-;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-symbol-font' -- for unicode glyphs
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 ;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
@@ -24,7 +24,7 @@
 ;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 (setq doom-font (font-spec :family "Dank Mono" :size 17 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Dank Mono" :size 17 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Overpass" :size 17 :weight 'regular)
       doom-symbol-font (font-spec :family "MesloLGS Nerd Font Mono" :size 17 :weight 'regular)
       doom-big-font (font-spec :family "Dank Mono" :size 22 :weight 'regular))
 ;;
@@ -40,7 +40,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -113,7 +113,87 @@
 (setq org-tags-exclude-from-inheritance (quote ("crypt")))
 (setq org-crypt-key nil)
 
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                shell-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+(defun cfg/org-font-setup ()
+  ;; Set faces for heading levels
+  (dolist (face '((org-level-1 . 1.15)
+                  (org-level-2 . 1.1)
+                  (org-level-3 . 1.05)
+                  (org-level-4 . 1.0)
+                  (org-level-5 . 1.0)
+                  (org-level-6 . 1.0)
+                  (org-level-7 . 1.0)
+                  (org-level-8 . 1.0)))
+    ;; (set-face-attribute (car face) nil doom-variable-pitch-font))
+    (set-face-attribute (car face) nil :font "Overpass" :weight 'regular :height (cdr face)))
+
+  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+  (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
+  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
+
+(defun cfg/org-mode-setup ()
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (visual-line-mode 1))
+
+(use-package! org
+  :hook (org-mode . cfg/org-mode-setup)
+  :config
+  (setq org-ellipsis " ▾")
+  (cfg/org-font-setup))
+
+;; (setq rfc-mode-directory (expand-file-name "~/.local/share/rfcs/"))
+
 ;; Fix bash configuration
 (setq shell-file-name (executable-find "bash"))
 (setq-default vterm-shell (executable-find "fish"))
 (setq-default explicit-shell-file-name (executable-find "fish"))
+
+;; configuring flyspell
+(after! flyspell
+  (setq flyspell-lazy-idle-seconds 2))
+
+(defun +markdown-flyspell-word-p ()
+  "Return t if point is on a word that should be spell checked.
+Return nil if on a link url, markup, html, or references."
+  (let ((faces (ensure-list (get-text-property (point) 'face))))
+    (or (and (memq 'font-lock-comment-face faces)
+             (memq 'markdown-code-face faces))
+        (not (cl-loop with unsafe-faces = '(markdown-reference-face
+                                            markdown-url-face
+                                            markdown-markup-face
+                                            markdown-comment-face
+                                            markdown-html-attr-name-face
+                                            markdown-html-attr-value-face
+                                            markdown-html-tag-name-face
+                                            markdown-code-face)
+                      for face in faces
+                      if (memq face unsafe-faces)
+                      return t)))))
+
+(let ((langs '("en" "pt_BR")))
+  (setq lang-ring (make-ring (length langs)))
+  (dolist (elem langs) (ring-insert lang-ring elem)))
+
+(defun cycle-ispell-languages ()
+  (interactive)
+  (let ((lang (ring-ref lang-ring -1)))
+    (ring-insert lang-ring lang)
+    (ispell-change-dictionary lang)))
+
+(map! :leader :desc "Change spell language" :n "t d" #'cycle-ispell-languages)
