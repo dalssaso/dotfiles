@@ -186,7 +186,7 @@ Return nil if on a link url, markup, html, or references."
                       if (memq face unsafe-faces)
                       return t)))))
 
-(let ((langs '("en" "pt_BR")))
+(let ((langs '("en_GB" "pt_BR")))
   (setq lang-ring (make-ring (length langs)))
   (dolist (elem langs) (ring-insert lang-ring elem)))
 
