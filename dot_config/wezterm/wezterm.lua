@@ -14,7 +14,7 @@ end
 
 -- For example, changing the color scheme:
 config.color_scheme = 'Tokyo Night'
-config.font = wezterm.font 'Dank Mono'
+config.font = wezterm.font 'Iosevka Term'
 config.font_size = 17
 
 -- and finally, return the configuration to wezterm

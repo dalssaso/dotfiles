@@ -23,10 +23,10 @@
 ;;
 ;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
-(setq doom-font (font-spec :family "Dank Mono" :size 17 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Overpass" :size 17 :weight 'regular)
+(setq doom-font (font-spec :family "Iosevka Term" :size 17 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Iosevka" :size 17 :weight 'regular)
       doom-symbol-font (font-spec :family "MesloLGS Nerd Font Mono" :size 17 :weight 'regular)
-      doom-big-font (font-spec :family "Dank Mono" :size 22 :weight 'regular))
+      doom-big-font (font-spec :family "Iosevka Term" :size 22 :weight 'regular))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
@@ -113,49 +113,49 @@
 (setq org-tags-exclude-from-inheritance (quote ("crypt")))
 (setq org-crypt-key nil)
 
-(dolist (mode '(org-mode-hook
-                term-mode-hook
-                shell-mode-hook
-                treemacs-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+;; (dolist (mode '(org-mode-hook
+;;                 term-mode-hook
+;;                 shell-mode-hook
+;;                 treemacs-mode-hook
+;;                 eshell-mode-hook))
+;;   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-(defun cfg/org-font-setup ()
-  ;; Set faces for heading levels
-  (dolist (face '((org-level-1 . 1.15)
-                  (org-level-2 . 1.1)
-                  (org-level-3 . 1.05)
-                  (org-level-4 . 1.0)
-                  (org-level-5 . 1.0)
-                  (org-level-6 . 1.0)
-                  (org-level-7 . 1.0)
-                  (org-level-8 . 1.0)))
-    ;; (set-face-attribute (car face) nil doom-variable-pitch-font))
-    (set-face-attribute (car face) nil :font "Overpass" :weight 'regular :height (cdr face)))
+;; (defun cfg/org-font-setup ()
+;;   ;; Set faces for heading levels
+;;   (dolist (face '((org-level-1 . 1.15)
+;;                   (org-level-2 . 1.1)
+;;                   (org-level-3 . 1.05)
+;;                   (org-level-4 . 1.0)
+;;                   (org-level-5 . 1.0)
+;;                   (org-level-6 . 1.0)
+;;                   (org-level-7 . 1.0)
+;;                   (org-level-8 . 1.0)))
+;;     ;; (set-face-attribute (car face) nil doom-variable-pitch-font))
+;;     (set-face-attribute (car face) nil :font "Overpass" :weight 'regular :height (cdr face)))
 
-  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
-  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
-  (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
+;;   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+;;   (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+;;   (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
+;;   (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+;;   (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
+;;   (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+;;   (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+;;   (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+;;   (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+;;   (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
+;;   (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+;;   (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
 
-(defun cfg/org-mode-setup ()
-  (org-indent-mode)
-  (variable-pitch-mode 1)
-  (visual-line-mode 1))
+;; (defun cfg/org-mode-setup ()
+;;   (org-indent-mode)
+;;   (variable-pitch-mode 1)
+;;   (visual-line-mode 1))
 
-(use-package! org
-  :hook (org-mode . cfg/org-mode-setup)
-  :config
-  (setq org-ellipsis " ▾")
-  (cfg/org-font-setup))
+;; (use-package! org
+;;   :hook (org-mode . cfg/org-mode-setup)
+;;   :config
+;;   (setq org-ellipsis " ▾")
+;;   (cfg/org-font-setup))
 
 ;; (setq rfc-mode-directory (expand-file-name "~/.local/share/rfcs/"))
 
