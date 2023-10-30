@@ -4,3 +4,4 @@ README.md
 .stylua.toml
 .config/nvim/lazy-lock.json
 Brewfile.lock.json
+*.org
