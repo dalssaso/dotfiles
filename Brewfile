@@ -124,3 +124,4 @@ brew "zoxide"
 
 mas "Tailscale", id: 1475387142
 mas "Things", id: 904280696
+mas "Fantastical", id: 975937182
