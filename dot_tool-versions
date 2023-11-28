@@ -9,7 +9,6 @@ kubectl system
 kustomize 3.8.9
 nodejs 20.8.1
 pluto 5.17.0
-poetry 1.4.2
 task 3.26.0
 vault system
 vcluster 0.15.2

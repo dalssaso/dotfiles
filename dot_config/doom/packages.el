@@ -65,3 +65,10 @@
 (package! copilot
   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
 (package! todoist)
+
+(package! lsp-ltex :pin "18b0e8608408f9e913d89075e78c2b4e3f69cf1c")
+;; Optional dependency of lsp-ltex, needed for installing/updating ltex-ls LSP server
+(package! github-tags
+  :recipe (:host github
+           :repo "jcs-elpa/github-tags")
+  :pin "7b02d6e883ac3d766106de30c60b22609c4515f9")
