@@ -262,3 +262,7 @@ Return nil if on a link url, markup, html, or references."
           (lambda ()
             (when (derived-mode-p 'go-mode)
               (setq my/flycheck-local-cache '((lsp . ((next-checkers . (golangci-lint)))))))))
+
+(define-derived-mode helm-mode yaml-mode "helm"
+  "Major mode for editing kubernetes helm templates")
+
