@@ -72,3 +72,5 @@
   :recipe (:host github
            :repo "jcs-elpa/github-tags")
   :pin "7b02d6e883ac3d766106de30c60b22609c4515f9")
+
+(package! catppuccin-theme)
