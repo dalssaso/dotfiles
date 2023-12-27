@@ -62,7 +62,7 @@
         }
       },
       "zoom": {
-        "version": "5.17.0.27246",
+        "version": "5.17.1.27701",
         "options": {
           "full_name": "zoom"
         }
@@ -206,7 +206,7 @@
         }
       },
       "arc": {
-        "version": null,
+        "version": "1.21.2,44530",
         "options": {
           "full_name": "arc"
         }
@@ -2080,7 +2080,7 @@
         "bottle": false
       },
       "hashicorp/tap/vault": {
-        "version": "1.15.3",
+        "version": "1.15.2",
         "bottle": false
       },
       "kubectl": {
@@ -4148,7 +4148,7 @@
     },
     "tap": {
       "homebrew/cask-fonts": {
-        "revision": "cc54a5c9f085c402d479431a26f86eb3f09c1e64"
+        "revision": "e80db5cea332c518263535cd24b47d3fe60519bc"
       },
       "hashicorp/tap": {
         "revision": "80733f313401c40e9caeecaee574127aad38ca64"
@@ -4175,7 +4175,7 @@
     "mas": {
       "Tailscale": {
         "id": "1475387142",
-        "version": "1.54.1"
+        "version": "1.54.0"
       },
       "Things": {
         "id": "904280696",
@@ -4193,9 +4193,9 @@
         "HOMEBREW_VERSION": "4.2.1",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
-        "CLT": "14.3.1.0.1.1683849156",
-        "Xcode": "14.3",
-        "macOS": "13.5.2"
+        "CLT": "15.0.0.0.1.1694021235",
+        "Xcode": "15.1",
+        "macOS": "13.6.1"
       }
     }
   }

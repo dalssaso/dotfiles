@@ -89,7 +89,7 @@ source ~/.asdf/plugins/golang/set-env.fish
 # Disable greeting message
 set fish_greeting
 
-set -xg BAT_THEME Catppuccin-Macchiato
+set -xg BAT_THEME Catppuccin-macchiato
 set -xg EDITOR "emacsclient -t -a ''"
 set -xg LS_COLORS (vivid generate catppuccin-macchiato)
 set -xg VISUAL "emacsclient -c -a emacs"
