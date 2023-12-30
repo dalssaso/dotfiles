@@ -206,7 +206,7 @@
         }
       },
       "arc": {
-        "version": null,
+        "version": "1.21.2,44530",
         "options": {
           "full_name": "arc"
         }
