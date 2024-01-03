@@ -90,7 +90,7 @@ source ~/.asdf/plugins/golang/set-env.fish
 set fish_greeting
 
 set -xg BAT_THEME Catppuccin-macchiato
-set -xg EDITOR "emacsclient -t -a ''"
+set -xg EDITOR "nvim"
 set -xg LS_COLORS (vivid generate catppuccin-macchiato)
 set -xg VISUAL "emacsclient -c -a emacs"
 
