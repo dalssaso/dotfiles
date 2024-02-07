@@ -66,7 +66,7 @@ local function project_files()
   end
 
   if is_inside_work_tree[cwd] then
-    require('telescope.builtin').git_files(opts)
+    require('telescope.builtin').git_files({show_untracked = true})
   else
     require('telescope.builtin').find_files(opts)
   end

@@ -92,7 +92,8 @@ set fish_greeting
 set -xg BAT_THEME Catppuccin-macchiato
 set -xg EDITOR "nvim"
 set -xg LS_COLORS (vivid generate catppuccin-macchiato)
-set -xg VISUAL "emacsclient -c -a emacs"
+set -xg VISUAL "nvim"
+set -xg ZK_NOTEBOOK_DIR $HOME/Dropbox/zk
 
 # catppuccin-macchiato
 set -Ux FZF_DEFAULT_OPTS "\

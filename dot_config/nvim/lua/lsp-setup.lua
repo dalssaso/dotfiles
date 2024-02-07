@@ -97,6 +97,20 @@ local servers = {
   gopls = {},
   yamlls = {
     cmd = { "yaml-language-server", "--stdio" },
+    settings = {
+      yaml = {
+        schemaStore = {
+          enable = false,
+          url = '',
+        },
+        schemas = require('schemastore').yaml.schemas(),
+        customTags = {
+          "!RequiredEnv scalar",
+          "!SecretEnv scalar",
+          "!reference sequence",
+        },
+      },
+    },
     redhat = {
       telemetry = {
         enabled = false
@@ -114,6 +128,13 @@ local servers = {
     },
   },
   ansiblels = {},
+  jsonls = {
+    json = {
+      schemas = require('schemastore').json.schemas(),
+      validate = { enable = true },
+    },
+  },
+  pyright = {},
 }
 
 -- Setup neovim lua configuration

@@ -4,10 +4,12 @@
 --
 --  You can also configure plugins after the setup call,
 --    as they will be available in your neovim runtime.
+--
+
 require('lazy').setup({
   install = {
     missing = true,
-    colorscheme = { 'catppuccin', 'habamax' }
+    colorscheme = { 'catppuccin', 'habamax' },
   },
   checker = {
     enabled = true,
@@ -18,7 +20,7 @@ require('lazy').setup({
     notify = false,
   },
   ui = {
-    border = 'rounded'
+    border = 'rounded',
   },
   performance = {
     rtp = {
@@ -33,8 +35,7 @@ require('lazy').setup({
   },
   -- NOTE: First, some plugins that don't require any configuration
 
-  -- Git related plugins
-  'tpope/vim-fugitive',
+  -- Git related plugins 'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
@@ -52,7 +53,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -83,7 +84,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -232,74 +233,73 @@ require('lazy').setup({
     opts = {
       theme = 'catppuccin-macchiato',
     },
-
   },
 
-  {
-    'ray-x/go.nvim',
-    dependencies = { -- optional packages
-      'ray-x/guihua.lua',
-      'neovim/nvim-lspconfig',
-      'nvim-treesitter/nvim-treesitter',
-
-      'leoluz/nvim-dap-go',
-    },
-    config = function()
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-      require('go').setup({
-        capabilities = capabilities,
-        lsp_on_attach = require('lsp-setup').on_attach,
-        lsp_cfg = {
-          settings = {
-            gopls = {
-              gofumpt = true,
-              codelenses = {
-                gc_details = false,
-                generate = true,
-                regenerate_cgo = true,
-                run_govulncheck = true,
-                test = true,
-                tidy = true,
-                upgrade_dependency = true,
-                vendor = true,
-              },
-              hints = {
-                assignVariableTypes = false,
-                compositeLiteralFields = false,
-                compositeLiteralTypes = false,
-                constantValues = false,
-                functionTypeParameters = false,
-                parameterNames = false,
-                rangeVariableTypes = false,
-              },
-              analyses = {
-                fieldalignment = true,
-                nilness = true,
-                unusedparams = true,
-                unusedwrite = true,
-                useany = true,
-              },
-              usePlaceholders = true,
-              completeUnimported = true,
-              staticcheck = true,
-              directoryFilters = { '-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules' },
-              semanticTokens = true,
-            },
-          },
-        },
-        luasnip = true,
-        trouble = true,
-      })
-    end,
-    event = { 'CmdlineEnter' },
-    ft = { 'go", "gomod' },
-    build = ':lua require("go.install").update_all_sync()',
-  },
+  -- {
+  --   'ray-x/go.nvim',
+  --   dependencies = { -- optional packages
+  --     'ray-x/guihua.lua',
+  --     'neovim/nvim-lspconfig',
+  --     'nvim-treesitter/nvim-treesitter',
+  --
+  --     'leoluz/nvim-dap-go',
+  --   },
+  --   config = function()
+  --     -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
+  --
+  --     require('go').setup {
+  --       -- capabilities = capabilities,
+  --       -- lsp_on_attach = require('lsp-setup').on_attach,
+  --       lsp_cfg = {
+  --         settings = {
+  --           gopls = {
+  --             gofumpt = true,
+  --             codelenses = {
+  --               gc_details = false,
+  --               generate = true,
+  --               regenerate_cgo = true,
+  --               run_govulncheck = true,
+  --               test = true,
+  --               tidy = true,
+  --               upgrade_dependency = true,
+  --               vendor = true,
+  --             },
+  --             hints = {
+  --               assignVariableTypes = false,
+  --               compositeLiteralFields = false,
+  --               compositeLiteralTypes = false,
+  --               constantValues = false,
+  --               functionTypeParameters = false,
+  --               parameterNames = false,
+  --               rangeVariableTypes = false,
+  --             },
+  --             analyses = {
+  --               fieldalignment = true,
+  --               nilness = true,
+  --               unusedparams = true,
+  --               unusedwrite = true,
+  --               useany = true,
+  --             },
+  --             usePlaceholders = true,
+  --             completeUnimported = true,
+  --             staticcheck = true,
+  --             directoryFilters = { '-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules' },
+  --             semanticTokens = true,
+  --           },
+  --         },
+  --       },
+  --       luasnip = true,
+  --       trouble = true,
+  --     }
+  --   end,
+  --   event = { 'CmdlineEnter' },
+  --   ft = { 'go", "gomod' },
+  --   build = ':lua require("go.install").update_all_sync()',
+  -- },
 
   {
     'towolf/vim-helm',
-    ft = 'helm'
+    ft = 'helm',
   },
 
   {
@@ -310,22 +310,57 @@ require('lazy').setup({
       'nvimtools/none-ls.nvim',
     },
     config = function()
-      require('mason-null-ls').setup({
+      require('mason-null-ls').setup {
         ensure_installed = {
           'stylua',
           'jq',
           'ansiblelint',
           'goimports',
           'gofumpt',
+          'golangci-lint',
         },
         automatic_installation = true,
-      })
+        handlers = {},
+      }
     end,
-}
-
-
-
-
+  },
+  {
+    'zk-org/zk-nvim',
+    config = function()
+      require('zk').setup {
+        picker = 'telescope',
+        lsp = {
+          cmd = { 'zk', 'lsp' },
+          name = 'zk',
+          on_attach = require('lsp-setup').on_attach,
+        },
+      }
+    end,
+  },
+  {
+    'b0o/schemastore.nvim',
+  },
+  {
+    'folke/trouble.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+  },
+  {
+    'nvim-tree/nvim-tree.lua',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    opts = {},
+  },
+  {
+    'echasnovski/mini.bufremove',
+    version = false,
+    opts = {},
+  },
 }, {})
 
 -- vim: ts=2 sts=2 sw=2 et
