@@ -1,3 +1,3 @@
 return {
-  'towolf/helm.nvim',
+  'towolf/vim-helm',
 }
