@@ -12,7 +12,7 @@ return {
           config = {
             cmd = { 'zk', 'lsp' },
             name = 'zk',
-            on_attach = require('lazyvim.util.lsp').on_attach,
+            -- on_attach = require('lazyvim.util.lsp').on_attach,
           },
 
           auto_attach = {
