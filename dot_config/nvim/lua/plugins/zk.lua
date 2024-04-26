@@ -3,6 +3,7 @@ return {
     'zk-org/zk-nvim',
     keys = {
       { '<leader>zn', ':ZkNew<CR>', desc = 'New note', mode = 'n' },
+      { '<leader>zl', ':ZkNotes<CR>', desc = 'New note', mode = 'n' },
     },
     config = function()
       require('zk').setup({
@@ -23,7 +24,4 @@ return {
       })
     end,
   },
-  -- keys = {
-  --   { '<leader>zn', ':ZkNew<CR>', desc = 'New note' },
-  -- },
 }
