@@ -90,10 +90,12 @@ source ~/.asdf/plugins/golang/set-env.fish
 set fish_greeting
 
 set -xg BAT_THEME Catppuccin-macchiato
-set -xg EDITOR "nvim"
+set -xg EDITOR nvim
 set -xg LS_COLORS (vivid generate catppuccin-macchiato)
-set -xg VISUAL "nvim"
+set -xg VISUAL nvim
 set -xg ZK_NOTEBOOK_DIR $HOME/Dropbox/zk
+set -xg GOROOT /opt/homebrew/bin/go
+set -xg GOPATH $HOME/go
 
 # catppuccin-macchiato
 set -Ux FZF_DEFAULT_OPTS "\
