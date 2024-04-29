@@ -26,7 +26,7 @@
         }
       },
       "rectangle": {
-        "version": "0.76",
+        "version": "0.77",
         "options": {
           "full_name": "rectangle"
         }
@@ -176,7 +176,7 @@
         }
       },
       "google-drive": {
-        "version": "90.0.2",
+        "version": "90.0.3",
         "options": {
           "full_name": "google-drive"
         }
@@ -230,7 +230,7 @@
         }
       },
       "telegram": {
-        "version": "10.12.1,262593",
+        "version": "10.12.2,262594",
         "options": {
           "full_name": "telegram"
         }
@@ -4326,10 +4326,10 @@
     },
     "tap": {
       "homebrew/cask-fonts": {
-        "revision": "5dbe07c7e101165698b5f60ffb0b72d438410e7e"
+        "revision": "52f522daad011802c4a69382a8d1599fd7e5c8df"
       },
       "hashicorp/tap": {
-        "revision": "163ddc3c2aca736fc9a1e0160f189a6a79318205"
+        "revision": "46f20d0a85529419438166e5b97d5ea2dbbada4c"
       },
       "railwaycat/emacsmacport": {
         "revision": "7646800dee29916ce61f09d78577865069445d49"
