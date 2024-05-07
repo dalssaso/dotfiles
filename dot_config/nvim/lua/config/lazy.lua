@@ -10,7 +10,7 @@ require('lazy').setup({
   spec = {
     -- add LazyVim and import its plugins
     { 'LazyVim/LazyVim', import = 'lazyvim.plugins', opts = {
-      colorscheme = 'catppuccin-macchiato',
+      colorscheme = 'catppuccin-mocha',
     } },
     -- import any extras modules here
     { import = 'lazyvim.plugins.extras.coding.copilot' },

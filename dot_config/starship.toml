@@ -1,6 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 # Sets user-defined palette
-palette = "catppuccin_macchiato"
+palette = "catppuccin_mocha"
 
 right_format = "$kubernetes"
 
@@ -139,7 +139,6 @@ SUSE = " "
 Ubuntu = " "
 Unknown = " "
 Windows = " "
-
 [package]
 symbol = " "
 
