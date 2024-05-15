@@ -94,7 +94,6 @@ set -xg EDITOR nvim
 set -xg LS_COLORS (vivid generate catppuccin-mocha)
 set -xg VISUAL nvim
 set -xg ZK_NOTEBOOK_DIR $HOME/Dropbox/zk
-set -xg GOROOT /opt/homebrew/bin/go
 set -xg GOPATH $HOME/go
 
 # catppuccino-mocha
