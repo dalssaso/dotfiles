@@ -23,8 +23,8 @@
 ;;
 ;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
-(setq doom-font (font-spec :family "Iosevka Term" :size 17 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Iosevka" :size 17 :weight 'regular)
+(setq doom-font (font-spec :family "Dank Mono" :size 17 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Dank Mono" :size 17 :weight 'regular)
       doom-symbol-font (font-spec :family "MesloLGS Nerd Font Mono" :size 17 :weight 'regular)
       doom-big-font (font-spec :family "Iosevka Term" :size 22 :weight 'regular))
 ;;
