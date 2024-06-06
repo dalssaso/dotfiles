@@ -1,7 +1,3 @@
-if test -d /opt/homebrew/bin
-    set -p PATH /opt/homebrew/bin $PATH
-end
-
 if status is-interactive
     zoxide init fish | source
 end
@@ -13,78 +9,59 @@ end
 starship init fish | source
 enable_transience
 
+fish_add_path -U /opt/homebrew/bin
+
 if test -d $HOME/.bin
-    if not contains -- $HOME/.bin $PATH
-        set -p PATH $PATH $HOME/.bin
-    end
+    fish_add_path -Ua $HOME/.bin
 end
 
 if test -d /opt/homebrew/opt/gnupg@2.2/bin
-    if not contains -- /opt/homebrew/opt/gnupg@2.2/bin $PATH
-        set -p PATH /opt/homebrew/opt/gnupg@2.2/bin $PATH
-    end
+   fish_add_path -Ua /opt/homebrew/opt/gnupg@2.2/bin
 end
 
 if test -d $HOME/.local/bin
-    if not contains -- $HOME/.local/bin $PATH
-        set -p PATH $PATH $HOME/.local/bin
-    end
+    fish_add_path -Ua $HOME/.local/bin
 end
 
 if test -d $HOME/.cargo/bin
-    if not contains -- $HOME/.cargo/bin $PATH
-        set -p PATH $PATH $HOME/.cargo/bin
-    end
+    fish_add_path -Ua $HOME/.cargo/bin
 end
 
-if test -d /opt/homebrew/opt/python@3.11/libexec/bin
-    if not contains -- /opt/homebrew/opt/python@3.11/libexec/bin $PATH
-        set -p PATH /opt/homebrew/opt/python@3.11/libexec/bin $PATH
-    end
+if test -d /opt/homebrew/opt/python@3.12/libexec/bin
+    fish_add_path -Ua /opt/homebrew/opt/python@3.12/libexec/bin
 end
 
 if test -d /opt/homebrew/opt/grep/libexec/gnubin
-    if not contains -- /opt/homebrew/opt/grep/libexec/gnubin $PATH
-        set -p PATH /opt/homebrew/opt/grep/libexec/gnubin $PATH
-    end
+    fish_add_path -Ua /opt/homebrew/opt/grep/libexec/gnubin
 end
 
 if test -d /opt/homebrew/opt/binutils/bin
-    if not contains -- /opt/homebrew/opt/binutils/bin $PATH
-        set -p PATH /opt/homebrew/opt/binutils/bin $PATH
-    end
+    fish_add_path -Ua /opt/homebrew/opt/binutils/bin
 end
 
 if test -d /opt/homebrew/opt/coreutils/libexec/gnubin
-    if not contains -- /opt/homebrew/opt/coreutils/libexec/gnubin $PATH
-        set -p PATH /opt/homebrew/opt/coreutils/libexec/gnubin $PATH
-    end
+    fish_add_path -Ua /opt/homebrew/opt/coreutils/libexec/gnubin
 end
 
 if test -d /opt/homebrew/opt/gnu-sed/libexec/gnubin
-    if not contains -- /opt/homebrew/opt/gnu-sed/libexec/gnubin $PATH
-        set -p PATH /opt/homebrew/opt/gnu-sed/libexec/gnubin $PATH
-    end
+    fish_add_path -Ua /opt/homebrew/opt/gnu-sed/libexec/gnubin
 end
 
 if test -d /opt/homebrew/opt/postgresql@15/bin
     set -g LDFLAGS "-L/opt/homebrew/opt/postgresql@15/lib"
     set -g CPPFLAGS "-I/opt/homebrew/opt/postgresql@15/include"
-
-    if not contains -- /opt/homebrew/opt/postgresql@15/bin $PATH
-        set -p PATH /opt/homebrew/opt/postgresql@15/bin $PATH
-    end
+    fish_add_path -Ua /opt/homebrew/opt/postgresql@15/bin
 end
 
-set -gx PATH $PATH $HOME/.krew/bin
+if test -d $HOME/.krew/bin
+    fish_add_path -Ua $HOME/.krew/bin
+end
 
 varclear PATH
 
 if test -f $HOME/.asdf/asdf.fish
     source $HOME/.asdf/asdf.fish
 end
-
-source ~/.asdf/plugins/golang/set-env.fish
 
 # Disable greeting message
 set fish_greeting
