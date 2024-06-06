@@ -1,7 +1,33 @@
+{{ $email := promptStringOnce . "email" "Email Address" -}}
+{{ $workEmail := promptStringOnce . "workEmail" "Work Email Address" -}}
+{{ $workMachine := promptBoolOnce . "workMachine" "Is it a machine from Work" -}}
+{{ $type := (output "sysctl" "-n" "hw.model") | trim -}}
+{{- $machineType := "laptop" -}}
+{{- if contains $type "MacBookPro" -}}
+{{-   $machineType = "laptop" -}}
+{{- else if contains $type "Mac" -}}
+{{-   $machineType = "macstudio" }}
+{{- end -}}
+
+{{- $user := "dalssaso" -}}
+{{- if $workMachine -}}
+{{-   $user = "henrique.dalssaso" -}}
+{{- end -}}
+
 encryption = "age"
 
 [age]
- identity = "~/.ssh/age-key.txt"
- recipient = "age1n60ykwyd0g44a47es9rgvxjd4nvarkmgk37xc7vrrxnla4vpcejqfp0vzu"
+ identity = "~/.config/chezmoi/key.txt"
+ recipient = "age1qna0dgrexfmr4n04628nnx82g3qlww4ykufaf9e26c0y06lyayys5ttnw2"
+
+[data]
+  email = {{ $email | quote }}
+  workEmail = {{ $workEmail | quote }}
+  machineType = {{ $machineType | quote }}
+  workMachine = {{ $workMachine }}
+  user = {{ $user | quote }}
+
+[hooks.read-source-state.pre]
+    command = ".local/share/chezmoi/.install-password-manager.sh"
 
 # vim: set ft=toml

@@ -6,4 +6,4 @@ README.md
 .config/nvim/lazy-lock.json
 Brewfile.lock.json
 *.org
-dot_config/private_fish/fish_variables
+dot_config/private_fish/fish_variableskey.txt.age
