@@ -112,6 +112,7 @@ brew "openjdk@11"
 brew "openssl"
 brew "parallel"
 brew "pipx"
+brew "pngpaste"
 brew "postgresql@15", restart_service: :changed
 brew "pre-commit"
 brew "pulumi"

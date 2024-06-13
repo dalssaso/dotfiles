@@ -16,7 +16,7 @@ if test -d $HOME/.bin
 end
 
 if test -d /opt/homebrew/opt/gnupg@2.2/bin
-   fish_add_path -Ua /opt/homebrew/opt/gnupg@2.2/bin
+    fish_add_path -Ua /opt/homebrew/opt/gnupg@2.2/bin
 end
 
 if test -d $HOME/.local/bin
@@ -55,6 +55,10 @@ end
 
 if test -d $HOME/.krew/bin
     fish_add_path -Ua $HOME/.krew/bin
+end
+
+if test -d $HOME/go/bin
+    fish_add_path -Ua $HOME/go/bin
 end
 
 varclear PATH

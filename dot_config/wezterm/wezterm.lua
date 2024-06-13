@@ -14,7 +14,7 @@ end
 
 -- For example, changing the color scheme:
 config.color_scheme = 'Catppuccin Mocha'
-config.font = wezterm.font 'Iosevka Term'
+config.font = wezterm.font 'DankMono Nerd Font'
 config.font_size = 17
 config.window_decorations = 'RESIZE'
 config.hide_tab_bar_if_only_one_tab = true

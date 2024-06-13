@@ -10,16 +10,6 @@ return {
       regols = {},
       templ = {},
       sqls = {},
-      ansiblels = {},
-      helm_ls = {
-        settings = {
-          ['helm_ls'] = {
-            yamlls = {
-              path = 'yaml-language-server',
-            },
-          },
-        },
-      },
     },
   },
 }
