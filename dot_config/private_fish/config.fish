@@ -76,6 +76,7 @@ set -xg LS_COLORS (vivid generate catppuccin-mocha)
 set -xg VISUAL nvim
 set -xg ZK_NOTEBOOK_DIR $HOME/Dropbox/zk
 set -xg GOPATH $HOME/go
+set -xg PIPX_HOME $HOME/.local/share/pipx
 
 # catppuccino-mocha
 set -Ux FZF_DEFAULT_OPTS "\
