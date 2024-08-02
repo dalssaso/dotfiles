@@ -61,6 +61,10 @@ if test -d $HOME/go/bin
     fish_add_path -Ua $HOME/go/bin
 end
 
+if test -d /opt/homebrew/opt/rustup/bin
+    fish_add_path -Ua /opt/homebrew/opt/rustup/bin
+end
+
 varclear PATH
 
 if test -f $HOME/.asdf/asdf.fish
