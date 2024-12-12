@@ -35,3 +35,5 @@
 	autoSetupRemote = true
 [github]
   user = dalssaso
+[pull]
+	rebase = true
