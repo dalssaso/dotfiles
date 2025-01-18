@@ -11,5 +11,6 @@ return {
         ['<c-f>'] = cmp.mapping.scroll_docs(4),
       })
     end,
+    enabled = true,
   },
 }

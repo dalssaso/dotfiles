@@ -4,6 +4,7 @@ return {
   -- opts.servers = vim.tbl_extend('force', opts.servers, {
   opts = {
     servers = {
+      bashls = {},
       emmet_ls = {},
       htmx = {},
       jsonnet_ls = {},
