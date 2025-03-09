@@ -1,20 +1,25 @@
-gui:
-  theme:
-    lightTheme: false 
-    activeBorderColor:
-      - "#a6e3a1" # Green
-      - bold
-    inactiveBorderColor:
-      - "#cdd6f4" # Text
-    optionsTextColor:
-      - "#89b4fa" # Blue
-    selectedLineBgColor:
-      - "#313244" # Surface0
-    selectedRangeBgColor:
-      - "#313244" # Surface0
-    cherryPickedCommitBgColor:
-      - "#94e2d5" # Teal
-    cherryPickedCommitFgColor:
-      - "#89b4fa" # Blue
-    unstagedChangesColor:
-      - red       # Red
+customCommands:
+  - key: "<c-m>"
+    command: "glab mr create --fill"
+    context: "global"
+    description: "Create new MR (fill from branch name)"
+    loadingText: "Creating merge request..."
+
+  - key: "<c-l>"
+    command: "glab mr list"
+    context: "global"
+    description: "List merge requests"
+    loadingText: "Loading merge requests..."
+    stream: true
+
+  - key: "<c-c>"
+    command: "glab mr close {{.SelectedRemoteBranch}}"
+    context: "remoteBranches"
+    description: "Close MR for current branch"
+    loadingText: "Closing merge request..."
+
+  - key: "<c-M>"
+    command: "glab mr view"
+    context: "global"
+    description: "View current MR in browser"
+    loadingText: "Opening merge request in browser..."
