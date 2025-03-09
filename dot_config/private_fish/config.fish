@@ -2,6 +2,12 @@ if status is-interactive
     zoxide init fish | source
 end
 
+if status is-interactive
+    mise activate fish | source
+else
+    mise activate fish --shims | source
+end
+
 # Old commands are not shown with full prompt
 function starship_transient_prompt_func
     starship module character
@@ -67,26 +73,30 @@ end
 
 varclear PATH
 
-if test -f $HOME/.asdf/asdf.fish
-    source $HOME/.asdf/asdf.fish
-end
+#if test -f $HOME/.asdf/asdf.fish
+#    source $HOME/.asdf/asdf.fish
+#end
 
 # Disable greeting message
 set fish_greeting
 
-set -xg BAT_THEME Catppuccin-mocha
+
+set -xg BAT_THEME_DARK rose-pine-moon
+set -xg BAT_THEME_LIGHT rose-pine-dawn
 set -xg EDITOR nvim
-set -xg LS_COLORS (vivid generate catppuccin-mocha)
+set -xg LS_COLORS (vivid generate rose-pine-moon)
 set -xg VISUAL nvim
 set -xg ZK_NOTEBOOK_DIR $HOME/Dropbox/zk
 set -xg GOPATH $HOME/go
 set -xg PIPX_HOME $HOME/.local/share/pipx
 
-# catppuccino-mocha
-set -Ux FZF_DEFAULT_OPTS "\
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+# rose-pine-moon
+set -Ux FZF_DEFAULT_OPTS "
+	--color=fg:#908caa,bg:#232136,hl:#ea9a97
+	--color=fg+:#e0def4,bg+:#393552,hl+:#ea9a97
+	--color=border:#44415a,header:#3e8fb0,gutter:#232136
+	--color=spinner:#f6c177,info:#9ccfd8
+	--color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa"
 
 alias vim='nvim'
 alias v='nvim'
