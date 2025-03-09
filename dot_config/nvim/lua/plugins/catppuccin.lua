@@ -6,5 +6,6 @@ return {
     opts = {
       flavour = 'mocha',
     },
+    enabled = false,
   },
 }
