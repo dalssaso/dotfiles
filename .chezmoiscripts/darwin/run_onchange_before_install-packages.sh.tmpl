@@ -2,5 +2,5 @@
 # setting to zsh as fish is not installed yet
 
 # Brewfile checksum: {{ include "Brewfile" | sha256sum }}
-brew bundle --file {{ joinPath .chezmoi.sourceDir "Brewfile" | quote }} --no-lock
+brew bundle --file {{ joinPath .chezmoi.sourceDir "Brewfile" | quote }}
 brew cleanup
