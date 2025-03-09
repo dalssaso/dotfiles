@@ -7,7 +7,7 @@ return {
     -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
     'BufReadPre '
       .. vim.fn.expand('~')
-      .. 'Documents/Obsidian/Dalssaso/**.md',
+      .. 'Dropbox/Cobalt Soul/Cobalt Soul/**.md',
   },
   dependencies = {
     -- Required.
@@ -19,11 +19,11 @@ return {
     workspaces = {
       {
         name = 'Dalssaso',
-        path = '~/Documents/Obsidian/Dalssaso',
+        path = '~/Dropbox/Cobalt Soul/Cobalt Soul',
       },
     },
     daily_notes = {
-      folder = '~/Documents/Obsidian/Dalssaso/Daily Notes',
+      folder = '~/Dropbox/Cobalt Soul/Cobalt Soul/Daily Notes',
     },
   },
   keys = {
