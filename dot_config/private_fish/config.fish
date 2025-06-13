@@ -80,23 +80,44 @@ varclear PATH
 # Disable greeting message
 set fish_greeting
 
-
-set -xg BAT_THEME_DARK rose-pine-moon
-set -xg BAT_THEME_LIGHT rose-pine-dawn
+set -xg BAT_THEME_DARK gruvbox-dark
+set -xg BAT_THEME_LIGHT gruvbox-light
 set -xg EDITOR nvim
-set -xg LS_COLORS (vivid generate rose-pine-moon)
+set -xg LS_COLORS (vivid generate gruvbox-dark)
 set -xg VISUAL nvim
 set -xg ZK_NOTEBOOK_DIR $HOME/Dropbox/zk
 set -xg GOPATH $HOME/go
 set -xg PIPX_HOME $HOME/.local/share/pipx
 
-# rose-pine-moon
-set -Ux FZF_DEFAULT_OPTS "
-	--color=fg:#908caa,bg:#232136,hl:#ea9a97
-	--color=fg+:#e0def4,bg+:#393552,hl+:#ea9a97
-	--color=border:#44415a,header:#3e8fb0,gutter:#232136
-	--color=spinner:#f6c177,info:#9ccfd8
-	--color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa"
+set -l color00 '#282828'
+set -l color01 '#3c3836'
+set -l color02 '#504945'
+set -l color03 '#665c54'
+set -l color04 '#928374'
+set -l color05 '#ebdbb2'
+set -l color06 '#fbf1c7'
+set -l color07 '#f9f5d7'
+set -l color08 '#cc241d'
+set -l color09 '#d65d0e'
+set -l color0A '#d79921'
+set -l color0B '#98971a'
+set -l color0C '#689d6a'
+set -l color0D '#458588'
+set -l color0E '#b16286'
+set -l color0F '#9d0006'
+
+set -l FZF_NON_COLOR_OPTS
+
+for arg in (echo $FZF_DEFAULT_OPTS | tr " " "\n")
+    if not string match -q -- "--color*" $arg
+        set -a FZF_NON_COLOR_OPTS $arg
+    end
+end
+
+set -Ux FZF_DEFAULT_OPTS "$FZF_NON_COLOR_OPTS"\
+" --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D"\
+" --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C"\
+" --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D"
 
 alias vim='nvim'
 alias v='nvim'
@@ -104,3 +125,10 @@ alias vi='nvim'
 
 alias ls='eza --git --group-directories-first --icons'
 alias cat='bat'
+
+# Added by Windsurf
+fish_add_path /Users/henrique.dalssaso/.codeium/windsurf/bin
+
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init2.fish 2>/dev/null || :

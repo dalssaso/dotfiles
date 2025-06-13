@@ -1,7 +1,8 @@
 quit-after-last-window-closed = true
 clipboard-read = allow
 clipboard-write = allow
-theme = dark:rose-pine-moon,light:rose-pine-dawn
+# theme = dark:rose-pine-moon,light:rose-pine-dawn
+theme = GruvboxDark
 bold-is-bright = true
 mouse-hide-while-typing = true
 macos-titlebar-style = tabs
@@ -31,10 +32,10 @@ keybind = ctrl+shift+l=resize_split:right,10
 keybind = ctrl+shift+k=resize_split:up,10
 keybind = ctrl+shift+j=resize_split:down,10
 keybind = ctrl+a>r=reload_config
-keybind = global:cmd+`=toggle_quick_terminal
+# keybind = global:cmd+`=toggle_quick_terminal
 
 #
-font-family = Maple Mono
+font-family = Iosevka Term
 font-style = Medium
 font-style-bold = Bold
 font-style-italic = Medium Italic
