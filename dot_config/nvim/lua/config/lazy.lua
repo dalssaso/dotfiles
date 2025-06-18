@@ -10,7 +10,7 @@ require('lazy').setup({
   spec = {
     -- add LazyVim and import its plugins
     { 'LazyVim/LazyVim', import = 'lazyvim.plugins', opts = {
-      colorscheme = 'gruvbox',
+      colorscheme = 'catppuccin',
     } },
     -- import any extras modules here
     -- { import = 'lazyvim.plugins.extras.ai.copilot' },
@@ -55,7 +55,7 @@ require('lazy').setup({
     version = false, -- always use the latest git commit
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
-  install = { colorscheme = { 'gruvbox', 'habamax' } },
+  install = { colorscheme = { 'catppuccin', 'habamax' } },
   checker = { enabled = true }, -- automatically check for plugin updates
   performance = {
     rtp = {

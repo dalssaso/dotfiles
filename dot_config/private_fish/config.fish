@@ -80,44 +80,21 @@ varclear PATH
 # Disable greeting message
 set fish_greeting
 
-set -xg BAT_THEME_DARK gruvbox-dark
-set -xg BAT_THEME_LIGHT gruvbox-light
+set -xg BAT_THEME_DARK Catppuccin-mocha
+set -xg BAT_THEME_LIGHT Catppuccin-latte
 set -xg EDITOR nvim
-set -xg LS_COLORS (vivid generate gruvbox-dark)
+set -xg LS_COLORS (vivid generate catppuccin-latte)
 set -xg VISUAL nvim
 set -xg ZK_NOTEBOOK_DIR $HOME/Dropbox/zk
 set -xg GOPATH $HOME/go
 set -xg PIPX_HOME $HOME/.local/share/pipx
 
-set -l color00 '#282828'
-set -l color01 '#3c3836'
-set -l color02 '#504945'
-set -l color03 '#665c54'
-set -l color04 '#928374'
-set -l color05 '#ebdbb2'
-set -l color06 '#fbf1c7'
-set -l color07 '#f9f5d7'
-set -l color08 '#cc241d'
-set -l color09 '#d65d0e'
-set -l color0A '#d79921'
-set -l color0B '#98971a'
-set -l color0C '#689d6a'
-set -l color0D '#458588'
-set -l color0E '#b16286'
-set -l color0F '#9d0006'
-
-set -l FZF_NON_COLOR_OPTS
-
-for arg in (echo $FZF_DEFAULT_OPTS | tr " " "\n")
-    if not string match -q -- "--color*" $arg
-        set -a FZF_NON_COLOR_OPTS $arg
-    end
-end
-
-set -Ux FZF_DEFAULT_OPTS "$FZF_NON_COLOR_OPTS"\
-" --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D"\
-" --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C"\
-" --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D"
+set -Ux FZF_DEFAULT_OPTS "\
+--color=bg+:#CCD0DA,bg:#EFF1F5,spinner:#DC8A78,hl:#D20F39 \
+--color=fg:#4C4F69,header:#D20F39,info:#8839EF,pointer:#DC8A78 \
+--color=marker:#7287FD,fg+:#4C4F69,prompt:#8839EF,hl+:#D20F39 \
+--color=selected-bg:#BCC0CC \
+--color=border:#CCD0DA,label:#4C4F69"
 
 alias vim='nvim'
 alias v='nvim'
