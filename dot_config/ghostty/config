@@ -1,7 +1,7 @@
 quit-after-last-window-closed = true
 clipboard-read = allow
 clipboard-write = allow
-theme = dark:catppuccin-mocha,light:catppuccin-latte
+theme = dark:Catppuccin Mocha,light:Catppuccin Latte
 bold-is-bright = true
 mouse-hide-while-typing = true
 macos-titlebar-style = tabs
@@ -34,10 +34,10 @@ keybind = ctrl+a>r=reload_config
 # keybind = global:cmd+`=toggle_quick_terminal
 
 #
-font-family = Iosevka Term
-font-style = Medium
+font-family = Google Sans Code
+font-style = Regular
 font-style-bold = Bold
-font-style-italic = Medium Italic
+font-style-italic = Regular Italic
 font-style-bold-italic = Bold Italic
 font-size = 17
 keybind = shift+enter=text:\n

@@ -1,0 +1,17 @@
+views:
+  v1/nodes:
+    sortColumn: AGE:desc
+    columns:
+      - NAME
+      - INTERNAL-IP
+      - EKS-ROLE:.metadata.labels.node\.ifood\.com\.br/role
+      - KOPS-ROLE:.metadata.labels.kops\.k8s\.io/instancegroup
+      - STATUS
+      - TAINTS
+      - VERSION
+      - PODS
+      - CPU
+      - "%CPU"
+      - MEM
+      - "%MEM"
+      - AGE
