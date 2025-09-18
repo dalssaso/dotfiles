@@ -1,5 +1,6 @@
-tap "argoproj/tap"
 tap "alexei-led/spotinfo"
+tap "argoproj/tap"
+tap "d12frosted/emacs-plus"
 tap "dbcli/tap"
 tap "goreleaser/tap"
 tap "hashicorp/tap"
@@ -8,7 +9,6 @@ tap "iann0036/iamlive"
 tap "loft-sh/tap"
 tap "pulumi/tap"
 tap "tilt-dev/tap"
-tap "d12frosted/emacs-plus"
 
 cask "1password"
 cask "1password-cli"
@@ -33,8 +33,6 @@ cask "slack"
 cask "spotify"
 cask "telegram"
 cask "visual-studio-code"
-cask "vlc"
-cask "vmware-fusion"
 cask "whatsapp"
 cask "zoom"
 
@@ -50,6 +48,7 @@ brew "btop"
 brew "clusterawsadm"
 brew "clusterctl"
 brew "coreutils"
+brew "d12frosted/emacs-plus/emacs-plus@30", args: ["with-ctags", "with-dbus", "with-mailutils", "with-xwidgets", "with-imagemagick", "with-savchenkovaleriy-big-sur-3d-icon"], restart_service: :changed
 brew "direnv"
 brew "dive"
 brew "docker"
@@ -66,7 +65,7 @@ brew "git-delta"
 brew "git-extras"
 brew "glab"
 brew "gnu-sed"
-brew "gnupg@2.2"
+brew "gnupg"
 brew "go"
 brew "go-task"
 brew "goreleaser/tap/goreleaser"
@@ -144,6 +143,8 @@ brew "zk"
 brew "zlib"
 brew "zoxide"
 
+mas "1Blocker", id: 1365531024
 mas "1Password for Safari", id: 1569813296
+mas "Hush", id: 1544743900
 mas "Perplexity", id: 6714467650
 mas "Tailscale", id: 1475387142
