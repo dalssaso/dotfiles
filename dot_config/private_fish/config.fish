@@ -53,10 +53,10 @@ if test -d /opt/homebrew/opt/gnu-sed/libexec/gnubin
     fish_add_path -Ua /opt/homebrew/opt/gnu-sed/libexec/gnubin
 end
 
-if test -d /opt/homebrew/opt/postgresql@15/bin
-    set -g LDFLAGS "-L/opt/homebrew/opt/postgresql@15/lib"
-    set -g CPPFLAGS "-I/opt/homebrew/opt/postgresql@15/include"
-    fish_add_path -Ua /opt/homebrew/opt/postgresql@15/bin
+if test -d /opt/homebrew/opt/postgresql@16/bin
+    set -g LDFLAGS "-L/opt/homebrew/opt/postgresql@16/lib"
+    set -g CPPFLAGS "-I/opt/homebrew/opt/postgresql@16/include"
+    fish_add_path -Ua /opt/homebrew/opt/postgresql@16/bin
 end
 
 if test -d $HOME/.krew/bin
