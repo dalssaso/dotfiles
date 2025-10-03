@@ -14,7 +14,7 @@ $character"""
 
 right_format = "$kubernetes"
 # Sets user-defined palette
-palette = "catppuccin_mocha"
+palette = "catppuccin_latte"
 add_newline = false
 
 [directory]
