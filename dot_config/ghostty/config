@@ -34,10 +34,10 @@ keybind = ctrl+a>r=reload_config
 # keybind = global:cmd+`=toggle_quick_terminal
 
 #
-font-family = Google Sans Code
+font-family = Zenbones Mono
 font-style = Regular
 font-style-bold = Bold
 font-style-italic = Regular Italic
 font-style-bold-italic = Bold Italic
-font-size = 17
+font-size = 16
 keybind = shift+enter=text:\n

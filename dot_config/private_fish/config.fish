@@ -92,6 +92,7 @@ set -xg VISUAL nvim
 set -xg ZK_NOTEBOOK_DIR $HOME/Dropbox/zk
 set -xg GOPATH $HOME/go
 set -xg PIPX_HOME $HOME/.local/share/pipx
+set -xg GPG_TTY (tty)
 
 set -Ux FZF_DEFAULT_OPTS "\
 --color=bg+:#CCD0DA,bg:#EFF1F5,spinner:#DC8A78,hl:#D20F39 \
