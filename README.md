@@ -1,152 +1,219 @@
-# Setup Archlinux
+# dotfiles
 
+Personal dotfiles managed with [chezmoi](https://www.chezmoi.io/) for macOS with automated setup scripts.
 
-### Enabling reflector to run weekly
+## Features
 
-Copy the following content to /etc/xdg/reflector/reflector.conf
+- Automated package installation via Homebrew
+- Encrypted secrets management with age encryption
+- Fish shell configuration with vi keybindings
+- Development tools setup (Go, Rust, Node.js, Python)
+- Kubernetes and cloud infrastructure tools
+- Terminal environment (Ghostty, Wezterm, Tmux)
+- Neovim configuration
 
-```conf
-# Reflector configuration file for the systemd service.
-#
-# Empty lines and lines beginning with "#" are ignored.  All other lines should
-# contain valid reflector command-line arguments. The lines are parsed with
-# Python's shlex modules so standard shell syntax should work. All arguments are
-# collected into a single argument list.
-#
-# See "reflector --help" for details.
+## Prerequisites
 
-# Recommended Options
+- macOS 10.15 or later
+- Command Line Tools: `xcode-select --install`
 
-# Set the output path where the mirrorlist will be saved (--save).
---save /etc/pacman.d/mirrorlist
+## Quick Start
 
-# Select the transfer protocol (--protocol).
---protocol https
+### Initial Setup
 
-# Select the country (--country).
-# Consult the list of available countries with "reflector --list-countries" and
-# select the countries nearest to you or the ones that you trust. For example:
-# --country France,Germany
---country Brazil,Argentina,Colombia,Paraguay,Uruguay,Chile,Ecuador,Mexico,Bolivia,Portugal,Poland,us
+1. Install chezmoi and initialize dotfiles:
 
-# Use only the  most recently synchronized mirrors (--latest).
---fastest 10
-
-# Use the latest ones
---latest 10
-
-# Sort the mirrors by synchronization time (--sort).
---sort rate
+```bash
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply dalssaso/dotfiles
 ```
 
-After that you can simply enable the service and the timer
+2. During first run, you'll be prompted for:
+   - Email address
+   - Work email address
+   - Whether this is a work machine
 
-`sudo systemctl enable reflector.timer reflector.service`
+3. The setup will automatically:
+   - Install 1Password and 1Password CLI
+   - Install packages from Brewfile
+   - Configure age encryption for secrets
+   - Set up Fish shell as default
+   - Install development tools via mise
+   - Configure macOS system preferences
 
-### Configure plymouth
+### Manual Application
 
-On `/etc/default/grub`
+After making changes to dotfiles:
 
-Edit the `GRUB_CMDLINE_LINUX_DEFAULT` and add `splash` after `quiet`, like so:
-
-```conf
-GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet splash mem_sleep_default=deep ..."
+```bash
+chezmoi apply
 ```
 
-On `/etc/mkinitcpio.conf` edit the `HOOKS` and add the `plymouth` after `udev` like so:
+To see what would change without applying:
 
-```conf
-HOOKS=(base udev plymouth autodetect modconf kms block filesystems resume encrypt keyboard fsck)
+```bash
+chezmoi diff
 ```
 
-After that you can simply run:
-
-`sudo grub-mkconfig -o /boot/grub/grub.cfg`
-
-and
-
-`sudo mkinitcpio -p linux-zen`
-
-### Configuring xinput
-
-
-Create a file called `00-keyboard.conf` on `/etc/X11/xorg.conf.d/` with the content below
-
-```conf
-Section "InputClass"
-	Identifier "system-keyboard"
-	MatchIsKeyboard "on"
-	Option "XkbModel" "pc105"
-	Option "XkbLayout" "us"
-	Option "XkbOptions" "ctrl:nocaps"
-EndSection
-```
-
-
-Create a file called `30-touchpad.conf` on `/etc/X11/xorg.conf.d/` with the content below
-
-```conf
-Section "InputClass"
-    Identifier "touchpad"
-    MatchIsTouchpad "on"
-    Driver "libinput"
-	Option "Tapping" "on"
-	Option "DisableWhileTyping" "1"
-	Option "NaturalScrolling" "true"
-EndSection
-```
-
-### Configure systemd-resolved
-
-Run `ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf`
-
-Change the contents of the file with the following:
-
-```conf
-[Resolve]
-# Some examples of DNS servers which may be used for DNS= and FallbackDNS=:
-# Cloudflare: 1.1.1.1#cloudflare-dns.com 1.0.0.1#cloudflare-dns.com 2606:4700:4700::1111#cloudflare-dns.com 2606:4700:4700::1001#cloudflare-dns.com
-# Google:     8.8.8.8#dns.google 8.8.4.4#dns.google 2001:4860:4860::8888#dns.google 2001:4860:4860::8844#dns.google
-# Quad9:      9.9.9.9#dns.quad9.net 149.112.112.112#dns.quad9.net 2620:fe::fe#dns.quad9.net 2620:fe::9#dns.quad9.net
-#DNS=
-#FallbackDNS=1.1.1.1#cloudflare-dns.com 9.9.9.9#dns.quad9.net 8.8.8.8#dns.google 2606:4700:4700::1111#cloudflare-dns.com 2620:fe::9#dns.quad9.net 2001:4860:4860::8888#dns.google
-DNS=<internal-ip>
-FallbackDNS=1.1.1.1 1.0.0.1
-#Domains=
-DNSSEC=no
-DNSOverTLS=no
-MulticastDNS=no
-LLMNR=no
-Cache=yes
-#CacheFromLocalhost=no
-DNSStubListener=yes
-#DNSStubListenerExtra=
-ReadEtcHosts=yes
-#ResolveUnicastSingleLabel=no
-```
-
-### Configure power-save mode networkmanager
-
-Create a file called `10-power-save-mode.conf` on `/etc/NetworkManager/conf.d/` with the following content
-
-
-```conf
-[connection]
-wifi.powersave = 2 # disable
-```
-
-
-### GNOME Keyring
-
-Change `/etc/pam.d/login` with the following content
+## Repository Structure
 
 ```
-auth       required     pam_securetty.so
-auth       requisite    pam_nologin.so
-auth       include      system-local-login
-auth       optional     pam_gnome_keyring.so
-account    include      system-local-login
-session    include      system-local-login
-session    optional     pam_gnome_keyring.so auto_start
-password   include      system-local-login
+.
+├── dot_config/              # Application configurations
+│   ├── bat/                 # bat (cat alternative) config
+│   ├── btop/                # btop system monitor
+│   ├── eza/                 # eza (ls alternative) config
+│   ├── ghostty/             # Ghostty terminal
+│   ├── lazygit/             # LazyGit TUI
+│   ├── nvim/                # Neovim configuration
+│   ├── private_fish/        # Fish shell config
+│   ├── tmux/                # Tmux configuration
+│   ├── wezterm/             # WezTerm terminal
+│   └── starship.toml        # Starship prompt
+├── dot_scripts/             # Personal scripts
+│   └── work/                # Work-specific scripts
+├── dot_ssh/                 # SSH configuration
+│   └── encrypted_config.age # Encrypted SSH config
+├── .chezmoiscripts/         # Automated setup scripts
+│   └── darwin/              # macOS-specific scripts
+├── private_Applications/    # macOS Applications
+├── private_Library/         # macOS Library files
+├── encrypted_*              # Encrypted configs (git, authinfo, wakatime, netrc)
+├── Brewfile                 # Homebrew packages
+├── dot_tool-versions        # mise/asdf tool versions
+├── dot_default-golang-pkgs  # Default Go packages to install
+├── dot_default-npm-packages # Default npm packages to install
+├── .chezmoi.toml.tmpl       # chezmoi configuration template
+└── .chezmoiignore           # Files to ignore during apply
+```
+
+## Installed Tools & Applications
+
+### Development Tools
+
+- **Languages**: Go, Rust, Python 3.11/3.12, Node.js, Lua
+- **Version Management**: mise (asdf successor)
+- **Editors**: Neovim, Emacs 30
+- **Shell**: Fish with vi keybindings, Starship prompt
+
+### Terminal Tools
+
+- **File Navigation**: eza, fd, fzf, zoxide
+- **File Viewing**: bat, less
+- **System Monitoring**: btop, htop
+- **Git**: lazygit, git-delta, gh, glab
+- **Search**: ripgrep, the_silver_searcher
+- **Multiplexers**: tmux, zellij
+
+### Cloud & Infrastructure
+
+- **Kubernetes**: kubectl, k9s, helm, kustomize, kubectx, krew, minikube
+- **AWS**: awscli, clusterawsadm, clusterctl
+- **Terraform/IaC**: terraform, pulumi, ansible
+- **Service Mesh/Tools**: consul, vault, argocd, temporal
+- **Containers**: docker, orbstack, dive, skaffold, tilt
+
+### Productivity
+
+- **Terminals**: Ghostty, WezTerm
+- **Password**: 1Password + 1Password CLI
+- **Launcher**: Raycast
+- **Automation**: Keyboard Maestro
+- **Communication**: Slack, Telegram, WhatsApp, Discord, Zoom
+
+## Encrypted Files
+
+Sensitive configuration files are encrypted using age:
+
+- `.gitconfig` (personal, work, and OSS variants)
+- `.authinfo.gpg` (personal and work)
+- `.ssh/config`
+- `.wakatime.cfg`
+- `.netrc`
+
+The age key is decrypted from 1Password during initial setup.
+
+## chezmoi Scripts
+
+Scripts in `.chezmoiscripts/darwin/` run automatically:
+
+### Before Scripts
+
+- `run_once_before_01_decrypt-age-key.sh` - Decrypts age encryption key from 1Password
+- `run_once_before_02_configure-sudo-passwordless.sh` - Configures passwordless sudo
+- `run_onchange_before_install-packages.sh` - Installs packages from Brewfile
+
+### After Scripts
+
+- `run_once_after_change-default-shell.sh` - Changes default shell to Fish
+- `run_once_after_configure-gpg-keys.fish` - Sets up GPG keys
+- `run_once_after_configure-ssh-keys.fish` - Configures SSH keys
+- `run_once_after_install-fisher.fish` - Installs Fisher plugin manager
+- `run_once_after_install-mise.fish` - Installs mise version manager
+- `run_once_after_install-rust.fish` - Installs Rust toolchain
+- `run_once_after_install-tpm.fish` - Installs Tmux Plugin Manager
+- `run_once_after_bat-cache-build.fish` - Builds bat cache
+- `run_once_after_enable-fish-vi-keybindings.fish` - Enables vi keybindings
+- `run_once_after_fish-pieces-config.fish` - Configures Fish Pieces
+- `run_once_after_macos_settings.sh` - Applies macOS system preferences
+
+## Common Tasks
+
+### Update chezmoi and dotfiles
+
+```bash
+chezmoi update
+```
+
+### Edit a dotfile
+
+```bash
+chezmoi edit ~/.config/fish/config.fish
+```
+
+### Add a new file
+
+```bash
+chezmoi add ~/.config/newapp/config.toml
+```
+
+### Re-run setup scripts
+
+```bash
+chezmoi state delete-bucket --bucket=scriptState
+chezmoi apply
+```
+
+### Update Brewfile
+
+After installing new packages with `brew install`:
+
+```bash
+brew bundle dump --force --file=~/.local/share/chezmoi/Brewfile
+```
+
+## Troubleshooting
+
+### Age decryption fails
+
+Ensure 1Password CLI is installed and configured:
+
+```bash
+op signin
+```
+
+### Brew bundle fails
+
+Update Homebrew and try again:
+
+```bash
+brew update
+brew doctor
+```
+
+### Fish shell not default
+
+Manually change shell:
+
+```bash
+chsh -s $(which fish)
 ```
