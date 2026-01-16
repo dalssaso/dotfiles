@@ -42,3 +42,5 @@ font-style-italic = Regular Italic
 font-style-bold-italic = Bold Italic
 font-size = 15
 keybind = shift+enter=text:\n
+
+auto-update-channel = tip

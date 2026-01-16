@@ -33,10 +33,6 @@ if test -d $HOME/.cargo/bin
     fish_add_path -Ua $HOME/.cargo/bin
 end
 
-if test -d /opt/homebrew/opt/python@3.12/libexec/bin
-    fish_add_path -Ua /opt/homebrew/opt/python@3.12/libexec/bin
-end
-
 if test -d /opt/homebrew/opt/grep/libexec/gnubin
     fish_add_path -Ua /opt/homebrew/opt/grep/libexec/gnubin
 end
@@ -79,12 +75,6 @@ if test -d $HOME/.lmstudio/bin
     fish_add_path -Ua $HOME/.lmstudio/bin
 end
 
-varclear PATH
-
-#if test -f $HOME/.asdf/asdf.fish
-#    source $HOME/.asdf/asdf.fish
-#end
-
 # Disable greeting message
 set fish_greeting
 
@@ -93,9 +83,7 @@ set -xg BAT_THEME_LIGHT Catppuccin Latte
 set -xg EDITOR nvim
 set -xg LS_COLORS (vivid generate catppuccin-mocha)
 set -xg VISUAL nvim
-set -xg ZK_NOTEBOOK_DIR $HOME/Dropbox/zk
 set -xg GOPATH $HOME/go
-set -xg PIPX_HOME $HOME/.local/share/pipx
 set -xg GPG_TTY (tty)
 
 set -Ux FZF_DEFAULT_OPTS "\
@@ -111,9 +99,9 @@ alias vi='nvim'
 
 alias ls='eza --git --group-directories-first --icons'
 alias cat='bat'
-
-# Added by Windsurf
-fish_add_path /Users/henrique.dalssaso/.codeium/windsurf/bin
+alias htop='btm'
+alias cd='z'
+alias kubectl='kubecolor'
 
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.

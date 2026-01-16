@@ -1,9 +1,8 @@
 cask "audacity"
-cask "discord"
 cask "dropbox"
-cask "elgato-stream-deck"
+cask "epic-games"
+cask "lm-studio"
 cask "nordvpn"
-cask "obs"
-cask "spotify"
-cask "telegram"
-cask "whatsapp"
+cask "steam"
+
+mas "Tailscale", id: 1475387142

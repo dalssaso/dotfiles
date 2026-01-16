@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 {{ if .workMachine -}}
 cat {{ joinPath .chezmoi.sourceDir "encrypted_dot_authinfo-work.gpg.age" | quote }} | chezmoi decrypt
 {{ else -}}
