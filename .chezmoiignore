@@ -9,3 +9,21 @@ Brewfile.lock.json
 dot_config/private_fish/fish_variableskey.txt.age
 Brewfile
 key.txt.age
+
+{{- if not .workMachine }}
+# Work-only files - ignored on personal machines
+.config/pip/pip.conf
+.config/fish/conf.d/work.fish
+.config/fish/functions/ifood-connect.fish
+.config/fish/functions/connect-account.fish
+.config/fish/functions/get-kubecfg.sh
+.swiftbar/
+.netrc
+.chef/
+
+{{- else }}
+# Personal-only files - ignored on work machines
+.ssh/oss
+.ssh/oss.pub
+
+{{- end }}
