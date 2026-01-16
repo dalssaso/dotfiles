@@ -3,13 +3,19 @@
 set -x GPG_TTY (tty)
 
 # I'm not using the integration from chezmoi here because I want to cleanup the things
+
+# Personal GPG key - available on ALL machines
 op item get 'GPG Personal' --fields private --format json | jq .value -r | gpg --import
 op item get 'GPG Personal' --fields public --format json | jq .value -r | gpg --import
+
+set -l gpg_personal_private_id (gpg --list-secret-keys --with-colons {{ .email }} | awk -F: '/^sec/ {print $5}')
+expect -c "spawn gpg --edit-key $gpg_personal_private_id trust quit; send \"5\ry\r\"; expect eof"
+
+{{ if .workMachine -}}
+# Work GPG key - work machines only
 op item get 'GPG Work' --fields private --format json | jq .value -r | gpg --import
 op item get 'GPG Work' --fields public --format json | jq .value -r | gpg --import
 
 set -l gpg_work_private_id (gpg --list-secret-keys --with-colons {{ .workEmail }} | awk -F: '/^sec/ {print $5}')
-set -l gpg_personal_private_id (gpg --list-secret-keys --with-colons {{ .email }} | awk -F: '/^sec/ {print $5}')
-
 expect -c "spawn gpg --edit-key $gpg_work_private_id trust quit; send \"5\ry\r\"; expect eof"
-expect -c "spawn gpg --edit-key $gpg_personal_private_id trust quit; send \"5\ry\r\"; expect eof"
+{{ end -}}
