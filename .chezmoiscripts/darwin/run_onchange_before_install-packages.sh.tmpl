@@ -1,6 +1,22 @@
 #!/usr/bin/env zsh
 # setting to zsh as fish is not installed yet
 
-# Brewfile checksum: {{ include "Brewfile" | sha256sum }}
-brew bundle --file {{ joinPath .chezmoi.sourceDir "Brewfile" | quote }}
+# Brewfile.common hash: {{ include "Brewfile.common" | sha256sum }}
+{{ if .workMachine -}}
+# Brewfile.work hash: {{ include "Brewfile.work" | sha256sum }}
+{{ else -}}
+# Brewfile.personal hash: {{ include "Brewfile.personal" | sha256sum }}
+{{ end -}}
+
+# Concatenate appropriate Brewfiles
+cat {{ joinPath .chezmoi.sourceDir "Brewfile.common" | quote }} > /tmp/Brewfile.combined
+
+{{ if .workMachine -}}
+cat {{ joinPath .chezmoi.sourceDir "Brewfile.work" | quote }} >> /tmp/Brewfile.combined
+{{ else -}}
+cat {{ joinPath .chezmoi.sourceDir "Brewfile.personal" | quote }} >> /tmp/Brewfile.combined
+{{ end -}}
+
+brew bundle --file=/tmp/Brewfile.combined
 brew cleanup
+rm /tmp/Brewfile.combined
