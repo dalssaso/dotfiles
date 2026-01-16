@@ -9,7 +9,7 @@ tap "TheBoredTeam/boring-notch"
 
 cask "1password"
 cask "1password-cli"
-cask "TheBoredTeam/boring-notch/boring-notch", args: ["no-quarantine"]
+cask "boring-notch", args: { no_quarantine: true }
 cask "bruno"
 cask "chatgpt"
 cask "claude"
