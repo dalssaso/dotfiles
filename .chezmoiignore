@@ -9,6 +9,7 @@ Brewfile.lock.json
 dot_config/private_fish/fish_variableskey.txt.age
 Brewfile
 key.txt.age
+docs/**
 
 # Authinfo source files - deployed via modify script (use target paths in ignore)
 .authinfo-personal.gpg
