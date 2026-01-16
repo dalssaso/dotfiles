@@ -10,9 +10,9 @@ dot_config/private_fish/fish_variableskey.txt.age
 Brewfile
 key.txt.age
 
-# Authinfo source files - deployed via modify script
-encrypted_dot_authinfo-personal.gpg.age
-encrypted_dot_authinfo-work.gpg.age
+# Authinfo source files - deployed via modify script (use target paths in ignore)
+.authinfo-personal.gpg
+.authinfo-work.gpg
 
 {{- if not .workMachine }}
 # Work-only files - ignored on personal machines
