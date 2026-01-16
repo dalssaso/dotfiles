@@ -1,0 +1,6 @@
+#!/bin/bash
+{{ if .workMachine -}}
+cat {{ joinPath .chezmoi.sourceDir "encrypted_dot_authinfo-work.gpg.age" | quote }} | chezmoi decrypt
+{{ else -}}
+cat {{ joinPath .chezmoi.sourceDir "encrypted_dot_authinfo-personal.gpg.age" | quote }} | chezmoi decrypt
+{{ end -}}
