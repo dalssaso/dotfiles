@@ -56,3 +56,7 @@
 ;; Catppuccin theme
 (package! catppuccin-theme)
 (package! wakatime-mode)
+
+;; Org visual enhancements
+(package! org-modern)
+(package! org-appear)
