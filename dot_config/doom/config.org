@@ -212,3 +212,44 @@ Define tag shortcuts for fast tagging.
             (concat (expand-file-name "archive.org" hd/org-work-dir) "::* Archive")
           (concat (expand-file-name "archive.org" (expand-file-name "agenda" hd/org-personal-dir)) "::* Archive"))))
 #+end_src
+
+* Org-roam
+** Directory Setup
+
+#+begin_src emacs-lisp
+(after! org-roam
+  (setq org-roam-directory (expand-file-name "roam" hd/org-personal-dir))
+  (setq org-roam-dailies-directory (expand-file-name "daily" hd/org-personal-dir)))
+#+end_src
+
+** Dailies Capture Templates
+
+#+begin_src emacs-lisp
+(after! org-roam-dailies
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           "* %<%H:%M> %?"
+           :target (file+head "%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n"))
+          ("t" "task" entry
+           "* TODO %?"
+           :target (file+head "%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n"))
+          ("j" "journal" entry
+           "* %<%H:%M> Journal :journal:\n%?"
+           :target (file+head "%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n")))))
+#+end_src
+
+** Keybindings
+
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix ("r" . "roam")
+       :desc "Find node" "f" #'org-roam-node-find
+       :desc "Insert link" "i" #'org-roam-node-insert
+       :desc "Today" "t" #'org-roam-dailies-goto-today
+       :desc "Yesterday" "y" #'org-roam-dailies-goto-yesterday
+       :desc "Date" "d" #'org-roam-dailies-goto-date
+       :desc "Capture today" "c" #'org-roam-dailies-capture-today))
+#+end_src
