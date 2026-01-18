@@ -253,3 +253,73 @@ Define tag shortcuts for fast tagging.
        :desc "Date" "d" #'org-roam-dailies-goto-date
        :desc "Capture today" "c" #'org-roam-dailies-capture-today))
 #+end_src
+
+** Git Auto-sync
+
+Automatically commit and push changes to org-personal repo.
+
+*** Core Functions
+
+#+begin_src emacs-lisp
+(defvar hd/org-sync-timer nil "Timer for debounced commit.")
+(defvar hd/org-sync-delay 60 "Seconds to wait after save before commit.")
+
+(defun hd/org-sync-commit-and-push ()
+  "Stage, commit, and push changes."
+  (let ((default-directory hd/org-personal-dir))
+    (when (and (bound-and-true-p hd/org-personal-dir)
+               (file-exists-p (expand-file-name ".git" hd/org-personal-dir)))
+      (start-process "org-sync-add" nil "git" "add" "-A")
+      (set-process-sentinel
+       (start-process "org-sync-commit" nil "git" "commit" "-m"
+                      (format "auto: %s" (format-time-string "%Y-%m-%d %H:%M")))
+       (lambda (proc event)
+         (when (string-match-p "finished" event)
+           (start-process "org-sync-push" nil "git" "push")))))))
+
+(defun hd/org-sync-pull ()
+  "Commit pending changes, then pull latest."
+  (let ((default-directory hd/org-personal-dir))
+    (when (and (bound-and-true-p hd/org-personal-dir)
+               (file-exists-p (expand-file-name ".git" hd/org-personal-dir)))
+      ;; Cancel pending timer and commit first
+      (when hd/org-sync-timer
+        (cancel-timer hd/org-sync-timer)
+        (setq hd/org-sync-timer nil))
+      ;; Synchronous commit before pull
+      (call-process "git" nil nil nil "add" "-A")
+      (call-process "git" nil nil nil "commit" "-m"
+                    (format "auto: %s" (format-time-string "%Y-%m-%d %H:%M")))
+      ;; Pull with rebase
+      (call-process "git" nil nil nil "pull" "--rebase"))))
+
+(defun hd/org-sync-schedule-commit ()
+  "Schedule a commit after delay (debounced)."
+  (when hd/org-sync-timer (cancel-timer hd/org-sync-timer))
+  (setq hd/org-sync-timer
+        (run-with-timer hd/org-sync-delay nil #'hd/org-sync-commit-and-push)))
+#+end_src
+
+*** Save Hook
+
+#+begin_src emacs-lisp
+(defun hd/org-sync-after-save ()
+  "Trigger sync if file is in org-personal."
+  (when (and buffer-file-name
+             (bound-and-true-p hd/org-personal-dir)
+             (string-prefix-p (expand-file-name hd/org-personal-dir)
+                              (expand-file-name buffer-file-name)))
+    (hd/org-sync-schedule-commit)))
+
+(add-hook 'after-save-hook #'hd/org-sync-after-save)
+#+end_src
+
+*** Pull Before Open
+
+#+begin_src emacs-lisp
+(after! org-roam
+  (advice-add 'org-roam-node-find :before (lambda (&rest _) (hd/org-sync-pull)))
+  (advice-add 'org-roam-dailies-goto-today :before (lambda (&rest _) (hd/org-sync-pull)))
+  (advice-add 'org-roam-dailies-goto-yesterday :before (lambda (&rest _) (hd/org-sync-pull)))
+  (advice-add 'org-roam-dailies-goto-date :before (lambda (&rest _) (hd/org-sync-pull))))
+#+end_src
