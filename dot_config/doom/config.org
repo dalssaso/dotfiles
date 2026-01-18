@@ -203,6 +203,20 @@ Create visual hierarchy with scaled heading sizes.
     '(org-document-title :height 1.6 :weight bold)))
 #+end_src
 
+** Centered Writing (Olivetti)
+
+Center org content like a word processor with comfortable margins.
+Use =SPC t z= for additional zen/focus mode (hides modeline, etc.).
+
+#+begin_src emacs-lisp
+(use-package! olivetti
+  :hook (org-mode . olivetti-mode)
+  :config
+  (setq olivetti-body-width 100
+        olivetti-minimum-body-width 80
+        olivetti-style 'fancy))
+#+end_src
+
 * Org Mode
 ** Path Configuration
 
