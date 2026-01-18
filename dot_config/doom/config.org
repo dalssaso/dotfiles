@@ -266,6 +266,22 @@ tables, and other elements that need alignment.
     '(org-date :inherit fixed-pitch)))
 #+end_src
 
+** Align All Tables
+
+Utility function to align all tables in the current buffer.
+
+#+begin_src emacs-lisp
+(defun hd/org-align-all-tables ()
+  "Align all tables in the current org buffer."
+  (interactive)
+  (org-table-map-tables 'org-table-align 'quietly))
+
+(map! :after org
+      :map org-mode-map
+      :localleader
+      :desc "Align all tables" "b a" #'hd/org-align-all-tables)
+#+end_src
+
 ** Heading Sizes
 
 Create visual hierarchy with scaled heading sizes.
