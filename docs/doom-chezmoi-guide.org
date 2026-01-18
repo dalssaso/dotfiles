@@ -118,19 +118,19 @@ Chezmoi uses special prefixes/suffixes to control behavior.
 
 ** Prefixes
 
-| Prefix       | Meaning                        | Example                    |
-|--------------+--------------------------------+----------------------------|
-| =dot_=       | File starts with dot           | =dot_gitconfig= → =.gitconfig= |
-| =private_=   | File is private (chmod 600)    | =private_dot_netrc=        |
-| =empty_=     | Ensure file exists but empty   | =empty_dot_file=           |
-| =executable_= | File is executable            | =executable_dot_script=    |
-| =readonly_=  | File is read-only              | =readonly_dot_config=      |
-| =create_=    | Create only if doesn't exist   | =create_dot_bashrc=        |
-| =modify_=    | Modify existing file           | =modify_dot_bashrc=        |
-| =remove_=    | Remove the target file         | =remove_dot_old=           |
-| =run_=       | Script to run                  | =run_setup.sh=             |
-| =run_once_=  | Run script only once           | =run_once_install.sh=      |
-| =run_onchange_= | Run when content changes    | =run_onchange_rebuild.sh=  |
+| Prefix        | Meaning                      | Example                    |
+|---------------+------------------------------+----------------------------|
+| =dot_=          | File starts with dot         | =dot_gitconfig= → =.gitconfig= |
+| =private_=      | File is private (chmod 600)  | =private_dot_netrc=          |
+| =empty_=        | Ensure file exists but empty | =empty_dot_file=             |
+| =executable_=   | File is executable           | =executable_dot_script=      |
+| =readonly_=     | File is read-only            | =readonly_dot_config=        |
+| =create_=       | Create only if doesn't exist | =create_dot_bashrc=          |
+| =modify_=       | Modify existing file         | =modify_dot_bashrc=          |
+| =remove_=       | Remove the target file       | =remove_dot_old=             |
+| =run_=          | Script to run                | =run_setup.sh=               |
+| =run_once_=     | Run script only once         | =run_once_install.sh=        |
+| =run_onchange_= | Run when content changes     | =run_onchange_rebuild.sh=    |
 
 ** Suffixes
 

@@ -255,15 +255,28 @@ tables, and other elements that need alignment.
   ;; Ensure these elements stay in fixed-pitch
   (custom-set-faces!
     '(org-block :inherit fixed-pitch)
+    '(org-block-begin-line :inherit fixed-pitch)
+    '(org-block-end-line :inherit fixed-pitch)
     '(org-code :inherit fixed-pitch)
-    '(org-table :inherit fixed-pitch)
+    '(org-table :inherit fixed-pitch :family nil)
     '(org-verbatim :inherit fixed-pitch)
     '(org-special-keyword :inherit fixed-pitch)
     '(org-meta-line :inherit fixed-pitch)
     '(org-checkbox :inherit fixed-pitch)
     '(org-property-value :inherit fixed-pitch)
     '(org-drawer :inherit fixed-pitch)
-    '(org-date :inherit fixed-pitch)))
+    '(org-date :inherit fixed-pitch)
+    '(org-formula :inherit fixed-pitch))
+
+  ;; Make table contents use fixed-pitch including whitespace
+  (defun hd/org-fixed-pitch-table ()
+    "Apply fixed-pitch to table regions for proper alignment."
+    (font-lock-add-keywords
+     nil
+     '(("^[ \t]*\\(|.*|\\)[ \t]*$"
+        (0 'fixed-pitch append)))
+     'append))
+  (add-hook 'org-mode-hook #'hd/org-fixed-pitch-table))
 #+end_src
 
 ** Align All Tables
