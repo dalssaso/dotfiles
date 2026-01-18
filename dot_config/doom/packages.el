@@ -64,3 +64,5 @@
 
 ;; Chezmoi integration
 (package! chezmoi)
+(package! age
+  :recipe (:host github :repo "anticomputer/age.el"))

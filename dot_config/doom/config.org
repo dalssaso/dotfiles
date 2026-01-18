@@ -106,6 +106,26 @@ Catppuccin Mocha flavor.
 Integration with chezmoi dotfile manager. Provides template overlays,
 diff/ediff tools, and convenient file operations.
 
+** Age Encryption
+
+Transparent age encryption support for editing encrypted chezmoi files.
+Uses the same identity file as chezmoi (~/.config/chezmoi/key.txt).
+
+#+begin_src emacs-lisp
+(use-package! age
+  :demand t
+  :config
+  ;; Use the same identity file as chezmoi
+  (setq age-program "age"
+        age-default-identity "~/.config/chezmoi/key.txt"
+        age-default-recipient "~/.config/chezmoi/key.txt")
+
+  ;; Enable age.el globally for .age files
+  (age-file-enable))
+#+end_src
+
+** Chezmoi Package
+
 #+begin_src emacs-lisp
 (use-package! chezmoi
   :defer t
