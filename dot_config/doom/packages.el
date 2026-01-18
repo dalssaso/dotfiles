@@ -61,3 +61,6 @@
 (package! org-modern)
 (package! org-appear)
 (package! olivetti)
+
+;; Chezmoi integration
+(package! chezmoi)

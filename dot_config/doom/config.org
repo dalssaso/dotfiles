@@ -101,6 +101,37 @@ Catppuccin Mocha flavor.
 (global-wakatime-mode)
 #+end_src
 
+* Chezmoi Integration
+
+Integration with chezmoi dotfile manager. Provides template overlays,
+diff/ediff tools, and convenient file operations.
+
+#+begin_src emacs-lisp
+(use-package! chezmoi
+  :defer t
+  :config
+  ;; Enable template value overlays in chezmoi source files
+  (setq chezmoi-template-display-p t))
+
+;; Keybindings under SPC c z
+(map! :leader
+      (:prefix ("c z" . "chezmoi")
+       :desc "Find file" "f" #'chezmoi-find
+       :desc "Write (apply)" "w" #'chezmoi-write
+       :desc "Diff" "d" #'chezmoi-diff
+       :desc "Ediff" "e" #'chezmoi-ediff
+       :desc "Sync" "s" #'chezmoi-sync-files
+       :desc "Open in magit" "g" #'chezmoi-magit-status
+       :desc "Toggle template" "t" #'chezmoi-template-buffer-display))
+
+;; Auto-enable chezmoi-mode for files in chezmoi source directory
+(add-hook 'find-file-hook
+          (lambda ()
+            (when (and buffer-file-name
+                       (string-match-p "/\\.local/share/chezmoi/" buffer-file-name))
+              (chezmoi-mode 1))))
+#+end_src
+
 * Brewfile Mode
 
 Syntax highlighting for Homebrew Brewfiles. Uses ruby-mode as base with
