@@ -100,3 +100,115 @@ Catppuccin Mocha flavor.
 #+begin_src emacs-lisp
 (global-wakatime-mode)
 #+end_src
+
+* Org Mode
+** Path Configuration
+
+Set org directories based on machine type.
+
+#+begin_src emacs-lisp
+(setq org-directory (if (hd/work-machine-p)
+                        hd/org-work-dir
+                      (expand-file-name "agenda" hd/org-personal-dir)))
+
+(setq org-agenda-files
+      (if (hd/work-machine-p)
+          (list (expand-file-name "agenda.org" hd/org-work-dir)
+                (expand-file-name "inbox.org" hd/org-work-dir))
+        (list (expand-file-name "agenda.org" (expand-file-name "agenda" hd/org-personal-dir))
+              (expand-file-name "inbox.org" (expand-file-name "agenda" hd/org-personal-dir)))))
+#+end_src
+
+** Tags
+
+Define tag shortcuts for fast tagging.
+
+#+begin_src emacs-lisp
+(after! org
+  (setq org-tag-alist
+        (if (hd/work-machine-p)
+            '(("@meeting" . ?m) ("@project" . ?p) ("@review" . ?r)
+              ("@admin" . ?a) ("@pending" . ?w) ("@report" . ?d))
+          '(("@home" . ?h) ("@errands" . ?e) ("@online" . ?o)
+            ("@health" . ?H) ("@finance" . ?f) ("@someday" . ?s)
+            ("@waiting" . ?w) ("@learning" . ?l)))))
+#+end_src
+
+** Capture Templates
+
+#+begin_src emacs-lisp
+(after! org
+  (setq org-capture-templates
+        (if (hd/work-machine-p)
+            ;; Work templates
+            '(("t" "Task" entry (file "inbox.org")
+               "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")
+              ("m" "Meeting" entry (file "inbox.org")
+               "* TODO %? :@meeting:\nSCHEDULED: %^t\n:PROPERTIES:\n:CREATED: %U\n:END:")
+              ("p" "Pending Reply" entry (file "inbox.org")
+               "* TODO %? :@pending:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+              ("r" "Review" entry (file "inbox.org")
+               "* TODO %? :@review:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+              ("a" "Admin" entry (file "inbox.org")
+               "* TODO %? :@admin:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+              ("d" "Report" entry (file "inbox.org")
+               "* TODO %? :@report:\n:PROPERTIES:\n:CREATED: %U\n:END:"))
+          ;; Personal templates
+          '(("t" "Task" entry (file "inbox.org")
+             "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("h" "Home" entry (file "inbox.org")
+             "* TODO %? :@home:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("e" "Errand" entry (file "inbox.org")
+             "* TODO %? :@errands:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("o" "Online" entry (file "inbox.org")
+             "* TODO %? :@online:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("H" "Health" entry (file "inbox.org")
+             "* TODO %? :@health:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("f" "Finance" entry (file "inbox.org")
+             "* TODO %? :@finance:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("s" "Someday" entry (file "inbox.org")
+             "* TODO %? :@someday:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("l" "Learning" entry (file "inbox.org")
+             "* TODO %? :@learning:\n:PROPERTIES:\n:CREATED: %U\n:END:")))))
+#+end_src
+
+** Custom Agenda Commands
+
+#+begin_src emacs-lisp
+(after! org-agenda
+  (setq org-agenda-custom-commands
+        (if (hd/work-machine-p)
+            ;; Work agenda commands
+            '(("W" "Work Agenda"
+               ((agenda "" ((org-agenda-span 'day)))
+                (tags-todo "+@pending" ((org-agenda-overriding-header "Awaiting Reply")))
+                (tags-todo "+@meeting" ((org-agenda-overriding-header "Meetings")))
+                (tags-todo "+@review" ((org-agenda-overriding-header "Reviews")))
+                (tags-todo "+@project" ((org-agenda-overriding-header "Projects")))
+                (tags-todo "+@admin" ((org-agenda-overriding-header "Admin")))
+                (tags-todo "+@report" ((org-agenda-overriding-header "Reports")))))
+              ("Wp" "Pending" tags-todo "+@pending")
+              ("Wm" "Meetings" tags-todo "+@meeting")
+              ("Wr" "Reviews" tags-todo "+@review"))
+          ;; Personal agenda commands
+          '(("P" "Personal Agenda"
+             ((agenda "" ((org-agenda-span 'day)))
+              (tags-todo "+@waiting" ((org-agenda-overriding-header "Waiting")))
+              (tags-todo "+@errands" ((org-agenda-overriding-header "Errands")))
+              (tags-todo "+@home" ((org-agenda-overriding-header "Home")))
+              (tags-todo "+@health" ((org-agenda-overriding-header "Health")))
+              (tags-todo "+@finance" ((org-agenda-overriding-header "Finance")))
+              (tags-todo "+@learning" ((org-agenda-overriding-header "Learning")))))
+            ("Ps" "Someday" tags-todo "+@someday")
+            ("Pw" "Waiting" tags-todo "+@waiting")))))
+#+end_src
+
+** Archive Settings
+
+#+begin_src emacs-lisp
+(after! org
+  (setq org-archive-location
+        (if (hd/work-machine-p)
+            (concat (expand-file-name "archive.org" hd/org-work-dir) "::* Archive")
+          (concat (expand-file-name "archive.org" (expand-file-name "agenda" hd/org-personal-dir)) "::* Archive"))))
+#+end_src
