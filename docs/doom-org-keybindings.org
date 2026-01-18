@@ -1,0 +1,345 @@
+#+TITLE: Doom Emacs Org-Mode Keybindings
+#+AUTHOR: Henrique Dalssaso
+#+DATE: 2026-01-18
+#+OPTIONS: toc:2 num:t H:3
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper,11pt]
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{booktabs}
+#+LATEX_HEADER: \usepackage{longtable}
+#+LATEX_HEADER: \usepackage{hyperref}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=blue}
+
+* Overview
+
+This document contains keybindings for daily use of Org-mode in Doom Emacs.
+All keybindings use =SPC= as the leader key (Evil mode).
+
+*Legend:*
+- =SPC= - Space (leader key)
+- =C-= - Control
+- =M-= - Meta/Alt
+- =S-= - Shift
+- =RET= - Enter/Return
+
+* Org-roam (Personal Knowledge Base)
+
+Custom keybindings under =SPC r= prefix.
+
+| Keybinding | Command                         | Description                   |
+|------------+---------------------------------+-------------------------------|
+| =SPC r f=    | org-roam-node-find              | Find or create a roam node    |
+| =SPC r i=    | org-roam-node-insert            | Insert link to a roam node    |
+| =SPC r t=    | org-roam-dailies-goto-today     | Go to today's daily note      |
+| =SPC r y=    | org-roam-dailies-goto-yesterday | Go to yesterday's daily note  |
+| =SPC r d=    | org-roam-dailies-goto-date      | Go to a specific date's note  |
+| =SPC r c=    | org-roam-dailies-capture-today  | Capture to today's daily note |
+
+** Org-roam Buffer
+
+| Keybinding | Command                           | Description                  |
+|------------+-----------------------------------+------------------------------|
+| =SPC n r r=  | org-roam-buffer-toggle            | Toggle roam backlinks buffer |
+| =SPC n r R=  | org-roam-buffer-display-dedicated | Dedicated backlinks buffer   |
+
+** Org-roam Aliases & Refs
+
+| Keybinding | Command               | Description            |
+|------------+-----------------------+------------------------|
+| =SPC n r a=  | org-roam-alias-add    | Add alias to node      |
+| =SPC n r A=  | org-roam-alias-remove | Remove alias from node |
+
+* Daily Notes / Journal
+
+Daily notes are accessed via =SPC r= (see Org-roam section above).
+
+** Dailies Capture Templates
+
+When capturing to daily notes (=SPC r c=):
+
+| Key | Template | Description                        |
+|-----+----------+------------------------------------|
+| =d=   | default  | Timestamped entry                  |
+| =t=   | task     | TODO item                          |
+| =j=   | journal  | Timestamped journal entry with tag |
+
+* Org Capture
+
+| Keybinding | Command     | Description             |
+|------------+-------------+-------------------------|
+| =SPC X=      | org-capture | Open capture menu       |
+| =SPC x=      | org-capture | Open capture menu (alt) |
+
+** Personal Machine Capture Templates
+
+| Key | Template | Description              |
+|-----+----------+--------------------------|
+| =t=   | Task     | Generic TODO             |
+| =h=   | Home     | Home task with @home tag |
+| =e=   | Errand   | Errand with @errands tag |
+| =o=   | Online   | Online task with @online |
+| =H=   | Health   | Health task with @health |
+| =f=   | Finance  | Finance with @finance    |
+| =s=   | Someday  | Someday/maybe item       |
+| =l=   | Learning | Learning item            |
+
+** Work Machine Capture Templates
+
+| Key | Template      | Description                  |
+|-----+---------------+------------------------------|
+| =t=   | Task          | Generic work TODO            |
+| =m=   | Meeting       | Meeting with scheduled time  |
+| =p=   | Pending Reply | Awaiting reply (slack/email) |
+| =r=   | Review        | Code/document review         |
+| =a=   | Admin         | Administrative task          |
+| =d=   | Report        | Report or documentation      |
+
+** During Capture
+
+| Keybinding | Command              | Description        |
+|------------+----------------------+--------------------|
+| =C-c C-c=    | org-capture-finalize | Save and close     |
+| =C-c C-w=    | org-capture-refile   | Refile to location |
+| =C-c C-k=    | org-capture-kill     | Abort capture      |
+
+* Org Agenda
+
+| Keybinding | Command    | Description            |
+|------------+------------+------------------------|
+| =SPC o a=    | org-agenda | Open agenda dispatcher |
+| =SPC o A=    | org-agenda | Open agenda (alt)      |
+
+** Custom Agenda Views
+
+*** Personal Machine
+
+| Key | View            | Description              |
+|-----+-----------------+--------------------------|
+| =P=   | Personal Agenda | Full personal overview   |
+| =Ps=  | Someday         | All someday/maybe items  |
+| =Pw=  | Waiting         | Items waiting on someone |
+
+*** Work Machine
+
+| Key | View        | Description          |
+|-----+-------------+----------------------|
+| =W=   | Work Agenda | Full work overview   |
+| =Wp=  | Pending     | Awaiting reply items |
+| =Wm=  | Meetings    | All meetings         |
+| =Wr=  | Reviews     | Code/doc reviews     |
+
+** Inside Agenda View
+
+*** Navigation
+
+| Keybinding | Command             | Description               |
+|------------+---------------------+---------------------------|
+| =j= / =k=      | next/previous line  | Move up/down              |
+| =J= / =K=      | next/previous item  | Jump to next/prev item    |
+| =n= / =p=      | next/previous line  | Move up/down (alt)        |
+| =N= / =P=      | next/previous item  | Jump items (alt)          |
+| =g g=        | beginning of buffer | Go to top                 |
+| =G=          | end of buffer       | Go to bottom              |
+| =RET=        | org-agenda-goto     | Go to item in file        |
+| =TAB=        | org-agenda-goto     | Go to item (alt)          |
+| =SPC=        | org-agenda-show     | Show item in other window |
+
+*** View Controls
+
+| Keybinding | Command               | Description         |
+|------------+-----------------------+---------------------|
+| =d=          | org-agenda-day-view   | Day view            |
+| =w=          | org-agenda-week-view  | Week view           |
+| =m=          | org-agenda-month-view | Month view          |
+| =y=          | org-agenda-year-view  | Year view           |
+| =.=          | org-agenda-goto-today | Jump to today       |
+| =f=          | org-agenda-later      | Go forward in time  |
+| =b=          | org-agenda-earlier    | Go backward in time |
+
+*** Actions on Items
+
+| Keybinding | Command                    | Description             |
+|------------+----------------------------+-------------------------|
+| =t=          | org-agenda-todo            | Cycle TODO state        |
+| =T=          | org-agenda-todo            | Set specific TODO state |
+| =:=          | org-agenda-set-tags        | Set tags                |
+| =,=          | org-agenda-priority        | Set priority            |
+| =+=          | org-agenda-priority-up     | Increase priority       |
+| =-=          | org-agenda-priority-down   | Decrease priority       |
+| =s=          | org-agenda-schedule        | Schedule item           |
+| =d=          | org-agenda-deadline        | Set deadline            |
+| =S-right=    | org-agenda-do-date-later   | Shift date forward      |
+| =S-left=     | org-agenda-do-date-earlier | Shift date backward     |
+| =r=          | org-agenda-refile          | Refile item             |
+| =a=          | org-agenda-archive         | Archive item            |
+| =C-k=        | org-agenda-kill            | Kill (delete) item      |
+
+*** Refresh & Quit
+
+| Keybinding | Command             | Description              |
+|------------+---------------------+--------------------------|
+| =g r=        | org-agenda-redo     | Refresh agenda           |
+| =g R=        | org-agenda-redo-all | Rebuild all agenda views |
+| =q=          | org-agenda-quit     | Quit agenda              |
+| =x=          | org-agenda-exit     | Exit and remove buffers  |
+
+* Org Files - Editing
+
+** Headings & Structure
+
+| Keybinding | Command                    | Description                  |
+|------------+----------------------------+------------------------------|
+| =M-RET=      | org-insert-heading         | Insert heading               |
+| =C-RET=      | org-insert-heading-respect | Insert heading after subtree |
+| =M-S-RET=    | org-insert-todo-heading    | Insert TODO heading          |
+| =M-left=     | org-promote-subtree        | Promote (decrease level)     |
+| =M-right=    | org-demote-subtree         | Demote (increase level)      |
+| =M-up=       | org-move-subtree-up        | Move subtree up              |
+| =M-down=     | org-move-subtree-down      | Move subtree down            |
+| =TAB=        | org-cycle                  | Cycle visibility             |
+| =S-TAB=      | org-global-cycle           | Cycle all visibility         |
+| =za=         | org-cycle                  | Fold/unfold (vim style)      |
+| =zA=         | org-shifttab               | Fold/unfold all              |
+| =zc=         | +org/close-fold            | Close fold                   |
+| =zo=         | +org/open-fold             | Open fold                    |
+| =zr=         | +org/open-all-folds        | Open all folds               |
+| =zm=         | +org/close-all-folds       | Close all folds              |
+
+** TODO States
+
+| Keybinding | Command        | Description         |
+|------------+----------------+---------------------|
+| =t=          | org-todo       | Cycle TODO state    |
+| =T=          | org-todo       | Select TODO state   |
+| =S-left=     | org-shiftleft  | Previous TODO state |
+| =S-right=    | org-shiftright | Next TODO state     |
+
+** Tags & Properties
+
+| Keybinding | Command              | Description        |
+|------------+----------------------+--------------------|
+| =SPC m q=    | org-set-tags-command | Set tags           |
+| =C-c C-q=    | org-set-tags-command | Set tags (alt)     |
+| =SPC m o=    | org-set-property     | Set property       |
+| =C-c C-x p=  | org-set-property     | Set property (alt) |
+
+** Timestamps & Scheduling
+
+| Keybinding | Command                 | Description            |
+|------------+-------------------------+------------------------|
+| =SPC m d s=  | org-schedule            | Schedule               |
+| =SPC m d d=  | org-deadline            | Set deadline           |
+| =SPC m d t=  | org-time-stamp          | Insert timestamp       |
+| =C-c .=      | org-time-stamp          | Insert timestamp (alt) |
+| =C-c !=      | org-time-stamp-inactive | Inactive timestamp     |
+| =S-up=       | org-timestamp-up        | Increase time/date     |
+| =S-down=     | org-timestamp-down      | Decrease time/date     |
+
+** Links
+
+| Keybinding | Command                 | Description            |
+|------------+-------------------------+------------------------|
+| =SPC m l l=  | org-insert-link         | Insert/edit link       |
+| =C-c C-l=    | org-insert-link         | Insert/edit link (alt) |
+| =SPC m l t=  | org-toggle-link-display | Toggle link display    |
+| =RET=        | org-open-at-point       | Open link at point     |
+| =C-c C-o=    | org-open-at-point       | Open link (alt)        |
+
+** Refiling & Archiving
+
+| Keybinding  | Command             | Description     |
+|-------------+---------------------+-----------------|
+| =SPC m r r=   | org-refile          | Refile heading  |
+| =C-c C-w=     | org-refile          | Refile (alt)    |
+| =SPC m r a=   | org-archive-subtree | Archive subtree |
+| =C-c C-x C-a= | org-archive-subtree | Archive (alt)   |
+
+** Lists & Checkboxes
+
+| Keybinding | Command             | Description           |
+|------------+---------------------+-----------------------|
+| =M-RET=      | org-insert-item     | Insert list item      |
+| =M-S-RET=    | org-insert-item     | Insert checkbox item  |
+| =C-c C-c=    | org-toggle-checkbox | Toggle checkbox       |
+| =SPC m x=    | org-toggle-checkbox | Toggle checkbox (alt) |
+| =S-left=     | org-shiftleft       | Cycle bullet type     |
+| =S-right=    | org-shiftright      | Cycle bullet type     |
+
+* Tables
+
+| Keybinding | Command                     | Description            |
+|------------+-----------------------------+------------------------|
+| =SPC m b -=  | org-table-insert-hline      | Insert horizontal line |
+| =TAB=        | org-table-next-field        | Next cell              |
+| =S-TAB=      | org-table-previous-field    | Previous cell          |
+| =RET=        | org-table-next-row          | Next row               |
+| =M-left=     | org-table-move-column-left  | Move column left       |
+| =M-right=    | org-table-move-column-right | Move column right      |
+| =M-up=       | org-table-move-row-up       | Move row up            |
+| =M-down=     | org-table-move-row-down     | Move row down          |
+| =M-S-left=   | org-table-delete-column     | Delete column          |
+| =M-S-right=  | org-table-insert-column     | Insert column          |
+| =M-S-up=     | org-table-kill-row          | Delete row             |
+| =M-S-down=   | org-table-insert-row        | Insert row             |
+
+* Export
+
+| Keybinding | Command             | Description       |
+|------------+---------------------+-------------------|
+| =SPC m e=    | org-export-dispatch | Export menu       |
+| =C-c C-e=    | org-export-dispatch | Export menu (alt) |
+
+** Common Export Targets
+
+From the export menu (=SPC m e=):
+
+| Key | Target                |
+|-----+-----------------------|
+| =h h= | HTML file             |
+| =h o= | HTML and open         |
+| =l l= | LaTeX file            |
+| =l p= | LaTeX to PDF          |
+| =l o= | LaTeX to PDF and open |
+| =m m= | Markdown              |
+| =t a= | Plain text (ASCII)    |
+| =t u= | Plain text (UTF-8)    |
+
+* Quick Reference Card
+
+** Most Used Daily
+
+| Action             | Keybinding |
+|--------------------+------------|
+| Capture new item   | =SPC X=      |
+| Open agenda        | =SPC o a=    |
+| Find roam node     | =SPC r f=    |
+| Today's daily note | =SPC r t=    |
+| Capture to daily   | =SPC r c=    |
+| Cycle TODO state   | =t=          |
+| Set tags           | =SPC m q=    |
+| Schedule           | =SPC m d s=  |
+| Refile             | =SPC m r r=  |
+| Export             | =SPC m e=    |
+
+** Navigation
+
+| Action           | Keybinding    |
+|------------------+---------------|
+| Fold/unfold      | =TAB=           |
+| Fold all         | =S-TAB=         |
+| Go to link       | =RET=           |
+| Next heading     | =]]= or =C-c C-n= |
+| Previous heading | =[[= or =C-c C-p= |
+
+* Exporting This Document
+
+To export this document as PDF:
+
+1. Open this file in Emacs
+2. Press =SPC m e= (or =C-c C-e=)
+3. Press =l p= for LaTeX to PDF
+4. Or press =l o= to generate PDF and open it
+
+Requirements:
+- LaTeX distribution (TeX Live, MacTeX, or MiKTeX)
+- =pdflatex= in your PATH
