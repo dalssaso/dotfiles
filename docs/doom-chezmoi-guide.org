@@ -1,0 +1,347 @@
+#+TITLE: Doom Emacs Chezmoi Guide
+#+AUTHOR: Henrique Dalssaso
+#+DATE: 2026-01-18
+#+OPTIONS: toc:2 num:t H:3
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper,11pt]
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{booktabs}
+#+LATEX_HEADER: \usepackage{longtable}
+#+LATEX_HEADER: \usepackage{hyperref}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=blue}
+
+* Overview
+
+This document covers chezmoi integration in Doom Emacs, including keybindings,
+encrypted file handling, and common workflows.
+
+*Chezmoi source directory:* =~/.local/share/chezmoi/=
+
+*Target:* Your home directory (=~/=)
+
+* Emacs Keybindings
+
+All chezmoi commands are under the =SPC c z= prefix.
+
+| Keybinding  | Command                         | Description                    |
+|-------------+---------------------------------+--------------------------------|
+| =SPC c z f= | chezmoi-find                    | Find and open a managed file   |
+| =SPC c z w= | chezmoi-write                   | Save and apply changes         |
+| =SPC c z d= | chezmoi-diff                    | Show diff (source vs target)   |
+| =SPC c z e= | chezmoi-ediff                   | Resolve conflicts with ediff   |
+| =SPC c z s= | chezmoi-sync-files              | Sync all managed files         |
+| =SPC c z g= | chezmoi-magit-status            | Open chezmoi repo in magit     |
+| =SPC c z t= | chezmoi-template-buffer-display | Toggle template value overlays |
+
+* Encrypted Files (Age)
+
+Chezmoi uses age encryption. Emacs handles this transparently via =age.el=.
+
+** How It Works
+
+1. Open any =.age= file in chezmoi source
+2. File is automatically decrypted using =~/.config/chezmoi/key.txt=
+3. Edit normally
+4. Save → automatically re-encrypted
+
+** Encrypted Files in Your Config
+
+| Source File                            | Target File        |
+|----------------------------------------+--------------------|
+| =encrypted_dot_gitconfig.age=          | =~/.gitconfig=     |
+| =encrypted_dot_gitconfig-work.age=     | =~/.gitconfig-work= |
+| =encrypted_dot_gitconfig-oss.age=      | =~/.gitconfig-oss= |
+| =encrypted_dot_authinfo-personal.gpg.age= | =~/.authinfo-personal.gpg= |
+| =encrypted_dot_authinfo-work.gpg.age=  | =~/.authinfo-work.gpg= |
+| =encrypted_dot_wakatime.cfg.age=       | =~/.wakatime.cfg=  |
+| =encrypted_private_dot_netrc.age=      | =~/.netrc=         |
+
+** Workflow
+
+#+begin_example
+SPC c z f                    → Find file
+Select: encrypted_dot_gitconfig.age
+                             → Opens decrypted
+Edit the file...
+C-x C-s (or :w)              → Save (auto re-encrypts)
+SPC c z w                    → Apply to target location
+#+end_example
+
+* Template Files
+
+Chezmoi template files (=.tmpl=) use Go template syntax with your config data.
+
+** Available Variables
+
+From =~/.config/chezmoi/chezmoi.toml=:
+
+| Variable       | Description              | Example Value               |
+|----------------+--------------------------+-----------------------------|
+| =.email=       | Personal email           | =henrique@dalssaso.com.br=  |
+| =.workEmail=   | Work email               | =henrique.dalssaso@company.com= |
+| =.workMachine= | Is this a work machine?  | =true= / =false=            |
+| =.machineType= | Hardware type            | =laptop= / =macstudio=      |
+| =.user=        | Username                 | =dalssaso= / =henrique.dalssaso= |
+
+** Template Syntax
+
+#+begin_src text
+# Basic variable
+{{ .email }}
+
+# Conditional
+{{- if .workMachine }}
+# Work-specific config
+{{- else }}
+# Personal config
+{{- end }}
+
+# Quote for strings
+{{ .workEmail | quote }}
+
+# Command output
+{{ output "hostname" | trim }}
+#+end_src
+
+** Template Overlays in Emacs
+
+Toggle with =SPC c z t= to see rendered values inline:
+
+#+begin_example
+Before toggle: {{ .email }}
+After toggle:  {{ .email }}  → henrique@dalssaso.com.br
+#+end_example
+
+* File Naming Conventions
+
+Chezmoi uses special prefixes/suffixes to control behavior.
+
+** Prefixes
+
+| Prefix       | Meaning                        | Example                    |
+|--------------+--------------------------------+----------------------------|
+| =dot_=       | File starts with dot           | =dot_gitconfig= → =.gitconfig= |
+| =private_=   | File is private (chmod 600)    | =private_dot_netrc=        |
+| =empty_=     | Ensure file exists but empty   | =empty_dot_file=           |
+| =executable_= | File is executable            | =executable_dot_script=    |
+| =readonly_=  | File is read-only              | =readonly_dot_config=      |
+| =create_=    | Create only if doesn't exist   | =create_dot_bashrc=        |
+| =modify_=    | Modify existing file           | =modify_dot_bashrc=        |
+| =remove_=    | Remove the target file         | =remove_dot_old=           |
+| =run_=       | Script to run                  | =run_setup.sh=             |
+| =run_once_=  | Run script only once           | =run_once_install.sh=      |
+| =run_onchange_= | Run when content changes    | =run_onchange_rebuild.sh=  |
+
+** Suffixes
+
+| Suffix   | Meaning           | Example                       |
+|----------+-------------------+-------------------------------|
+| =.tmpl=  | Template file     | =dot_gitconfig.tmpl=          |
+| =.age=   | Age encrypted     | =encrypted_dot_secret.age=    |
+| =.gpg=   | GPG encrypted     | =encrypted_dot_secret.gpg=    |
+
+** Combined Examples
+
+| Source Name                         | Target            | Notes                      |
+|-------------------------------------+-------------------+----------------------------|
+| =dot_config/doom/config.org=        | =~/.config/doom/config.org= | Directory + file |
+| =private_dot_ssh/config=            | =~/.ssh/config=   | Private SSH config         |
+| =encrypted_dot_gitconfig.age=       | =~/.gitconfig=    | Encrypted gitconfig        |
+| =dot_bashrc.tmpl=                   | =~/.bashrc=       | Templated bashrc           |
+| =run_once_install-packages.sh.tmpl= | (runs once)       | One-time setup script      |
+
+* CLI Commands Reference
+
+Common chezmoi commands for terminal use.
+
+** Basic Operations
+
+| Command              | Description                        |
+|----------------------+------------------------------------|
+| =chezmoi add <file>= | Add file to chezmoi management     |
+| =chezmoi edit <file>= | Edit file (handles encryption)    |
+| =chezmoi apply=      | Apply all changes to target        |
+| =chezmoi apply -v=   | Apply with verbose output          |
+| =chezmoi diff=       | Show what would change             |
+| =chezmoi status=     | Show changed files                 |
+| =chezmoi update=     | Pull and apply from remote         |
+
+** Adding Files
+
+| Command                      | Description                    |
+|------------------------------+--------------------------------|
+| =chezmoi add ~/.bashrc=      | Add file                       |
+| =chezmoi add --encrypt ~/.secret= | Add encrypted              |
+| =chezmoi add --template ~/.config= | Add as template           |
+| =chezmoi add -r ~/.config/doom= | Add directory recursively   |
+
+** Editing
+
+| Command                          | Description                  |
+|----------------------------------+------------------------------|
+| =chezmoi edit ~/.gitconfig=      | Edit (decrypts if encrypted) |
+| =chezmoi edit --apply ~/.bashrc= | Edit and apply immediately   |
+| =chezmoi edit --diff ~/.bashrc=  | Edit and show diff           |
+
+** Inspection
+
+| Command                    | Description                   |
+|----------------------------+-------------------------------|
+| =chezmoi data=             | Show template data (JSON)     |
+| =chezmoi cat ~/.gitconfig= | Show file as it would appear  |
+| =chezmoi source-path ~/.gitconfig= | Show source file path   |
+| =chezmoi target-path dot_gitconfig= | Show target path       |
+| =chezmoi managed=          | List all managed files        |
+
+** Git Operations
+
+| Command            | Description                     |
+|--------------------+---------------------------------|
+| =chezmoi cd=       | cd to source directory          |
+| =chezmoi git pull= | Run git pull in source          |
+| =chezmoi git push= | Run git push in source          |
+| =chezmoi git status= | Run git status in source      |
+
+** Initialization
+
+| Command                        | Description                 |
+|--------------------------------+-----------------------------|
+| =chezmoi init=                 | Initialize chezmoi          |
+| =chezmoi init <github-user>=   | Init from GitHub dotfiles   |
+| =chezmoi init --apply <user>=  | Init and apply immediately  |
+
+* Common Workflows
+
+** Adding a New Dotfile
+
+#+begin_example
+# Terminal
+chezmoi add ~/.config/newapp/config.toml
+
+# Or in Emacs
+1. Copy file to ~/.local/share/chezmoi/dot_config/newapp/config.toml
+2. SPC c z g  → commit in magit
+#+end_example
+
+** Adding an Encrypted File
+
+#+begin_example
+# Terminal
+chezmoi add --encrypt ~/.secret-file
+
+# Or in Emacs
+1. Create file: encrypted_dot_secret-file.age
+2. Edit normally (age.el handles encryption)
+3. SPC c z w to apply
+#+end_example
+
+** Editing Existing Managed File
+
+#+begin_example
+# In Emacs
+SPC c z f              → Find chezmoi file
+Edit...
+C-x C-s                → Save
+SPC c z d              → Preview diff
+SPC c z w              → Apply changes
+#+end_example
+
+** Resolving Conflicts
+
+When target differs from source:
+
+#+begin_example
+SPC c z e              → Open ediff
+                       → Resolve differences
+                       → Save
+SPC c z w              → Apply
+#+end_example
+
+** Machine-Specific Configuration
+
+Use templates with conditionals:
+
+#+begin_src text
+{{- if .workMachine }}
+# Work machine settings
+export CORP_PROXY=http://proxy.corp.com
+{{- else }}
+# Personal machine settings
+export PATH=$PATH:~/games/bin
+{{- end }}
+#+end_src
+
+** Setting Up a New Machine
+
+#+begin_example
+# 1. Install chezmoi
+brew install chezmoi
+
+# 2. Initialize from your repo
+chezmoi init --apply <github-username>
+
+# 3. Answer prompts for machine config
+Email Address: ...
+Work Email Address: ...
+Is it a machine from Work: yes/no
+
+# 4. Done! All dotfiles applied
+#+end_example
+
+* Directory Structure
+
+Your chezmoi source directory:
+
+#+begin_example
+~/.local/share/chezmoi/
+├── .chezmoi.toml.tmpl        # Config template (prompts)
+├── .chezmoiignore            # Files to ignore
+├── .chezmoiscripts/          # Hook scripts
+├── Brewfile.common           # Shared Homebrew packages
+├── Brewfile.work             # Work-only packages
+├── Brewfile.personal         # Personal-only packages
+├── dot_config/               # ~/.config/
+│   ├── doom/                 # Doom Emacs config
+│   ├── fish/                 # Fish shell config
+│   └── ghostty/              # Terminal config
+├── dot_ssh/                  # ~/.ssh/
+├── encrypted_*.age           # Encrypted files
+└── key.txt.age               # Encrypted age key
+#+end_example
+
+* Quick Reference Card
+
+** Most Used (Emacs)
+
+| Action              | Keybinding  |
+|---------------------+-------------|
+| Find chezmoi file   | =SPC c z f= |
+| Save and apply      | =SPC c z w= |
+| Show diff           | =SPC c z d= |
+| Resolve with ediff  | =SPC c z e= |
+| Open in magit       | =SPC c z g= |
+| Toggle templates    | =SPC c z t= |
+
+** Most Used (CLI)
+
+| Action              | Command              |
+|---------------------+----------------------|
+| Apply all changes   | =chezmoi apply -v=   |
+| Show what changed   | =chezmoi diff=       |
+| Add new file        | =chezmoi add <file>= |
+| Add encrypted       | =chezmoi add --encrypt <file>= |
+| Edit file           | =chezmoi edit <file>= |
+| Update from remote  | =chezmoi update=     |
+
+* Exporting This Document
+
+To export this document as PDF:
+
+1. Open this file in Emacs
+2. Press =SPC m e= (or =C-c C-e=)
+3. Press =l p= for LaTeX to PDF
+4. Or press =l o= to generate PDF and open it
+
+Requirements:
+- LaTeX distribution (MacTeX)
+- =pdflatex= in your PATH
