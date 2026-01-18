@@ -10,6 +10,7 @@ dot_config/private_fish/fish_variableskey.txt.age
 key.txt.age
 docs/**
 Brewfile.*
+.config/doom/config.el
 
 # Authinfo source files - deployed via modify script (use target paths in ignore)
 .authinfo-personal.gpg
