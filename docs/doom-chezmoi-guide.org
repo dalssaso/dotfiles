@@ -134,11 +134,11 @@ Chezmoi uses special prefixes/suffixes to control behavior.
 
 ** Suffixes
 
-| Suffix   | Meaning           | Example                       |
-|----------+-------------------+-------------------------------|
-| =.tmpl=  | Template file     | =dot_gitconfig.tmpl=          |
-| =.age=   | Age encrypted     | =encrypted_dot_secret.age=    |
-| =.gpg=   | GPG encrypted     | =encrypted_dot_secret.gpg=    |
+| Suffix | Meaning       | Example                  |
+|--------+---------------+--------------------------|
+| =.tmpl=  | Template file | =dot_gitconfig.tmpl=       |
+| =.age=   | Age encrypted | =encrypted_dot_secret.age= |
+| =.gpg=   | GPG encrypted | =encrypted_dot_secret.gpg= |
 
 ** Combined Examples
 

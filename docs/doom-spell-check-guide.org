@@ -1,0 +1,329 @@
+#+TITLE: Doom Emacs Spell & Grammar Check Guide
+#+AUTHOR: Henrique Dalssaso
+#+DATE: 2026-01-19
+#+OPTIONS: toc:2 num:t H:3
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper,11pt]
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{booktabs}
+#+LATEX_HEADER: \usepackage{longtable}
+#+LATEX_HEADER: \usepackage{hyperref}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=blue}
+
+* Overview
+
+This document covers spell checking and grammar checking in Doom Emacs using:
+
+- *Hunspell* - Multi-language spell checking (via flyspell)
+- *LTeX+* - Grammar and style checking (via LSP)
+
+*Supported Languages:* en_US, en_GB, pt_BR
+
+* Hunspell (Spell Checking)
+
+Hunspell provides spell checking with support for multiple dictionaries simultaneously.
+
+** Configuration
+
+Doom module: =(spell +flyspell +hunspell)= in =init.el=
+
+Dictionaries are installed automatically by chezmoi to =~/Library/Spelling/=.
+
+** Default Dictionary
+
+The default dictionary is =multi=, which combines all three languages:
+- en_US (American English)
+- en_GB (British English)
+- pt_BR (Brazilian Portuguese)
+
+This means words from any of these languages are accepted as correct.
+
+** Keybindings
+
+*** Evil Normal Mode (vim-style)
+
+| Keybinding | Command           | Description                    |
+|------------+-------------------+--------------------------------|
+| =zg=         | +spell/add-word   | Add word to personal dictionary |
+| =zw=         | +spell/remove-word | Remove word from dictionary    |
+| =z==         | flyspell-correct-at-point | Correct word at point |
+
+*** Leader Key (SPC S)
+
+| Keybinding | Command                   | Description                |
+|------------+---------------------------+----------------------------|
+| =SPC S d=    | hd/switch-spell-dictionary | Switch dictionary          |
+| =SPC S c=    | flyspell-correct-at-point | Correct word at point      |
+| =SPC S p=    | flyspell-correct-previous | Correct previous misspelling |
+| =SPC S a=    | +spell/add-word           | Add word to dictionary     |
+| =SPC S r=    | +spell/remove-word        | Remove word from dictionary |
+| =SPC S b=    | flyspell-buffer           | Check entire buffer        |
+
+** Available Dictionaries
+
+| Dictionary | Languages                      | Use Case                |
+|------------+--------------------------------+-------------------------|
+| =multi=      | en_US + en_GB + pt_BR          | Mixed language writing  |
+| =en_US=      | American English               | US English only         |
+| =en_GB=      | British English                | UK English only         |
+| =pt_BR=      | Brazilian Portuguese           | Portuguese only         |
+
+** Switching Dictionaries
+
+Use =SPC S d= to switch between dictionaries:
+
+#+begin_example
+SPC S d              → Opens completion menu
+Select: multi        → All three languages
+Select: en_US        → American English only
+Select: pt_BR        → Portuguese only
+#+end_example
+
+** Personal Dictionary
+
+Words added with =zg= or =SPC S a= are saved to your personal dictionary.
+
+*Location:* =~/.local/share/doom/ispell/=
+
+The personal dictionary is shared across all languages.
+
+** Automatic Spell Checking
+
+Flyspell is automatically enabled in:
+- org-mode
+- markdown-mode
+- LaTeX/TeX modes
+- Git commit messages
+- Email composition
+
+Misspelled words are underlined in red.
+
+* LTeX+ (Grammar Checking)
+
+LTeX+ provides advanced grammar and style checking using LanguageTool via LSP.
+
+** What It Checks
+
+- Grammar errors
+- Style issues
+- Punctuation problems
+- Word repetition
+- Passive voice (optional)
+- And more...
+
+** Configuration
+
+LTeX+ is configured but *not enabled by default* (to avoid slowdown on large files).
+
+*Mother tongue:* pt_BR (helps catch language interference errors)
+
+** Keybindings
+
+| Keybinding | Command              | Description          |
+|------------+----------------------+----------------------|
+| =SPC l l=    | hd/enable-ltex       | Enable LTeX for buffer |
+| =SPC l L=    | hd/ltex-set-language | Change LTeX language |
+
+** Enabling LTeX
+
+LTeX must be manually enabled per-buffer:
+
+#+begin_example
+# Open an org/markdown/LaTeX file
+SPC l l              → Enables LTeX LSP
+                     → Grammar errors appear as diagnostics
+#+end_example
+
+** Changing Language
+
+#+begin_example
+SPC l L              → Opens language selection
+Select: en-US        → American English grammar
+Select: en-GB        → British English grammar
+Select: pt-BR        → Portuguese grammar
+#+end_example
+
+** Supported File Types
+
+LTeX works in:
+- org-mode
+- markdown-mode / gfm-mode
+- LaTeX-mode / latex-mode
+- text-mode
+
+** Viewing Diagnostics
+
+Once LTeX is enabled, grammar issues appear as LSP diagnostics:
+
+| Keybinding | Command                    | Description              |
+|------------+----------------------------+--------------------------|
+| =SPC c x=    | +default/diagnostics       | List all diagnostics     |
+| =] d=        | flycheck-next-error        | Next diagnostic          |
+| =[ d=        | flycheck-previous-error    | Previous diagnostic      |
+| =SPC c a=    | lsp-execute-code-action    | Apply suggested fix      |
+
+* Hunspell vs LTeX
+
+| Feature              | Hunspell (flyspell)      | LTeX+                     |
+|----------------------+--------------------------+---------------------------|
+| Purpose              | Spell checking           | Grammar & style checking  |
+| Speed                | Fast                     | Slower (LSP-based)        |
+| Auto-enabled         | Yes                      | No (manual)               |
+| Multi-language       | Yes (simultaneous)       | One at a time             |
+| Personal dictionary  | Yes                      | Yes (via LSP)             |
+| Checks grammar       | No                       | Yes                       |
+| Checks style         | No                       | Yes                       |
+
+*Recommendation:* Use hunspell for everyday writing. Enable LTeX when you need thorough grammar checking (final drafts, important documents).
+
+* Workflows
+
+** Quick Spell Check (Daily Use)
+
+#+begin_example
+# While writing in org-mode...
+Misspelled word highlighted in red
+
+z=                   → See corrections
+Select correction    → Word is fixed
+
+# Or for unknown correct words:
+zg                   → Add to dictionary
+#+end_example
+
+** Thorough Review (Important Documents)
+
+#+begin_example
+# 1. Check spelling first
+SPC S b              → Check entire buffer
+Fix any misspellings...
+
+# 2. Enable grammar checking
+SPC l l              → Enable LTeX
+
+# 3. Review grammar issues
+] d                  → Go to next issue
+SPC c a              → Apply fix (if available)
+                     → Or fix manually
+
+# 4. Repeat until clean
+#+end_example
+
+** Writing in Portuguese
+
+#+begin_example
+# Switch to Portuguese only
+SPC S d              → Select pt_BR
+
+# Enable Portuguese grammar checking
+SPC l l              → Enable LTeX
+SPC l L              → Select pt-BR
+
+# Write in Portuguese...
+#+end_example
+
+** Mixed Language Document
+
+#+begin_example
+# Use multi dictionary (default)
+SPC S d              → Select multi
+
+# LTeX can only check one language at a time
+# Switch as needed for different sections
+SPC l L              → Switch between en-US/pt-BR
+#+end_example
+
+* Troubleshooting
+
+** Spell check not working
+
+1. Check hunspell is installed:
+   #+begin_example
+   which hunspell
+   #+end_example
+
+2. Check dictionaries exist:
+   #+begin_example
+   ls ~/Library/Spelling/
+   # Should show: en_US.dic, en_US.aff, en_GB.dic, etc.
+   #+end_example
+
+3. Reinstall dictionaries:
+   #+begin_example
+   chezmoi apply
+   # Or run manually:
+   ~/.local/share/chezmoi/.chezmoiscripts/darwin/run_once_after_install-hunspell-dictionaries.fish
+   #+end_example
+
+** LTeX not starting
+
+1. Check ltex-ls-plus is installed:
+   #+begin_example
+   which ltex-ls-plus
+   #+end_example
+
+2. Install via mise if missing:
+   #+begin_example
+   mise install
+   #+end_example
+
+3. Restart Emacs and try =SPC l l= again.
+
+** Too many false positives
+
+- Add technical terms to personal dictionary (=zg=)
+- For LTeX, use code blocks for code snippets
+- Consider switching to single-language dictionary if writing in one language
+
+* Installation Details
+
+** Hunspell Dictionaries
+
+Dictionaries are downloaded from LibreOffice's dictionary repository and installed to =~/Library/Spelling/=.
+
+This is handled automatically by chezmoi script:
+=.chezmoiscripts/darwin/run_once_after_install-hunspell-dictionaries.fish=
+
+** LTeX+ Language Server
+
+LTeX+ (ltex-ls-plus) is installed via mise:
+
+#+begin_example
+# In ~/.config/mise/config.toml
+"github:ltex-plus/ltex-ls-plus" = "latest"
+#+end_example
+
+* Quick Reference Card
+
+** Spell Checking (Hunspell)
+
+| Action                | Keybinding |
+|-----------------------+------------|
+| Add word to dict      | =zg=         |
+| Remove word from dict | =zw=         |
+| Correct word          | =z==         |
+| Switch dictionary     | =SPC S d=    |
+| Check buffer          | =SPC S b=    |
+
+** Grammar Checking (LTeX)
+
+| Action            | Keybinding |
+|-------------------+------------|
+| Enable LTeX       | =SPC l l=    |
+| Change language   | =SPC l L=    |
+| Next diagnostic   | =] d=        |
+| Apply fix         | =SPC c a=    |
+| List diagnostics  | =SPC c x=    |
+
+* Exporting This Document
+
+To export this document as PDF:
+
+1. Open this file in Emacs
+2. Press =SPC m e= (or =C-c C-e=)
+3. Press =l p= for LaTeX to PDF
+4. Or press =l o= to generate PDF and open it
+
+Requirements:
+- LaTeX distribution (MacTeX)
+- =pdflatex= in your PATH
