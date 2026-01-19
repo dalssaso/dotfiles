@@ -530,6 +530,16 @@ rendered text while still being able to edit markers easily.
         org-appear-autosubmarkers t))
 #+end_src
 
+** Org Fragtog
+
+Automatically toggle LaTeX fragment previews when cursor enters/leaves them.
+Works like org-appear but for LaTeX math.
+
+#+begin_src emacs-lisp
+(use-package! org-fragtog
+  :hook (org-mode . org-fragtog-mode))
+#+end_src
+
 ** Visual Settings
 
 #+begin_src emacs-lisp
