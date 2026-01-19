@@ -136,6 +136,49 @@ They are placed in =~/Library/Spelling/=.
 #+begin_src emacs-lisp
 (after! treesit
   (setq treesit-font-lock-level 3))
+** Formatters & Linters
+
+Configure language-specific formatters (via apheleia) and linters (via flycheck).
+With =+lsp= enabled on the format module, LSP formatting is the default.
+We override specific modes to use our preferred formatters instead.
+
+*** Python (ruff)
+
+Use ruff for everything: LSP, formatting, and linting.
+
+#+begin_src emacs-lisp
+;; Use lsp-mode's built-in ruff client
+(after! lsp-mode
+  (require 'lsp-ruff nil t)
+  ;; Disable other Python LSP servers in favor of ruff
+  (setq lsp-disabled-clients '(pyls pylsp pyright mspyls))
+  ;; Configure ruff LSP
+  (setq lsp-ruff-log-level "warn"
+        lsp-ruff-advertize-fix-all t
+        lsp-ruff-advertize-organize-imports t
+        lsp-ruff-import-strategy "fromEnvironment"))
+
+;; Use ruff for formatting instead of LSP (format + isort in one)
+(after! apheleia
+  (setf (alist-get 'python-mode apheleia-mode-alist) '(ruff-isort ruff))
+  (setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff)))
+(setq-hook! '(python-mode-hook python-ts-mode-hook)
+  +format-with '(ruff-isort ruff))
+
+;; Use ruff for linting via flycheck
+(after! flycheck
+  (flycheck-define-checker python-ruff
+    "A Python syntax and style checker using ruff."
+    :command ("ruff" "check" "--output-format=concise" source-original)
+    :error-patterns
+    ((warning line-start (file-name) ":" line ":" column ": " (id (one-or-more alnum)) " " (message) line-end))
+    :modes (python-mode python-ts-mode)
+    :predicate (lambda () (buffer-file-name)))
+  (add-to-list 'flycheck-checkers 'python-ruff)
+  (setq-hook! '(python-mode-hook python-ts-mode-hook)
+    flycheck-checker 'python-ruff))
+#+end_src
+
 *** JavaScript & CSS (prettier)
 
 Use prettier for JavaScript, TypeScript, and CSS. Prettier automatically
