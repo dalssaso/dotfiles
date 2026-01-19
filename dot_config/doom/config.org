@@ -131,6 +131,7 @@ They are placed in =~/Library/Spelling/=.
        :desc "Remove from dictionary" "r" #'+spell/remove-word
        :desc "Check buffer" "b" #'flyspell-buffer))
 #+end_src
+
 ** Treesitter
 
 #+begin_src emacs-lisp
@@ -761,6 +762,22 @@ Define tag shortcuts for fast tagging.
         (if (hd/work-machine-p)
             (concat (expand-file-name "archive.org" hd/org-work-dir) "::* Archive")
           (concat (expand-file-name "archive.org" (expand-file-name "agenda" hd/org-personal-dir)) "::* Archive"))))
+#+end_src
+
+** Babel Languages
+
+Configure org-babel for additional languages.
+
+*** Mermaid Diagrams
+
+Support for mermaid diagrams in org-babel. Requires =mmdc= (mermaid-cli) to be installed.
+
+#+begin_src emacs-lisp
+(use-package! ob-mermaid
+  :after org
+  :config
+  ;; Use mmdc from mise-installed mermaid-cli
+  (setq ob-mermaid-cli-path (executable-find "mmdc")))
 #+end_src
 
 * Org-roam
