@@ -212,6 +212,21 @@ Supports org-mode, markdown, and LaTeX files.
        :desc "Enable LTeX" "l" #'hd/enable-ltex
        :desc "Set language" "L" #'hd/ltex-set-language))
 #+end_src
+
+*** Ansible (ansible-language-server)
+
+LSP support for Ansible playbooks and roles.
+
+#+begin_src emacs-lisp
+;; Enable LSP for ansible files
+(after! lsp-mode
+  (setq lsp-ansible-add-on? t)  ; Work alongside yamlls
+  (setq lsp-ansible-validation-enabled t))
+
+;; Hook LSP to ansible-mode (activated by Doom's +ansible-yaml-mode project detection)
+(add-hook 'ansible-mode-hook #'lsp!)
+#+end_src
+
 #+end_src
 
 ** Projectile
