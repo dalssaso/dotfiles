@@ -563,7 +563,10 @@ Works like org-appear but for LaTeX math.
   (setq org-startup-indented t)
 
   ;; Don't show line numbers in org-mode (cleaner for writing)
-  (add-hook 'org-mode-hook (lambda () (display-line-numbers-mode -1))))
+  (add-hook 'org-mode-hook (lambda () (display-line-numbers-mode -1)))
+
+  ;; Disable git-gutter in org-mode (looks weird with variable-pitch and indentation)
+  (add-hook 'org-mode-hook (lambda () (diff-hl-mode -1))))
 #+end_src
 
 ** Mixed Pitch (Variable + Fixed Fonts)
@@ -643,8 +646,8 @@ Use =SPC t z= for additional zen/focus mode (hides modeline, etc.).
 (use-package! olivetti
   :hook (org-mode . olivetti-mode)
   :config
-  (setq olivetti-body-width 100
-        olivetti-minimum-body-width 80
+  (setq olivetti-body-width 120
+        olivetti-minimum-body-width 100
         olivetti-style 'fancy))
 #+end_src
 
