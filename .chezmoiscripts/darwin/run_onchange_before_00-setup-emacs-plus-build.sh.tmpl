@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+# build.yml hash: {{ include "dot_config/emacs-plus/build.yml" | sha256sum }}
+
+# This script creates ~/.config/emacs-plus/build.yml BEFORE brew bundle runs.
+#
+# Why is this necessary?
+# - emacs-plus reads build.yml during `brew install` to apply custom icons and patches
+# - chezmoi's `run_*_before_` scripts execute BEFORE chezmoi manages dotfiles
+# - Therefore, a regular chezmoi-managed file would be copied AFTER brew install
+# - This script runs before `run_onchange_before_install-packages.sh.tmpl` (0 < i)
+#   ensuring build.yml exists when emacs-plus is compiled
+#
+# The build.yml is also managed normally by chezmoi in dot_config/emacs-plus/
+# for subsequent updates. The hash comment above triggers re-runs when it changes.
+
+mkdir -p ~/.config/emacs-plus
+cat > ~/.config/emacs-plus/build.yml << 'EOF'
+{{ include "dot_config/emacs-plus/build.yml" -}}
+EOF

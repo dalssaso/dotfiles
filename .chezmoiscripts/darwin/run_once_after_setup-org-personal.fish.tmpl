@@ -1,0 +1,23 @@
+#!/usr/bin/env fish
+
+# Clone the org-personal repository from GitHub
+#
+# This script runs after configure-ssh-keys (lexicographical: setup > configure)
+# ensuring the SSH key is available for authentication.
+
+set -l repo_path ~/org-personal
+set -l repo_url git@github.com:dalssaso/org-personal.git
+
+if test -d $repo_path
+    # Repo exists - verify it's a git repo and has correct remote
+    if test -d $repo_path/.git
+        echo "org-personal already cloned at $repo_path"
+    else
+        echo "Warning: $repo_path exists but is not a git repository"
+        exit 1
+    end
+else
+    # Clone the repository
+    echo "Cloning org-personal to $repo_path..."
+    git clone $repo_url $repo_path
+end

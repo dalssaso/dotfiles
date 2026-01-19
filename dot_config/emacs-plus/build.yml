@@ -1,0 +1,5 @@
+icon: dragon-plus
+
+patches:
+  - mac-font-use-typo-metrics
+  - aggressive-read-buffering
