@@ -816,7 +816,14 @@ Support for mermaid diagrams in org-babel. Requires =mmdc= (mermaid-cli) to be i
           ("j" "journal" entry
            "* %<%H:%M> Journal :journal:\n%?"
            :target (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n")))))
+                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n"))
+          ("l" "link" entry
+           "* [[%:link][%:description]]\n%:initial"
+           :target (file+head+olp "%<%Y-%m-%d>.org"
+                                  "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n"
+                                  ("Links"))
+           :immediate-finish t
+           :empty-lines 1))))
 #+end_src
 
 ** Keybindings
