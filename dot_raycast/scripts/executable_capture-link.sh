@@ -23,11 +23,12 @@ fi
 # Fetch metadata using htmlq
 if command -v htmlq &> /dev/null; then
   HTML=$(curl -sL --max-time 10 "$URL")
-  TITLE=$(echo "$HTML" | htmlq --text 'title' 2>/dev/null | head -1 | xargs)
-  SUMMARY=$(echo "$HTML" | htmlq --attribute content 'meta[name="description"]' 2>/dev/null | head -1 | xargs)
+  # Use sed to trim whitespace instead of xargs (xargs fails on unbalanced quotes)
+  TITLE=$(echo "$HTML" | htmlq --text 'title' 2>/dev/null | head -1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+  SUMMARY=$(echo "$HTML" | htmlq --attribute content 'meta[name="description"]' 2>/dev/null | head -1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
 
   # Fallback to og:description
-  [ -z "$SUMMARY" ] && SUMMARY=$(echo "$HTML" | htmlq --attribute content 'meta[property="og:description"]' 2>/dev/null | head -1 | xargs)
+  [ -z "$SUMMARY" ] && SUMMARY=$(echo "$HTML" | htmlq --attribute content 'meta[property="og:description"]' 2>/dev/null | head -1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
 else
   # Fallback without htmlq
   TITLE=""
