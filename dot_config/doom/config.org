@@ -407,6 +407,135 @@ LSP support for Helm chart templates using helm-ls (via lsp-mode's built-in clie
 (setq auth-sources '("~/.authinfo.gpg"))
 #+end_src
 
+* Navigation & Productivity
+
+Improvements for navigation, context-switching, and search/discovery.
+
+** Buffer & Symbol Navigation
+
+Enable buffer preview and improve imenu for faster jumping.
+
+#+begin_src emacs-lisp
+;; Buffer preview in vertico - see contents before switching
+(after! vertico
+  (setq vertico-preselect 'prompt))
+
+(after! consult
+  (consult-customize
+   consult-buffer :preview-key "M-."))
+
+;; Improve imenu for code files
+(after! imenu
+  (setq imenu-max-item-length 100)
+  (setq imenu-auto-rescan t))
+
+;; Project-wide symbol jump
+(map! :leader
+      :desc "Imenu (all buffers)" "s I" #'consult-imenu-multi)
+#+end_src
+
+** Workspace Navigation
+
+Auto-assign workspaces and quick toggle between org and code.
+
+#+begin_src emacs-lisp
+(after! persp-mode
+  ;; Name workspaces after project
+  (setq +workspaces-on-switch-project-behavior t)
+
+  ;; Start with org workspace on launch
+  (add-hook 'doom-init-ui-hook
+            (lambda ()
+              (+workspace-switch "org" t)
+              (org-roam-dailies-goto-today))))
+
+;; Toggle between org workspace and previous buffer
+(defvar hd/last-non-org-buffer nil
+  "Buffer to return to from org workspace.")
+
+(defun hd/toggle-org-workspace ()
+  "Toggle between org workspace and previous buffer."
+  (interactive)
+  (if (string= (+workspace-current-name) "org")
+      (when hd/last-non-org-buffer
+        (switch-to-buffer hd/last-non-org-buffer))
+    (setq hd/last-non-org-buffer (current-buffer))
+    (+workspace-switch "org" t)
+    (org-roam-dailies-goto-today)))
+
+(map! :leader
+      :desc "Toggle org workspace" "TAB o" #'hd/toggle-org-workspace)
+
+;; Recent project shortcut
+(map! :leader
+      :desc "Recent projects" "p r" #'projectile-switch-open-project)
+#+end_src
+
+** Search & Discovery
+
+Fast search across code and org notes with live preview.
+
+#+begin_src emacs-lisp
+;; Consult ripgrep with live preview
+(after! consult
+  (consult-customize
+   consult-ripgrep :preview-key "M-."
+   consult-grep :preview-key "M-."))
+
+;; Search org-roam notes
+(defun hd/search-org-roam ()
+  "Search org-roam directory with ripgrep."
+  (interactive)
+  (consult-ripgrep org-roam-directory))
+
+(defun hd/search-org-personal ()
+  "Search entire org-personal directory."
+  (interactive)
+  (consult-ripgrep hd/org-personal-dir))
+
+(map! :leader
+      (:prefix ("r" . "roam")
+       :desc "Search roam" "s" #'hd/search-org-roam
+       :desc "Search all org" "S" #'hd/search-org-personal))
+
+;; Jump to heading in any org file
+(defun hd/org-heading-search ()
+  "Search headings across all org-roam files."
+  (interactive)
+  (let ((org-agenda-files (directory-files-recursively
+                           org-roam-directory "\\.org$")))
+    (consult-org-heading)))
+
+(map! :leader
+      :desc "Search org headings" "r h" #'hd/org-heading-search)
+#+end_src
+
+** Within-File Navigation
+
+Jump to outlines, headings, and improve folding.
+
+#+begin_src emacs-lisp
+;; Better imenu for org-mode - index deeper headings
+(after! org
+  (setq org-imenu-depth 6))
+
+;; Outline navigation for code
+(map! :leader
+      :desc "Jump to outline" "s o" #'consult-outline)
+
+;; Org-specific folding with vim keys
+(map! :after org
+      :map org-mode-map
+      :n "zo" #'org-show-subtree
+      :n "zc" #'org-hide-subtree
+      :n "zO" #'org-show-all
+      :n "zC" #'org-hide-body)
+
+;; Goto line with preview
+(map! :leader
+      :desc "Goto line" "g l" #'consult-goto-line)
+#+end_src
+
 * Packages
 ** Wakatime
 
