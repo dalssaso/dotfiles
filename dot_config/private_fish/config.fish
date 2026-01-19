@@ -80,9 +80,11 @@ set fish_greeting
 
 set -xg BAT_THEME_DARK Catppuccin Mocha
 set -xg BAT_THEME_LIGHT Catppuccin Latte
-set -xg EDITOR nvim
+# Emacs as default editor - opens floating frame for git commits etc.
+# Frame closes automatically when editing is done (C-c C-c or save+quit)
+set -xg EDITOR "emacsclient -c -a '' -F '((name . \"Editor\") (width . 80) (height . 25))'"
 set -xg LS_COLORS (vivid generate catppuccin-mocha)
-set -xg VISUAL nvim
+set -xg VISUAL $EDITOR
 set -xg GOPATH $HOME/go
 set -xg GPG_TTY (tty)
 
@@ -102,6 +104,13 @@ alias cat='bat'
 alias htop='btm'
 alias cd='z'
 alias kubectl='kubecolor'
+
+# Open project in Emacs workspace
+function eproj --description "Open project in Emacs workspace"
+    set -l dir (test -n "$argv[1]" && echo "$argv[1]" || pwd)
+    set -l abs_dir (realpath "$dir")
+    emacsclient -n -e "(hd/open-project-in-workspace \"$abs_dir\")"
+end
 
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.

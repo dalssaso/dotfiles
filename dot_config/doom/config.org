@@ -869,6 +869,45 @@ Link captures finish immediately; others open a frame for editing."
 (add-hook 'org-capture-after-finalize-hook #'hd/close-capture-frame)
 #+end_src
 
+** Server Edit Frame
+
+Support for using emacsclient as EDITOR/VISUAL. When git (or other tools) invoke
+the editor, a floating frame opens. It closes automatically when editing is done.
+
+#+begin_src emacs-lisp
+(defvar hd/server-edit-frame nil
+  "Frame created for emacsclient editing, closed when done.")
+
+(defun hd/server-visit-hook-handler ()
+  "Mark buffers opened via emacsclient in an Editor frame."
+  (when (and (frame-live-p (selected-frame))
+             (equal "Editor" (frame-parameter (selected-frame) 'name)))
+    (setq hd/server-edit-frame (selected-frame))
+    (setq-local hd/server-edit-buffer t)))
+
+(defun hd/server-done-hook-handler ()
+  "Close the Editor frame when emacsclient editing is done."
+  (when (and (bound-and-true-p hd/server-edit-buffer)
+             hd/server-edit-frame
+             (frame-live-p hd/server-edit-frame))
+    (delete-frame hd/server-edit-frame)
+    (setq hd/server-edit-frame nil)))
+
+(add-hook 'server-visit-hook #'hd/server-visit-hook-handler)
+(add-hook 'server-done-hook #'hd/server-done-hook-handler)
+#+end_src
+
+** Open Project from CLI
+
+Open a project in a dedicated workspace from external tools (shell, etc.).
+
+#+begin_src emacs-lisp
+(defun hd/open-project-in-workspace (dir)
+  "Open DIR as a project in a dedicated workspace, raising Emacs."
+  (select-frame-set-input-focus (selected-frame))
+  (+workspaces-switch-to-project-h dir))
+#+end_src
+
 ** Keybindings
 
 #+begin_src emacs-lisp
