@@ -839,6 +839,21 @@ Support for mermaid diagrams in org-babel. Requires =mmdc= (mermaid-cli) to be i
        :desc "Capture today" "c" #'org-roam-dailies-capture-today))
 #+end_src
 
+** Link Note Capture
+
+Capture web links as dedicated roam notes with category tags.
+
+#+begin_src emacs-lisp
+(after! org-roam
+  (add-to-list 'org-roam-capture-templates
+               '("L" "link note" plain
+                 "%?"
+                 :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                                    "#+title: ${title}\n#+filetags: :reference:${category}:\n#+url: ${url}\n\n${body}\n")
+                 :unnarrowed t)
+               t))  ; append to end
+#+end_src
+
 ** Git Auto-sync
 
 Automatically commit and push changes to org-personal repo.
