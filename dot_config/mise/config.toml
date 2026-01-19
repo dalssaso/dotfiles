@@ -1,0 +1,37 @@
+# Global mise configuration
+# Managed by chezmoi
+
+[settings]
+# Use uv/uvx as backend for pipx (faster installations)
+# This is the default when uv is installed, but we set it explicitly
+pipx.uvx = true
+
+[tools]
+# Note: node, go, and uv are installed globally via Homebrew
+# Only project-specific versions should be managed by mise
+
+# Python tools (via pipx, using uvx backend automatically)
+"pipx:ruff" = "latest"
+
+# Node.js tools (via npm)
+"npm:prettier" = "latest"
+"npm:@mermaid-js/mermaid-cli" = "latest"
+"npm:@ansible/ansible-language-server" = "latest"
+
+# Go tools
+"go:golang.org/x/tools/cmd/goimports" = "latest"
+"go:github.com/golangci/golangci-lint/cmd/golangci-lint" = "latest"
+"go:github.com/fatih/gomodifytags" = "latest"
+"go:github.com/cweill/gotests/gotests" = "latest"
+"go:github.com/x-motemen/gore/cmd/gore" = "latest"
+"go:github.com/go-delve/delve/cmd/dlv" = "latest"
+
+# Docker tools
+"github:hadolint/hadolint" = "latest"
+"npm:dockerfile-language-server-nodejs" = "latest"
+
+# Helm/Kubernetes tools
+"github:mrjosh/helm-ls" = "latest"
+
+# Writing/Grammar tools
+"github:ltex-plus/ltex-ls-plus" = "latest"
