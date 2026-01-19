@@ -836,11 +836,13 @@ Functions to invoke org-roam-dailies capture from external tools (Raycast, shell
 PROPS is a plist of capture properties like :link, :description, :initial.
 Called from external tools via emacsclient."
   (require 'org-roam-dailies)
-  ;; Set up org-store-link-plist for template expansion
+  ;; Set up link properties using org-link-store-props (the correct way)
+  ;; This ensures %:link, %:description, %:initial work in templates
   (when props
-    (setq org-store-link-plist props))
-  ;; Capture to today's daily
-  (org-roam-dailies-capture-today nil template-key)
+    (apply #'org-link-store-props props))
+  ;; Prevent org-capture from overwriting our stored link
+  (let ((org-capture-link-is-already-stored t))
+    (org-roam-dailies-capture-today nil template-key))
   ;; Return success
   t)
 #+end_src
