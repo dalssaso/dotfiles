@@ -136,6 +136,38 @@ They are placed in =~/Library/Spelling/=.
 #+begin_src emacs-lisp
 (after! treesit
   (setq treesit-font-lock-level 3))
+*** Docker (dockerfile-language-server + hadolint)
+
+Use dockerfile-language-server-nodejs for LSP (formatting, completion, diagnostics)
+and hadolint for additional linting.
+
+#+begin_src emacs-lisp
+;; Configure lsp-mode's built-in dockerfile client
+(after! lsp-mode
+  (require 'lsp-dockerfile nil t)
+  (setq lsp-dockerfile-language-server-command '("docker-langserver" "--stdio")))
+
+;; Use LSP formatting for Dockerfiles
+(setq-hook! 'dockerfile-mode-hook +format-with 'lsp)
+
+;; Enable LSP for dockerfile-mode
+(add-hook 'dockerfile-mode-hook #'lsp!)
+
+;; Additional linting with hadolint (complements LSP diagnostics)
+(after! flycheck
+  (flycheck-define-checker dockerfile-hadolint
+    "A Dockerfile linter using hadolint."
+    :command ("hadolint" "--format" "tty" "-")
+    :standard-input t
+    :error-patterns
+    ((error line-start "-:" line " " (id (one-or-more alnum)) " error: " (message) line-end)
+     (warning line-start "-:" line " " (id (one-or-more alnum)) " warning: " (message) line-end)
+     (info line-start "-:" line " " (id (one-or-more alnum)) " info: " (message) line-end)
+     (error line-start "-:" line " " (message) line-end))
+    :modes dockerfile-mode)
+  (add-to-list 'flycheck-checkers 'dockerfile-hadolint))
+#+end_src
+
 *** LTeX+ (Grammar & Spell Checking)
 
 LSP-based grammar and spell checking using LanguageTool via ltex-ls-plus.
