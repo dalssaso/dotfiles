@@ -66,3 +66,14 @@
 (package! chezmoi)
 (package! age
   :recipe (:host github :repo "anticomputer/age.el"))
+
+;; Additional modes
+(package! just-mode)
+(package! protobuf-mode)
+
+;; UI enhancements
+(package! hide-mode-line)
+(package! org-fragtog)
+
+;; Org-babel extensions
+(package! ob-mermaid)
