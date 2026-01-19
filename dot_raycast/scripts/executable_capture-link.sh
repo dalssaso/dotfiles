@@ -38,28 +38,32 @@ fi
 [ -z "$TITLE" ] && TITLE="$URL"
 [ -z "$SUMMARY" ] && SUMMARY=""
 
-ORG_CAPTURE="$HOME/.config/emacs/bin/org-capture"
+EMACSCLIENT="/opt/homebrew/bin/emacsclient"
 
-if [[ ! -x "$ORG_CAPTURE" ]]; then
-  echo "Error: org-capture not found at $ORG_CAPTURE"
+if [[ ! -x "$EMACSCLIENT" ]]; then
+  echo "Error: emacsclient not found at $EMACSCLIENT"
   exit 1
 fi
 
+# Escape double quotes for elisp
+TITLE_ESCAPED=$(echo "$TITLE" | sed 's/"/\\"/g')
+SUMMARY_ESCAPED=$(echo "$SUMMARY" | sed 's/"/\\"/g')
+
 if [ -z "$CATEGORY" ]; then
   # Quick capture → daily
-  if "$ORG_CAPTURE" -k "l" -- ":link" "$URL" ":description" "$TITLE" ":initial" "$SUMMARY"; then
+  if "$EMACSCLIENT" --eval "(hd/roam-dailies-capture-cli \"l\" '(:link \"$URL\" :description \"$TITLE_ESCAPED\" :initial \"$SUMMARY_ESCAPED\"))"; then
     echo "Captured: $TITLE"
   else
     echo "Failed to capture: $TITLE"
     exit 1
   fi
 else
-  # Detailed capture → roam note
-  # Generate slug from title
+  # Detailed capture → roam note (uses standard org-capture)
+  ORG_CAPTURE="$HOME/.config/emacs/bin/org-capture"
   SLUG=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//' | cut -c1-50)
 
   if "$ORG_CAPTURE" -k "L" -- ":url" "$URL" ":title" "$TITLE" ":slug" "$SLUG" ":category" "$CATEGORY" ":body" "$SUMMARY"; then
-    echo "Captured: $TITLE"
+    echo "Captured as note: $TITLE"
   else
     echo "Failed to capture: $TITLE"
     exit 1
