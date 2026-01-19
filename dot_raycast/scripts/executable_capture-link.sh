@@ -40,27 +40,28 @@ fi
 
 ORG_CAPTURE="$HOME/.config/emacs/bin/org-capture"
 
+if [[ ! -x "$ORG_CAPTURE" ]]; then
+  echo "Error: org-capture not found at $ORG_CAPTURE"
+  exit 1
+fi
+
 if [ -z "$CATEGORY" ]; then
   # Quick capture → daily
-  "$ORG_CAPTURE" \
-    -k "l" \
-    -- \
-    ":link" "$URL" \
-    ":description" "$TITLE" \
-    ":initial" "$SUMMARY"
+  if "$ORG_CAPTURE" -k "l" -- ":link" "$URL" ":description" "$TITLE" ":initial" "$SUMMARY"; then
+    echo "Captured: $TITLE"
+  else
+    echo "Failed to capture: $TITLE"
+    exit 1
+  fi
 else
   # Detailed capture → roam note
   # Generate slug from title
   SLUG=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//' | cut -c1-50)
 
-  "$ORG_CAPTURE" \
-    -k "L" \
-    -- \
-    ":url" "$URL" \
-    ":title" "$TITLE" \
-    ":slug" "$SLUG" \
-    ":category" "$CATEGORY" \
-    ":body" "$SUMMARY"
+  if "$ORG_CAPTURE" -k "L" -- ":url" "$URL" ":title" "$TITLE" ":slug" "$SLUG" ":category" "$CATEGORY" ":body" "$SUMMARY"; then
+    echo "Captured: $TITLE"
+  else
+    echo "Failed to capture: $TITLE"
+    exit 1
+  fi
 fi
-
-echo "Captured: $TITLE"
