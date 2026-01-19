@@ -12,6 +12,9 @@ docs/**
 Brewfile.*
 .config/doom/config.el
 
+# Deployed via run_onchange_before script (needs to exist before brew install)
+.config/emacs-plus/build.yml
+
 # Authinfo source files - deployed via modify script (use target paths in ignore)
 .authinfo-personal.gpg
 .authinfo-work.gpg
