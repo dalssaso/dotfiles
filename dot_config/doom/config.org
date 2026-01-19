@@ -805,25 +805,24 @@ Support for mermaid diagrams in org-babel. Requires =mmdc= (mermaid-cli) to be i
 #+begin_src emacs-lisp
 (after! org-roam-dailies
   (setq org-roam-dailies-capture-templates
-        '(("d" "default" entry
-           "* %<%H:%M> %?"
-           :target (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n"))
-          ("t" "task" entry
-           "* TODO %?"
-           :target (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n"))
-          ("j" "journal" entry
-           "* %<%H:%M> Journal :journal:\n%?"
-           :target (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n"))
-          ("l" "link" entry
-           "* [[%:link][%:description]]\n%:initial"
-           :target (file+head+olp "%<%Y-%m-%d>.org"
-                                  "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n"
-                                  ("Links"))
-           :immediate-finish t
-           :empty-lines 1))))
+        (let ((daily-header "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* Tasks\n\n* Journal\n\n* Links\n"))
+          `(("d" "default" entry
+             "** %<%H:%M> %:initial%?"
+             :target (file+head+olp "%<%Y-%m-%d>.org" ,daily-header ("Journal"))
+             :empty-lines 1)
+            ("t" "task" entry
+             "** TODO %:initial%?"
+             :target (file+head+olp "%<%Y-%m-%d>.org" ,daily-header ("Tasks"))
+             :empty-lines 1)
+            ("j" "journal" entry
+             "** %<%H:%M> :journal:\n%:initial%?"
+             :target (file+head+olp "%<%Y-%m-%d>.org" ,daily-header ("Journal"))
+             :empty-lines 1)
+            ("l" "link" entry
+             "** [[%:link][%:description]]\n%:initial"
+             :target (file+head+olp "%<%Y-%m-%d>.org" ,daily-header ("Links"))
+             :immediate-finish t
+             :empty-lines 1)))))
 #+end_src
 
 ** CLI Capture Support
@@ -836,12 +835,19 @@ Functions to invoke org-roam-dailies capture from external tools (Raycast, shell
 PROPS is a plist of capture properties like :link, :description, :initial.
 Called from external tools via emacsclient."
   (require 'org-roam-dailies)
-  ;; Set up link properties using org-link-store-props (the correct way)
+  ;; Set up link properties using org-link-store-props
   ;; This ensures %:link, %:description, %:initial work in templates
   (when props
     (apply #'org-link-store-props props))
-  ;; Prevent org-capture from overwriting our stored link
-  (let ((org-capture-link-is-already-stored t))
+  ;; Modify templates to add :immediate-finish for CLI use
+  ;; This allows non-interactive capture without breaking normal templates
+  (let* ((org-capture-link-is-already-stored t)
+         (org-roam-dailies-capture-templates
+          (mapcar (lambda (template)
+                    (if (plist-get (nthcdr 4 template) :immediate-finish)
+                        template
+                      (append template '(:immediate-finish t))))
+                  org-roam-dailies-capture-templates)))
     (org-roam-dailies-capture-today nil template-key))
   ;; Return success
   t)
