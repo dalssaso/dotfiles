@@ -1,6 +1,6 @@
 #+TITLE: Doom Emacs Org-Mode Keybindings
 #+AUTHOR: Henrique Dalssaso
-#+DATE: 2026-01-18
+#+DATE: 2026-01-19
 #+OPTIONS: toc:2 num:t H:3
 #+LATEX_CLASS: article
 #+LATEX_CLASS_OPTIONS: [a4paper,11pt]
@@ -63,25 +63,52 @@ When capturing to daily notes (=SPC r c=):
 | =t=   | task     | TODO item                          |
 | =j=   | journal  | Timestamped journal entry with tag |
 
-* Org Capture
+* Area Notes (Personal Only)
+
+Personal task management uses org-roam area notes. Tasks are captured to dailies,
+then refiled to area notes based on tags. Completed tasks return to the daily as a log.
+
+** Area Notes
+
+| Area     | File         | Tag        |
+|----------+--------------+------------|
+| Home     | home.org     | =@home=      |
+| Errands  | errands.org  | =@errands=   |
+| Online   | online.org   | =@online=    |
+| Health   | health.org   | =@health=    |
+| Finance  | finance.org  | =@finance=   |
+| Someday  | someday.org  | =@someday=   |
+| Learning | learning.org | =@learning=  |
+
+** Area Keybindings
+
+| Keybinding | Command                 | Description                          |
+|------------+-------------------------+--------------------------------------|
+| =SPC r R=    | hd/refile-to-area       | Smart refile based on task's tag     |
+| =SPC r B=    | hd/refile-all-daily-tasks | Batch refile all tagged tasks (review) |
+| =SPC r a=    | hd/goto-area            | Jump to an area note (menu)          |
+
+** Daily-First Workflow
+
+1. =SPC r c t= - Capture task to today's daily
+2. =SPC m q= - Add context tag (@home, @errands, etc.)
+3. =SPC r R= - Smart refile single task, OR =SPC r B= - Batch refile all tagged tasks
+4. =t= - Mark DONE in area note → task moves to daily's Completed section
+
+** End-of-Day Review
+
+Run =SPC r B= to refile all tagged TODO tasks from today's daily to their
+respective area notes at once. This fits a GTD-style review workflow.
+
+* Org Capture (Work Only)
+
+On work machines, use =SPC X= to capture to inbox.org.
+On personal machines, use =SPC r c= to capture to org-roam dailies instead.
 
 | Keybinding | Command     | Description             |
 |------------+-------------+-------------------------|
 | =SPC X=      | org-capture | Open capture menu       |
 | =SPC x=      | org-capture | Open capture menu (alt) |
-
-** Personal Machine Capture Templates
-
-| Key | Template | Description              |
-|-----+----------+--------------------------|
-| =t=   | Task     | Generic TODO             |
-| =h=   | Home     | Home task with @home tag |
-| =e=   | Errand   | Errand with @errands tag |
-| =o=   | Online   | Online task with @online |
-| =H=   | Health   | Health task with @health |
-| =f=   | Finance  | Finance with @finance    |
-| =s=   | Someday  | Someday/maybe item       |
-| =l=   | Learning | Learning item            |
 
 ** Work Machine Capture Templates
 
@@ -306,15 +333,27 @@ From the export menu (=SPC m e=):
 
 * Quick Reference Card
 
-** Most Used Daily
+** Most Used Daily (Personal)
+
+| Action               | Keybinding |
+|----------------------+------------|
+| Today's daily note   | =SPC r t=    |
+| Capture to daily     | =SPC r c=    |
+| Smart refile to area | =SPC r R=    |
+| Batch refile (review)| =SPC r B=    |
+| Go to area note      | =SPC r a=    |
+| Find roam node       | =SPC r f=    |
+| Open agenda          | =SPC o a=    |
+| Cycle TODO state     | =t=          |
+| Set tags             | =SPC m q=    |
+| Schedule             | =SPC m d s=  |
+
+** Most Used Daily (Work)
 
 | Action             | Keybinding |
 |--------------------+------------|
 | Capture new item   | =SPC X=      |
 | Open agenda        | =SPC o a=    |
-| Find roam node     | =SPC r f=    |
-| Today's daily note | =SPC r t=    |
-| Capture to daily   | =SPC r c=    |
 | Cycle TODO state   | =t=          |
 | Set tags           | =SPC m q=    |
 | Schedule           | =SPC m d s=  |

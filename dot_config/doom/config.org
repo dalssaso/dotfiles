@@ -630,9 +630,9 @@ Create visual hierarchy with scaled heading sizes.
 #+begin_src emacs-lisp
 (after! org
   (custom-set-faces!
-    '(org-level-1 :inherit outline-1 :height 1.4)
-    '(org-level-2 :inherit outline-2 :height 1.3)
-    '(org-level-3 :inherit outline-3 :height 1.2)
+    '(org-level-1 :inherit outline-1 :height 1.25)
+    '(org-level-2 :inherit outline-2 :height 1.2)
+    '(org-level-3 :inherit outline-3 :height 1.15)
     '(org-level-4 :inherit outline-4 :height 1.1)
     '(org-level-5 :inherit outline-5 :height 1.05)
     '(org-document-title :height 1.6 :weight bold)))
@@ -688,39 +688,22 @@ Define tag shortcuts for fast tagging.
 ** Capture Templates
 
 #+begin_src emacs-lisp
+;; Org-capture templates (work only - personal uses org-roam dailies)
 (after! org
-  (setq org-capture-templates
-        (if (hd/work-machine-p)
-            ;; Work templates
-            '(("t" "Task" entry (file "inbox.org")
-               "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")
-              ("m" "Meeting" entry (file "inbox.org")
-               "* TODO %? :@meeting:\nSCHEDULED: %^t\n:PROPERTIES:\n:CREATED: %U\n:END:")
-              ("p" "Pending Reply" entry (file "inbox.org")
-               "* TODO %? :@pending:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-              ("r" "Review" entry (file "inbox.org")
-               "* TODO %? :@review:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-              ("a" "Admin" entry (file "inbox.org")
-               "* TODO %? :@admin:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-              ("d" "Report" entry (file "inbox.org")
-               "* TODO %? :@report:\n:PROPERTIES:\n:CREATED: %U\n:END:"))
-          ;; Personal templates
+  (when (hd/work-machine-p)
+    (setq org-capture-templates
           '(("t" "Task" entry (file "inbox.org")
              "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("h" "Home" entry (file "inbox.org")
-             "* TODO %? :@home:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("e" "Errand" entry (file "inbox.org")
-             "* TODO %? :@errands:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("o" "Online" entry (file "inbox.org")
-             "* TODO %? :@online:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("H" "Health" entry (file "inbox.org")
-             "* TODO %? :@health:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("f" "Finance" entry (file "inbox.org")
-             "* TODO %? :@finance:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("s" "Someday" entry (file "inbox.org")
-             "* TODO %? :@someday:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("l" "Learning" entry (file "inbox.org")
-             "* TODO %? :@learning:\n:PROPERTIES:\n:CREATED: %U\n:END:")))))
+            ("m" "Meeting" entry (file "inbox.org")
+             "* TODO %? :@meeting:\nSCHEDULED: %^t\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("p" "Pending Reply" entry (file "inbox.org")
+             "* TODO %? :@pending:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("r" "Review" entry (file "inbox.org")
+             "* TODO %? :@review:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("a" "Admin" entry (file "inbox.org")
+             "* TODO %? :@admin:\n:PROPERTIES:\n:CREATED: %U\n:END:")
+            ("d" "Report" entry (file "inbox.org")
+             "* TODO %? :@report:\n:PROPERTIES:\n:CREATED: %U\n:END:")))))
 #+end_src
 
 ** Custom Agenda Commands
@@ -934,6 +917,151 @@ Capture web links as dedicated roam notes with category tags.
                                     "#+title: ${title}\n#+filetags: :reference:${category}:\n#+url: ${url}\n\n${body}\n")
                  :unnarrowed t)
                t))  ; append to end
+#+end_src
+
+** Area Notes (Personal Only)
+
+Smart refile and navigation for personal task areas. Tasks captured to dailies
+are refiled to area notes based on their tags, and completed tasks return to
+the daily as a log.
+
+*** Tag to Area Mapping
+
+#+begin_src emacs-lisp
+(defvar hd/area-tag-map
+  '(("@home"     . "home.org")
+    ("@errands"  . "errands.org")
+    ("@online"   . "online.org")
+    ("@health"   . "health.org")
+    ("@finance"  . "finance.org")
+    ("@someday"  . "someday.org")
+    ("@learning" . "learning.org"))
+  "Mapping from task tags to area note filenames.")
+
+(defun hd/area-file (name)
+  "Return full path to area note NAME in roam directory."
+  (expand-file-name name (expand-file-name "roam" hd/org-personal-dir)))
+
+(defun hd/area-names ()
+  "Return list of area names (without .org extension)."
+  (mapcar (lambda (pair) (file-name-sans-extension (cdr pair)))
+          hd/area-tag-map))
+#+end_src
+
+*** Smart Refile to Area
+
+#+begin_src emacs-lisp
+(defun hd/refile-to-area ()
+  "Refile current heading to area note based on its tag.
+If no matching tag found, prompt for area selection."
+  (interactive)
+  (unless (hd/work-machine-p)
+    (let* ((tags (org-get-tags))
+           (area-file nil))
+      ;; Find matching area from tags
+      (cl-loop for (tag . file) in hd/area-tag-map
+               when (member tag tags)
+               do (setq area-file (hd/area-file file))
+               and return nil)
+      ;; If no tag match, prompt for area
+      (unless area-file
+        (let ((area (completing-read "Refile to area: " (hd/area-names) nil t)))
+          (setq area-file (hd/area-file (concat area ".org")))))
+      ;; Refile to top level of area note
+      (when area-file
+        (let ((org-refile-targets `((,area-file :maxlevel . 0))))
+          (org-refile nil nil (list nil area-file nil nil)))
+        (message "Refiled to %s" (file-name-nondirectory area-file))))))
+#+end_src
+
+*** Jump to Area Note
+
+#+begin_src emacs-lisp
+(defun hd/goto-area ()
+  "Jump to an area note."
+  (interactive)
+  (unless (hd/work-machine-p)
+    (let* ((area (completing-read "Go to area: " (hd/area-names) nil t))
+           (file (hd/area-file (concat area ".org"))))
+      (find-file file))))
+#+end_src
+
+*** Move Completed Tasks to Daily
+
+#+begin_src emacs-lisp
+(defun hd/move-done-to-daily ()
+  "Move completed task back to today's daily note under Completed heading.
+Only runs for tasks in area notes (roam directory)."
+  (when (and (not (hd/work-machine-p))
+             buffer-file-name
+             (string-prefix-p (expand-file-name "roam" hd/org-personal-dir)
+                              (expand-file-name buffer-file-name))
+             (org-entry-is-done-p))
+    (let* ((daily-file (expand-file-name
+                        (format-time-string "%Y-%m-%d.org")
+                        org-roam-dailies-directory))
+           (heading-text (org-get-heading t t t t)))
+      ;; Ensure daily exists with proper structure
+      (unless (file-exists-p daily-file)
+        (org-roam-dailies-goto-today)
+        (save-buffer)
+        (kill-buffer))
+      ;; Add Completed heading if needed and refile there
+      (with-current-buffer (find-file-noselect daily-file)
+        (goto-char (point-min))
+        (unless (re-search-forward "^\\* Completed$" nil t)
+          (goto-char (point-max))
+          (insert "\n* Completed\n"))
+        (save-buffer))
+      ;; Refile to Completed heading
+      (let ((org-refile-targets `((,daily-file :regexp . "^Completed$"))))
+        (org-refile nil nil (list "Completed" daily-file nil nil)))
+      (message "Moved to daily: %s" heading-text))))
+
+(add-hook 'org-after-todo-state-change-hook #'hd/move-done-to-daily)
+#+end_src
+
+*** Batch Refile (Daily Review)
+
+Refile all tagged tasks from today's daily at once. Run this during your
+end-of-day review to move tasks to their area notes.
+
+#+begin_src emacs-lisp
+(defun hd/refile-all-daily-tasks ()
+  "Refile all tagged TODO tasks from today's daily to area notes.
+Run this during daily review to batch-move tasks to their areas."
+  (interactive)
+  (unless (hd/work-machine-p)
+    (let ((daily-file (expand-file-name
+                       (format-time-string "%Y-%m-%d.org")
+                       org-roam-dailies-directory))
+          (refiled 0))
+      (when (file-exists-p daily-file)
+        (with-current-buffer (find-file-noselect daily-file)
+          (org-map-entries
+           (lambda ()
+             (let ((tags (org-get-tags))
+                   (area-file nil))
+               (cl-loop for (tag . file) in hd/area-tag-map
+                        when (member tag tags)
+                        do (setq area-file (hd/area-file file))
+                        and return nil)
+               (when area-file
+                 (let ((org-refile-targets `((,area-file :maxlevel . 0))))
+                   (org-refile nil nil (list nil area-file nil nil))
+                   (setq refiled (1+ refiled))))))
+           "TODO=\"TODO\"")
+          (save-buffer)))
+      (message "Refiled %d tasks from today's daily" refiled))))
+#+end_src
+
+*** Area Keybindings
+
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "Smart refile to area" "r R" #'hd/refile-to-area
+      :desc "Go to area note" "r a" #'hd/goto-area
+      :desc "Refile all daily tasks" "r B" #'hd/refile-all-daily-tasks)
 #+end_src
 
 ** Git Auto-sync

@@ -1,0 +1,594 @@
+#+TITLE: Doom Emacs Magit & Forge Guide
+#+AUTHOR: Henrique Dalssaso
+#+DATE: 2026-01-19
+#+OPTIONS: toc:2 num:t H:3
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper,11pt]
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{booktabs}
+#+LATEX_HEADER: \usepackage{longtable}
+#+LATEX_HEADER: \usepackage{hyperref}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=blue}
+
+* Overview
+
+This document covers Magit and Magit-forge integration in Doom Emacs, including
+keybindings, common workflows, and advanced git operations.
+
+*Magit* is a complete git interface for Emacs. *Forge* adds GitHub/GitLab integration
+for issues, pull requests, and code review.
+
+*Leader Key:* All git commands are under the =SPC g= prefix.
+
+* Primary Git Keybindings
+
+All git commands in Doom Emacs start with =SPC g=.
+
+** Core Operations
+
+| Keybinding | Command             | Description                    |
+|------------+---------------------+--------------------------------|
+| =SPC g g=    | magit-status        | Open git status buffer         |
+| =SPC g G=    | magit-status-here   | Open status in current dir     |
+| =SPC g /=    | magit-dispatch      | Main transient menu            |
+| =SPC g .=    | magit-file-dispatch | File-specific git operations   |
+| =SPC g '=    | forge-dispatch      | GitHub/GitLab operations       |
+
+** Branch & Blame
+
+| Keybinding | Command               | Description               |
+|------------+-----------------------+---------------------------|
+| =SPC g b=    | magit-branch-checkout | Checkout/switch branch    |
+| =SPC g B=    | magit-blame-addition  | Show blame for file       |
+
+** File Operations
+
+| Keybinding | Command           | Description            |
+|------------+-------------------+------------------------|
+| =SPC g S=    | magit-file-stage  | Stage current file     |
+| =SPC g U=    | magit-file-unstage| Unstage current file   |
+| =SPC g D=    | magit-file-delete | Delete file from git   |
+| =SPC g R=    | vc-revert         | Revert to last commit  |
+
+** Repository Operations
+
+| Keybinding | Command              | Description           |
+|------------+----------------------+-----------------------|
+| =SPC g C=    | magit-clone          | Clone a repository    |
+| =SPC g F=    | magit-fetch          | Fetch from remote     |
+| =SPC g L=    | magit-log-buffer-file| Show log for file     |
+| =SPC g t=    | git-timemachine      | Browse git history    |
+
+** Remote Links
+
+| Keybinding | Command                          | Description         |
+|------------+----------------------------------+---------------------|
+| =SPC g y=    | +vc/browse-at-remote-kill        | Copy link to remote |
+| =SPC g Y=    | +vc/browse-at-remote-kill-homepage | Copy homepage link |
+
+** Hunk Operations (VC Gutter)
+
+| Keybinding | Command                        | Description          |
+|------------+--------------------------------+----------------------|
+| =SPC g s=    | +vc-gutter/stage-hunk          | Stage hunk at point  |
+| =SPC g r=    | +vc-gutter/revert-hunk         | Revert hunk at point |
+| =SPC g ]=    | +vc-gutter/next-hunk           | Jump to next hunk    |
+| =SPC g [=    | +vc-gutter/previous-hunk       | Jump to prev hunk    |
+
+* Find Subcommands (SPC g f)
+
+| Keybinding | Command               | Description              |
+|------------+-----------------------+--------------------------|
+| =SPC g f f=  | magit-find-file       | Find file in git repo    |
+| =SPC g f g=  | magit-find-git-config | Find .gitconfig file     |
+| =SPC g f c=  | magit-show-commit     | Show specific commit     |
+| =SPC g f i=  | forge-visit-issue     | Visit GitHub/GitLab issue|
+| =SPC g f p=  | forge-visit-pullreq   | Visit pull request       |
+
+* Create Subcommands (SPC g c)
+
+| Keybinding | Command                   | Description               |
+|------------+---------------------------+---------------------------|
+| =SPC g c c=  | magit-commit-create       | Create new commit         |
+| =SPC g c f=  | magit-commit-fixup        | Create fixup commit       |
+| =SPC g c b=  | magit-branch-and-checkout | Create and checkout branch|
+| =SPC g c r=  | magit-init                | Initialize new repo       |
+| =SPC g c R=  | magit-clone               | Clone a repository        |
+| =SPC g c i=  | forge-create-issue        | Create GitHub issue       |
+| =SPC g c p=  | forge-create-pullreq      | Create pull request       |
+
+* List Subcommands (SPC g l)
+
+| Keybinding | Command                 | Description           |
+|------------+-------------------------+-----------------------|
+| =SPC g l r=  | magit-list-repositories | List known repos      |
+| =SPC g l s=  | magit-list-submodules   | List submodules       |
+| =SPC g l i=  | forge-list-issues       | List issues           |
+| =SPC g l p=  | forge-list-pullreqs     | List pull requests    |
+| =SPC g l n=  | forge-list-notifications| List notifications    |
+
+* Open in Browser (SPC g o)
+
+| Keybinding | Command                        | Description           |
+|------------+--------------------------------+-----------------------|
+| =SPC g o o=  | +vc/browse-at-remote           | Open file on remote   |
+| =SPC g o h=  | +vc/browse-at-remote-homepage  | Open repo homepage    |
+| =SPC g o r=  | forge-browse-remote            | Browse remote repo    |
+| =SPC g o c=  | forge-browse-commit            | View commit online    |
+| =SPC g o i=  | forge-browse-issue             | View issue in browser |
+| =SPC g o p=  | forge-browse-pullreq           | View PR in browser    |
+| =SPC g o I=  | forge-browse-issues            | View all issues       |
+| =SPC g o P=  | forge-browse-pullreqs          | View all PRs          |
+
+* Magit Status Buffer
+
+The magit-status buffer (=SPC g g=) is the main interface for git operations.
+
+** Navigation
+
+| Keybinding | Command                         | Description            |
+|------------+---------------------------------+------------------------|
+| =j= / =k=      | next/previous line              | Move up/down           |
+| =]= / =[=      | magit-section-forward/backward  | Navigate sections      |
+| =TAB=        | magit-section-toggle            | Expand/collapse section|
+| =RET=        | magit-visit-thing               | Visit item at point    |
+| =q=          | +magit/quit                     | Quit magit buffer      |
+| =Q=          | +magit/quit-all                 | Quit all magit buffers |
+
+** Refresh
+
+| Keybinding | Command            | Description              |
+|------------+--------------------+--------------------------|
+| =g r=        | magit-refresh      | Refresh current buffer   |
+| =g R=        | magit-refresh-all  | Refresh all magit buffers|
+| =g z=        | magit-refresh      | Refresh status (alt)     |
+
+** Scrolling
+
+| Keybinding | Command                     | Description          |
+|------------+-----------------------------+----------------------|
+| =z t=        | evil-scroll-line-to-top     | Line to top          |
+| =z z=        | evil-scroll-line-to-center  | Line to center       |
+| =z b=        | evil-scroll-line-to-bottom  | Line to bottom       |
+
+** Diff Operations
+
+| Keybinding | Command                       | Description           |
+|------------+-------------------------------+-----------------------|
+| =g ==        | magit-diff-default-context    | Show default context  |
+| =g d=        | magit-jump-to-diffstat-or-diff| Jump to diff          |
+
+** Quick Actions in Status Buffer
+
+| Key | Action                    |
+|-----+---------------------------|
+| =s=   | Stage item at point       |
+| =u=   | Unstage item at point     |
+| =k=   | Discard item at point     |
+| =c=   | Commit menu               |
+| =b=   | Branch menu               |
+| =m=   | Merge menu                |
+| =r=   | Rebase menu               |
+| =P=   | Push menu                 |
+| =F=   | Pull menu                 |
+| =f=   | Fetch menu                |
+| =l=   | Log menu                  |
+| =d=   | Diff menu                 |
+| =z=   | Stash menu                |
+
+* Branch Switching (git switch)
+
+** From Leader Key
+
+| Keybinding | Command               | Description            |
+|------------+-----------------------+------------------------|
+| =SPC g b=    | magit-branch-checkout | Switch to a branch     |
+| =SPC g c b=  | magit-branch-and-checkout | Create and switch  |
+
+** From Status Buffer
+
+Press =b= in the magit-status buffer to open the branch transient menu:
+
+| Key | Command                    | Description                 |
+|-----+----------------------------+-----------------------------|
+| =b=   | magit-branch-checkout      | Switch to existing branch   |
+| =c=   | magit-branch-and-checkout  | Create and checkout branch  |
+| =n=   | magit-branch-create        | Create branch (no checkout) |
+| =s=   | magit-branch-spinoff       | Spinoff to new branch       |
+| =l=   | magit-branch-checkout-local| Checkout local branch       |
+| =r=   | magit-branch-rename        | Rename a branch             |
+| =k=   | magit-branch-delete        | Delete a branch             |
+| =K=   | magit-branch-delete-force  | Force delete branch         |
+| =m=   | magit-branch-configure     | Configure branch            |
+
+** Workflow: Switch Branch
+
+#+begin_example
+1. SPC g g                    → Open magit status
+2. b                          → Open branch menu
+3. b                          → Switch to branch (type name or select)
+   OR
+   c                          → Create and checkout new branch
+#+end_example
+
+* Rebasing
+
+** Starting a Rebase
+
+Press =r= in the magit-status buffer to open the rebase transient menu:
+
+| Key | Command                        | Description                  |
+|-----+--------------------------------+------------------------------|
+| =p=   | magit-rebase-onto-pushremote   | Rebase onto push remote      |
+| =u=   | magit-rebase-onto-upstream     | Rebase onto upstream         |
+| =e=   | magit-rebase-branch            | Rebase onto another branch   |
+| =s=   | magit-rebase-subset            | Rebase subset of commits     |
+| =o=   | magit-rebase-onto              | Rebase onto (interactive)    |
+| =i=   | magit-rebase-interactive       | Interactive rebase           |
+| =f=   | magit-rebase-autosquash        | Autosquash (fixup commits)   |
+| =m=   | magit-rebase-edit-commit       | Edit a specific commit       |
+| =w=   | magit-rebase-reword-commit     | Reword commit message        |
+| =k=   | magit-rebase-remove-commit     | Remove a commit              |
+
+** During Interactive Rebase
+
+In the git-rebase-todo buffer:
+
+| Key | Action                    |
+|-----+---------------------------|
+| =p=   | Pick commit               |
+| =r=   | Reword commit             |
+| =e=   | Edit commit               |
+| =s=   | Squash into previous      |
+| =f=   | Fixup (squash, discard msg)|
+| =d=   | Drop commit               |
+| =M-j= | Move commit down          |
+| =M-k= | Move commit up            |
+| =C-c C-c= | Confirm and start rebase |
+| =C-c C-k= | Abort rebase             |
+
+** Continuing/Aborting Rebase
+
+| Key | Command                  | Description         |
+|-----+--------------------------+---------------------|
+| =r r= | magit-rebase-continue    | Continue rebase     |
+| =r s= | magit-rebase-skip        | Skip current commit |
+| =r a= | magit-rebase-abort       | Abort rebase        |
+| =r e= | magit-rebase-edit        | Edit current commit |
+
+** Workflow: Interactive Rebase
+
+#+begin_example
+1. SPC g g                    → Open magit status
+2. l l                        → View log to identify commits
+3. Move to commit             → Navigate to starting point
+4. r i                        → Start interactive rebase
+5. Edit the todo list:
+   - Reorder commits with M-j/M-k
+   - Mark commits for squash/fixup/drop
+6. C-c C-c                    → Confirm and start
+7. Resolve any conflicts (see Merge Conflicts)
+8. r r                        → Continue after each conflict
+#+end_example
+
+* Merge Conflicts
+
+** Identifying Conflicts
+
+When conflicts occur, magit-status shows unmerged files in a special section.
+
+** Resolving Conflicts
+
+| Keybinding | Command            | Description                |
+|------------+--------------------+----------------------------|
+| =e=          | magit-ediff-dwim   | Open ediff for conflict    |
+| =E=          | magit-ediff-popup  | Ediff options menu         |
+| =RET=        | magit-visit-thing  | Open file at point         |
+
+** Ediff Commands
+
+When in ediff mode (=e= on a conflicted file):
+
+| Key | Action                           |
+|-----+----------------------------------|
+| =n=   | Next difference                  |
+| =p=   | Previous difference              |
+| =a=   | Choose version A (HEAD)          |
+| =b=   | Choose version B (incoming)      |
+| =r a= | Restore version A in region      |
+| =r b= | Restore version B in region      |
+| =!=   | Update diff regions              |
+| =q=   | Quit ediff                       |
+
+** SMerge Commands (in conflict buffer)
+
+| Keybinding  | Command               | Description              |
+|-------------+-----------------------+--------------------------|
+| =C-c ^ u=     | smerge-keep-upper     | Keep upper (HEAD)        |
+| =C-c ^ l=     | smerge-keep-lower     | Keep lower (incoming)    |
+| =C-c ^ b=     | smerge-keep-base      | Keep base version        |
+| =C-c ^ a=     | smerge-keep-all       | Keep all versions        |
+| =C-c ^ n=     | smerge-next           | Go to next conflict      |
+| =C-c ^ p=     | smerge-prev           | Go to previous conflict  |
+| =C-c ^ RET=   | smerge-keep-current   | Keep version at point    |
+
+** Workflow: Resolve Merge Conflict
+
+#+begin_example
+1. SPC g g                    → Open magit status
+2. Navigate to unmerged file  → See conflict markers
+3. e                          → Open ediff (or RET to open file)
+4. Resolve conflict:
+   - In ediff: use a/b to choose versions
+   - In file: use smerge commands (C-c ^)
+5. Save the file              → C-x C-s
+6. s                          → Stage the resolved file
+7. Continue operation:
+   - If merging: c c          → Commit
+   - If rebasing: r r         → Continue rebase
+#+end_example
+
+* Cherry Picking
+
+Press =A= in the magit-status buffer for cherry-pick menu:
+
+| Key | Command                      | Description                    |
+|-----+------------------------------+--------------------------------|
+| =A=   | magit-cherry-pick-popup      | Cherry-pick menu               |
+| =a=   | magit-cherry-pick            | Cherry-pick a commit           |
+| =A=   | magit-cherry-apply           | Apply commit (no commit)       |
+| =h=   | magit-cherry-harvest         | Cherry-pick multiple commits   |
+| =d=   | magit-cherry-donate          | Donate commits to another branch |
+
+** Cherry-pick Continuation
+
+| Key | Command                      | Description            |
+|-----+------------------------------+------------------------|
+| =A A= | magit-cherry-pick-continue   | Continue cherry-pick   |
+| =A s= | magit-cherry-pick-skip       | Skip current commit    |
+| =A a= | magit-cherry-pick-abort      | Abort cherry-pick      |
+
+** Workflow: Cherry Pick Commits
+
+#+begin_example
+1. SPC g g                    → Open magit status
+2. l o                        → Log of other branch
+3. Navigate to desired commit
+4. A a                        → Cherry-pick the commit
+5. Resolve conflicts if any   → (see Merge Conflicts)
+6. A A                        → Continue if conflicts
+#+end_example
+
+* Bisect
+
+Press =B= in the magit-status buffer for bisect menu:
+
+| Key | Command                   | Description                |
+|-----+---------------------------+----------------------------|
+| =B=   | magit-bisect              | Bisect transient menu      |
+| =s=   | magit-bisect-start        | Start bisect               |
+| =b=   | magit-bisect-bad          | Mark current commit as bad |
+| =g=   | magit-bisect-good         | Mark current commit as good|
+| =k=   | magit-bisect-skip         | Skip current commit        |
+| =r=   | magit-bisect-reset        | End bisect session         |
+| =R=   | magit-bisect-run          | Run bisect with script     |
+
+** Workflow: Find Bug with Bisect
+
+#+begin_example
+1. SPC g g                    → Open magit status
+2. B s                        → Start bisect
+   - Select bad commit (where bug exists)
+   - Select good commit (where bug doesn't exist)
+3. Test the current commit
+4. B g                        → Mark good (no bug)
+   OR
+   B b                        → Mark bad (has bug)
+5. Repeat steps 3-4 until bisect finds the commit
+6. B r                        → Reset bisect when done
+#+end_example
+
+* Blame
+
+** Starting Blame
+
+| Keybinding | Command              | Description              |
+|------------+----------------------+--------------------------|
+| =SPC g B=    | magit-blame-addition | Blame current file       |
+
+** Inside Blame Buffer
+
+| Key | Command                 | Description              |
+|-----+-------------------------+--------------------------|
+| =RET= | magit-show-commit       | Show commit at point     |
+| =b=   | magit-blame             | Blame for parent commit  |
+| =q=   | magit-blame-quit        | Quit blame               |
+| =n=   | magit-blame-next-chunk  | Next blame chunk         |
+| =p=   | magit-blame-previous-chunk | Previous blame chunk  |
+| =N=   | magit-blame-next-chunk-same-commit | Next same commit |
+| =P=   | magit-blame-previous-chunk-same-commit | Prev same commit |
+
+** Blame Modes
+
+| Key | Command                   | Description            |
+|-----+---------------------------+------------------------|
+| =M-w= | magit-blame-copy-hash     | Copy commit hash       |
+| =c=   | magit-blame-cycle-style   | Cycle blame display    |
+| =t=   | magit-blame-toggle-headings | Toggle headings     |
+
+** Workflow: Investigate Line History
+
+#+begin_example
+1. Navigate to suspicious line in file
+2. SPC g B                    → Start blame
+3. Examine annotations        → See who changed what
+4. RET                        → View the commit details
+5. b                          → Blame parent (go back in history)
+6. q                          → Quit blame when done
+#+end_example
+
+* Forge (GitHub/GitLab Integration)
+
+Forge adds support for issues, pull requests, and code review.
+
+** Setup
+
+First, configure authentication:
+
+#+begin_example
+# GitHub
+1. Create a token at https://github.com/settings/tokens
+2. Add to ~/.authinfo.gpg:
+   machine api.github.com login YOUR_USERNAME^forge password YOUR_TOKEN
+#+end_example
+
+** Forge Dispatch (SPC g ')
+
+| Key | Command                  | Description              |
+|-----+--------------------------+--------------------------|
+| =f f= | forge-pull               | Fetch issues/PRs         |
+| =f n= | forge-pull-notifications | Fetch notifications      |
+| =f t= | forge-pull-topic         | Fetch specific topic     |
+
+** Creating Issues & PRs
+
+| Keybinding | Command             | Description         |
+|------------+---------------------+---------------------|
+| =SPC g c i=  | forge-create-issue  | Create new issue    |
+| =SPC g c p=  | forge-create-pullreq| Create pull request |
+
+** Browsing
+
+| Keybinding | Command              | Description         |
+|------------+----------------------+---------------------|
+| =SPC g l i=  | forge-list-issues    | List all issues     |
+| =SPC g l p=  | forge-list-pullreqs  | List all PRs        |
+| =SPC g l n=  | forge-list-notifications | List notifications |
+
+** In Status Buffer (Forge Sections)
+
+| Key | Command                | Description           |
+|-----+------------------------+-----------------------|
+| =g i= | forge-jump-to-issues   | Jump to issues        |
+| =g m= | forge-jump-to-pullreqs | Jump to pull requests |
+| ='=   | forge-dispatch         | Forge menu            |
+
+** On Issue/PR at Point
+
+| Key | Command                | Description           |
+|-----+------------------------+-----------------------|
+| =C-c C-c= | forge-create-post    | Add comment         |
+| =C-c C-e= | forge-edit-post      | Edit comment        |
+| =C-c C-k= | forge-delete-comment | Delete comment      |
+
+** Workflow: Create Pull Request
+
+#+begin_example
+1. Create and push feature branch
+2. SPC g g                    → Open magit status
+3. SPC g c p                  → Create pull request
+   OR
+   ' c p                      → Create PR from forge menu
+4. Fill in title and description
+5. C-c C-c                    → Submit PR
+#+end_example
+
+** Workflow: Review Pull Request
+
+#+begin_example
+1. SPC g l p                  → List pull requests
+2. RET                        → Open PR details
+3. Review changes             → Navigate through diff
+4. C-c C-c                    → Add comment
+5. ' c r                      → Submit review (approve/request changes)
+#+end_example
+
+* Stashing
+
+Press =z= in the magit-status buffer for stash menu:
+
+| Key | Command                   | Description               |
+|-----+---------------------------+---------------------------|
+| =z=   | magit-stash               | Stash (both staged/unstaged)|
+| =i=   | magit-stash-index         | Stash only staged changes |
+| =w=   | magit-stash-worktree      | Stash only unstaged       |
+| =x=   | magit-stash-keep-index    | Stash but keep staged     |
+| =p=   | magit-stash-pop           | Pop latest stash          |
+| =a=   | magit-stash-apply         | Apply stash (keep in list)|
+| =k=   | magit-stash-drop          | Drop a stash              |
+| =l=   | magit-stash-list          | List all stashes          |
+| =v=   | magit-stash-show          | Show stash contents       |
+| =b=   | magit-stash-branch        | Create branch from stash  |
+
+* Worktrees
+
+Press =%= (or =*= in Doom) in the magit-status buffer:
+
+| Key | Command                   | Description               |
+|-----+---------------------------+---------------------------|
+| =b=   | magit-worktree-checkout   | Checkout worktree         |
+| =c=   | magit-worktree-create     | Create new worktree       |
+| =m=   | magit-worktree-move       | Move worktree             |
+| =k=   | magit-worktree-delete     | Delete worktree           |
+| =g=   | magit-worktree-status     | Show worktree status      |
+
+* Quick Reference Card
+
+** Most Used (Leader Keys)
+
+| Action              | Keybinding  |
+|---------------------+-------------|
+| Magit status        | =SPC g g=     |
+| Switch branch       | =SPC g b=     |
+| Git blame           | =SPC g B=     |
+| Stage file          | =SPC g S=     |
+| Unstage file        | =SPC g U=     |
+| Create commit       | =SPC g c c=   |
+| Create branch       | =SPC g c b=   |
+| Fetch               | =SPC g F=     |
+| File log            | =SPC g L=     |
+| Create PR           | =SPC g c p=   |
+| List PRs            | =SPC g l p=   |
+| Forge menu          | =SPC g '=     |
+
+** Most Used (Status Buffer)
+
+| Action              | Key         |
+|---------------------+-------------|
+| Stage               | =s=           |
+| Unstage             | =u=           |
+| Discard             | =k=           |
+| Commit menu         | =c=           |
+| Branch menu         | =b=           |
+| Merge menu          | =m=           |
+| Rebase menu         | =r=           |
+| Push menu           | =P=           |
+| Pull menu           | =F=           |
+| Stash menu          | =z=           |
+| Cherry-pick menu    | =A=           |
+| Bisect menu         | =B=           |
+| Refresh             | =g r=         |
+| Quit                | =q=           |
+
+** Conflict Resolution
+
+| Action              | Key/Binding   |
+|---------------------+---------------|
+| Open ediff          | =e=             |
+| Keep HEAD (upper)   | =C-c ^ u=       |
+| Keep incoming (lower)| =C-c ^ l=      |
+| Keep both           | =C-c ^ a=       |
+| Next conflict       | =C-c ^ n=       |
+
+* Exporting This Document
+
+To export this document as PDF:
+
+1. Open this file in Emacs
+2. Press =SPC m e= (or =C-c C-e=)
+3. Press =l p= for LaTeX to PDF
+4. Or press =l o= to generate PDF and open it
+
+Requirements:
+- LaTeX distribution (MacTeX)
+- =pdflatex= in your PATH
