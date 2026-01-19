@@ -1014,10 +1014,11 @@ the editor, a floating frame opens. It closes automatically when editing is done
 Open a project in a dedicated workspace from external tools (shell, etc.).
 
 #+begin_src emacs-lisp
-(defun hd/open-project-in-workspace (dir)
-  "Open DIR as a project in a dedicated workspace, raising Emacs."
-  (select-frame-set-input-focus (selected-frame))
-  (+workspaces-switch-to-project-h dir))
+(after! persp-mode
+  (defun hd/open-project-in-workspace (dir)
+    "Open DIR as a project in a dedicated workspace, raising Emacs."
+    (select-frame-set-input-focus (selected-frame))
+    (+workspaces-switch-to-project-h dir)))
 #+end_src
 
 ** Keybindings
