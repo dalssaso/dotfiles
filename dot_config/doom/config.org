@@ -75,11 +75,111 @@ Catppuccin Mocha flavor.
 (setq-default explicit-shell-file-name (executable-find "fish"))
 #+end_src
 
+** Spell Checking
+
+Multi-language spell checking with hunspell. Supports en_US, en_GB, and pt_BR.
+
+Dictionaries are installed automatically by chezmoi (see =run_once_after_install-hunspell-dictionaries.fish=).
+They are placed in =~/Library/Spelling/=.
+
+#+begin_src emacs-lisp
+(after! ispell
+  ;; Doom sets ispell-program-name to "hunspell" via +hunspell flag
+  ;; We just need to configure dictionaries
+
+  ;; Set dictionary search path for macOS
+  (setenv "DICPATH"
+          (string-join (list (expand-file-name "~/Library/Spelling")
+                             "/opt/homebrew/share/hunspell"
+                             "/Library/Spelling")
+                       ":"))
+
+  ;; Configure available dictionaries for hunspell
+  (setq ispell-local-dictionary-alist
+        '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+          ("en_GB" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_GB") nil utf-8)
+          ("pt_BR" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "pt_BR") nil utf-8)
+          ("multi" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US,en_GB,pt_BR") nil utf-8)))
+
+  ;; Use multi-dictionary by default (all three languages)
+  (setq ispell-dictionary "multi"
+        ispell-local-dictionary "multi"))
+
+;; Function to switch spell-check language
+(defun hd/switch-spell-dictionary ()
+  "Switch between spell-check dictionaries."
+  (interactive)
+  (let ((dict (completing-read "Dictionary: "
+                               '("multi" "en_US" "en_GB" "pt_BR")
+                               nil t nil nil "multi")))
+    (ispell-kill-ispell t)
+    (setq ispell-dictionary dict
+          ispell-local-dictionary dict)
+    (when (bound-and-true-p flyspell-mode)
+      (flyspell-mode -1)
+      (flyspell-mode +1))
+    (message "Switched to dictionary: %s" dict)))
+
+;; Keybindings for spell checking
+;; Note: zg and zw are already bound by Doom to +spell/add-word and +spell/remove-word
+(map! :leader
+      (:prefix ("S" . "spell")
+       :desc "Switch dictionary" "d" #'hd/switch-spell-dictionary
+       :desc "Correct word" "c" #'flyspell-correct-at-point
+       :desc "Correct previous" "p" #'flyspell-correct-previous
+       :desc "Add to dictionary" "a" #'+spell/add-word
+       :desc "Remove from dictionary" "r" #'+spell/remove-word
+       :desc "Check buffer" "b" #'flyspell-buffer))
+#+end_src
 ** Treesitter
 
 #+begin_src emacs-lisp
 (after! treesit
   (setq treesit-font-lock-level 3))
+*** LTeX+ (Grammar & Spell Checking)
+
+LSP-based grammar and spell checking using LanguageTool via ltex-ls-plus.
+Supports org-mode, markdown, and LaTeX files.
+
+#+begin_src emacs-lisp
+(after! lsp-mode
+  ;; Register ltex-ls-plus client
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection '("ltex-ls-plus"))
+    :activation-fn (lsp-activate-on "latex" "markdown" "org" "text")
+    :major-modes '(org-mode markdown-mode gfm-mode latex-mode LaTeX-mode text-mode)
+    :server-id 'ltex-plus
+    :priority 1
+    :initialization-options
+    (lambda ()
+      (list :settings
+            (list :ltex
+                  (list :language "en-US"
+                        :additionalRules (list :motherTongue "pt-BR"
+                                               :enablePickyRules t)
+                        :completionEnabled t))))))
+
+  ;; Custom function to change ltex language
+  (defun hd/ltex-set-language (lang)
+    "Set LTeX language for current buffer."
+    (interactive
+     (list (completing-read "Language: " '("en-US" "en-GB" "pt-BR") nil t)))
+    (setq-local lsp-ltex-language lang)
+    (lsp-workspace-restart (lsp--read-workspace))))
+
+;; Enable ltex for writing modes (but not by default - manually activate)
+(defun hd/enable-ltex ()
+  "Enable LTeX LSP for current buffer."
+  (interactive)
+  (lsp))
+
+;; Keybindings for ltex
+(map! :leader
+      (:prefix ("l" . "ltex")
+       :desc "Enable LTeX" "l" #'hd/enable-ltex
+       :desc "Set language" "L" #'hd/ltex-set-language))
+#+end_src
 #+end_src
 
 ** Projectile
