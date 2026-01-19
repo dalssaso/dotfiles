@@ -830,27 +830,43 @@ Support for mermaid diagrams in org-babel. Requires =mmdc= (mermaid-cli) to be i
 Functions to invoke org-roam-dailies capture from external tools (Raycast, shell scripts).
 
 #+begin_src emacs-lisp
+(defvar hd/capture-frame nil
+  "Frame used for CLI capture, closed after capture finalization.")
+
 (defun hd/roam-dailies-capture-cli (template-key &optional props)
   "Capture to today's daily using TEMPLATE-KEY with optional PROPS.
 PROPS is a plist of capture properties like :link, :description, :initial.
-Called from external tools via emacsclient."
+Called from external tools via emacsclient.
+Link captures finish immediately; others open a frame for editing."
   (require 'org-roam-dailies)
-  ;; Set up link properties using org-link-store-props
-  ;; This ensures %:link, %:description, %:initial work in templates
   (when props
     (apply #'org-link-store-props props))
-  ;; Modify templates to add :immediate-finish for CLI use
-  ;; This allows non-interactive capture without breaking normal templates
-  (let* ((org-capture-link-is-already-stored t)
-         (org-roam-dailies-capture-templates
-          (mapcar (lambda (template)
-                    (if (plist-get (nthcdr 4 template) :immediate-finish)
-                        template
-                      (append template '(:immediate-finish t))))
-                  org-roam-dailies-capture-templates)))
-    (org-roam-dailies-capture-today nil template-key))
-  ;; Return success
+  (let ((org-capture-link-is-already-stored t))
+    (if (string= template-key "l")
+        ;; Link capture: immediate finish, no interaction needed
+        (let ((org-roam-dailies-capture-templates
+               (mapcar (lambda (template)
+                         (if (plist-get (nthcdr 4 template) :immediate-finish)
+                             template
+                           (append template '(:immediate-finish t))))
+                       org-roam-dailies-capture-templates)))
+          (org-roam-dailies-capture-today nil template-key))
+      ;; Other captures: open in new frame for editing
+      (setq hd/capture-frame
+            (make-frame '((name . "Org Capture")
+                          (width . 80)
+                          (height . 25))))
+      (select-frame-set-input-focus hd/capture-frame)
+      (org-roam-dailies-capture-today nil template-key)))
   t)
+
+(defun hd/close-capture-frame ()
+  "Close the capture frame after finalization."
+  (when (and hd/capture-frame (frame-live-p hd/capture-frame))
+    (delete-frame hd/capture-frame)
+    (setq hd/capture-frame nil)))
+
+(add-hook 'org-capture-after-finalize-hook #'hd/close-capture-frame)
 #+end_src
 
 ** Keybindings
