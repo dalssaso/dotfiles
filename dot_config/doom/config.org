@@ -826,6 +826,25 @@ Support for mermaid diagrams in org-babel. Requires =mmdc= (mermaid-cli) to be i
            :empty-lines 1))))
 #+end_src
 
+** CLI Capture Support
+
+Functions to invoke org-roam-dailies capture from external tools (Raycast, shell scripts).
+
+#+begin_src emacs-lisp
+(defun hd/roam-dailies-capture-cli (template-key &optional props)
+  "Capture to today's daily using TEMPLATE-KEY with optional PROPS.
+PROPS is a plist of capture properties like :link, :description, :initial.
+Called from external tools via emacsclient."
+  (require 'org-roam-dailies)
+  ;; Set up org-store-link-plist for template expansion
+  (when props
+    (setq org-store-link-plist props))
+  ;; Capture to today's daily
+  (org-roam-dailies-capture-today nil template-key)
+  ;; Return success
+  t)
+#+end_src
+
 ** Keybindings
 
 #+begin_src emacs-lisp
