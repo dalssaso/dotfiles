@@ -440,7 +440,8 @@ Uses the same identity file as chezmoi (~/.config/chezmoi/key.txt).
 
 #+begin_src emacs-lisp
 (use-package! chezmoi
-  :defer t
+  :commands (chezmoi-find chezmoi-write chezmoi-diff chezmoi-ediff
+             chezmoi-sync-files chezmoi-magit-status chezmoi-template-buffer-display)
   :config
   ;; Enable template value overlays in chezmoi source files
   (setq chezmoi-template-display-p t))
@@ -461,7 +462,8 @@ Uses the same identity file as chezmoi (~/.config/chezmoi/key.txt).
           (lambda ()
             (when (and buffer-file-name
                        (string-match-p "/\\.local/share/chezmoi/" buffer-file-name))
-              (chezmoi-mode 1))))
+              (when (require 'chezmoi nil t)
+                (chezmoi-mode 1)))))
 #+end_src
 
 * Brewfile Mode
