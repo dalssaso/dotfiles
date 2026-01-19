@@ -227,6 +227,38 @@ LSP support for Ansible playbooks and roles.
 (add-hook 'ansible-mode-hook #'lsp!)
 #+end_src
 
+*** Helm Templates (helm-ls)
+
+LSP support for Helm chart templates using helm-ls (via lsp-mode's built-in client).
+
+#+begin_src emacs-lisp
+;; Define a major mode for Helm templates (derived from yaml-mode)
+(define-derived-mode helm-template-mode yaml-mode "Helm"
+  "Major mode for editing Helm template files.")
+
+;; Associate helm template files with helm-template-mode
+(add-to-list 'auto-mode-alist '("/templates/.*\\.\\(ya?ml\\|tpl\\)\\'" . helm-template-mode))
+(add-to-list 'auto-mode-alist '("Chart\\.yaml\\'" . helm-template-mode))
+(add-to-list 'auto-mode-alist '("values.*\\.ya?ml\\'" . helm-template-mode))
+
+;; Use LSP formatting for helm templates (helm-ls understands {{ }} syntax)
+;; Disable apheleia to prevent prettier from being used
+(after! apheleia
+  (setf (alist-get 'helm-template-mode apheleia-mode-alist) nil))
+(setq-hook! 'helm-template-mode-hook +format-with 'lsp)
+
+;; Configure lsp-mode's built-in helm-ls client
+(after! lsp-mode
+  (require 'lsp-kubernetes-helm nil t)
+  ;; Add helm-template-mode to the supported modes
+  (add-to-list 'lsp-language-id-configuration '(helm-template-mode . "helm"))
+  ;; Ensure helm_ls binary is found
+  (setq lsp-kubernetes-helm-ls-server-path "helm_ls")
+  ;; Enable built-in YAML LS for formatting (understands {{ }} syntax)
+  (setq lsp-kubernetes-helm-yaml-ls-enable t))
+
+;; Enable LSP for helm-template-mode
+(add-hook 'helm-template-mode-hook #'lsp!)
 #+end_src
 
 ** Projectile
