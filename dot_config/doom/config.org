@@ -136,6 +136,39 @@ They are placed in =~/Library/Spelling/=.
 #+begin_src emacs-lisp
 (after! treesit
   (setq treesit-font-lock-level 3))
+*** Go (golangci-lint + goimports/gofmt)
+
+Use golangci-lint for linting (already configured by Doom's go module).
+For formatting, use project's golangci-lint config if available, otherwise
+fall back to goimports then gofmt.
+
+#+begin_src emacs-lisp
+(after! apheleia
+  ;; Define a smart Go formatter that uses golangci-lint if config exists
+  (setf (alist-get 'golangci-lint-fmt apheleia-formatters)
+        '("golangci-lint" "fmt" "--stdin" filepath))
+
+  ;; Use goimports as default (includes gofmt)
+  (setf (alist-get 'go-mode apheleia-mode-alist) 'goimports)
+  (setf (alist-get 'go-ts-mode apheleia-mode-alist) 'goimports))
+
+;; Custom formatter selection based on project config
+(defun hd/go-formatter ()
+  "Return the appropriate Go formatter based on project config."
+  (if (or (locate-dominating-file default-directory ".golangci.yml")
+          (locate-dominating-file default-directory ".golangci.yaml")
+          (locate-dominating-file default-directory ".golangci.toml")
+          (locate-dominating-file default-directory ".golangci.json"))
+      'golangci-lint-fmt
+    'goimports))
+
+;; Override LSP formatting with goimports/golangci-lint
+(add-hook! '(go-mode-hook go-ts-mode-hook)
+  (defun hd/go-set-formatter-h ()
+    "Set Go formatter based on project configuration."
+    (setq-local +format-with (hd/go-formatter))))
+#+end_src
+
 *** Docker (dockerfile-language-server + hadolint)
 
 Use dockerfile-language-server-nodejs for LSP (formatting, completion, diagnostics)
