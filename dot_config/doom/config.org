@@ -136,6 +136,32 @@ They are placed in =~/Library/Spelling/=.
 #+begin_src emacs-lisp
 (after! treesit
   (setq treesit-font-lock-level 3))
+*** JavaScript & CSS (prettier)
+
+Use prettier for JavaScript, TypeScript, and CSS. Prettier automatically
+respects project configuration files (.prettierrc, etc.).
+
+#+begin_src emacs-lisp
+(after! apheleia
+  ;; JavaScript/TypeScript
+  (setf (alist-get 'js-mode apheleia-mode-alist) 'prettier-javascript)
+  (setf (alist-get 'js-ts-mode apheleia-mode-alist) 'prettier-javascript)
+  (setf (alist-get 'typescript-mode apheleia-mode-alist) 'prettier-typescript)
+  (setf (alist-get 'typescript-ts-mode apheleia-mode-alist) 'prettier-typescript)
+  (setf (alist-get 'tsx-ts-mode apheleia-mode-alist) 'prettier-typescript)
+
+  ;; CSS/SCSS
+  (setf (alist-get 'css-mode apheleia-mode-alist) 'prettier-css)
+  (setf (alist-get 'css-ts-mode apheleia-mode-alist) 'prettier-css)
+  (setf (alist-get 'scss-mode apheleia-mode-alist) 'prettier-scss))
+
+;; Override LSP formatting with prettier for these modes
+(setq-hook! '(js-mode-hook js-ts-mode-hook) +format-with 'prettier-javascript)
+(setq-hook! '(typescript-mode-hook typescript-ts-mode-hook tsx-ts-mode-hook) +format-with 'prettier-typescript)
+(setq-hook! '(css-mode-hook css-ts-mode-hook) +format-with 'prettier-css)
+(setq-hook! 'scss-mode-hook +format-with 'prettier-scss)
+#+end_src
+
 *** Go (golangci-lint + goimports/gofmt)
 
 Use golangci-lint for linting (already configured by Doom's go module).
