@@ -890,3 +890,25 @@ Automatically commit and push changes to org-personal repo.
   (advice-add 'org-roam-dailies-goto-yesterday :before (lambda (&rest _) (hd/org-sync-pull)))
   (advice-add 'org-roam-dailies-goto-date :before (lambda (&rest _) (hd/org-sync-pull))))
 #+end_src
+
+*** Dynamic Agenda Integration
+
+Query dailies for agenda views.
+
+#+begin_src emacs-lisp
+(defun hd/roam-dailies-files (days)
+  "Return list of daily note files from the last DAYS days."
+  (let ((since (time-subtract (current-time) (days-to-time days))))
+    (seq-filter
+     (lambda (file)
+       (let ((fname (file-name-nondirectory file)))
+         (when (string-match "^\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)\\.org$" fname)
+           (time-less-p since (date-to-time (match-string 1 fname))))))
+     (directory-files org-roam-dailies-directory t "\\.org$"))))
+
+(defun hd/agenda-with-dailies (days base-key)
+  "Show agenda with dailies from last DAYS days using BASE-KEY view."
+  (let ((org-agenda-files
+         (append org-agenda-files (hd/roam-dailies-files days))))
+    (org-agenda nil base-key)))
+#+end_src
