@@ -135,7 +135,38 @@ They are placed in =~/Library/Spelling/=.
 
 #+begin_src emacs-lisp
 (after! treesit
-  (setq treesit-font-lock-level 3))
+  (setq treesit-font-lock-level 3)
+  ;; Automatically install missing grammars without prompting
+  (setq treesit-auto-install-grammar 'always))
+
+(defun hd/treesit-install-all-grammars ()
+  "Install missing tree-sitter grammars with progress logging.
+Skips already installed grammars and continues past failures."
+  (interactive)
+  (let* ((grammars (mapcar #'car treesit-language-source-alist))
+         (total (length grammars))
+         (current 0)
+         (installed 0)
+         (skipped 0)
+         (failed 0))
+    (dolist (grammar grammars)
+      (setq current (1+ current))
+      (if (treesit-language-available-p grammar)
+          (progn
+            (setq skipped (1+ skipped))
+            (message "[%d/%d] Already installed: %s" current total grammar))
+        (message "[%d/%d] Installing grammar: %s..." current total grammar)
+        (condition-case err
+            (progn
+              (treesit-install-language-grammar grammar)
+              (setq installed (1+ installed))
+              (message "[%d/%d] Installed: %s" current total grammar))
+          (error
+           (setq failed (1+ failed))
+           (message "[%d/%d] Failed %s: %s" current total grammar (error-message-string err))))))
+    (message "Tree-sitter: %d installed, %d already present, %d failed" installed skipped failed)))
+#+end_src
+
 ** Formatters & Linters
 
 Configure language-specific formatters (via apheleia) and linters (via flycheck).
