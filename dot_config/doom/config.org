@@ -750,6 +750,17 @@ Define tag shortcuts for fast tagging.
               (tags-todo "+@health" ((org-agenda-overriding-header "Health")))
               (tags-todo "+@finance" ((org-agenda-overriding-header "Finance")))
               (tags-todo "+@learning" ((org-agenda-overriding-header "Learning")))))
+            ("Pd" "Personal + Dailies (7 days)"
+             ((agenda "" ((org-agenda-span 'day)
+                          (org-agenda-files (append org-agenda-files (hd/roam-dailies-files 7)))))
+              (tags-todo "+@waiting" ((org-agenda-overriding-header "Waiting")))
+              (tags-todo "+@errands" ((org-agenda-overriding-header "Errands")))
+              (tags-todo "+@home" ((org-agenda-overriding-header "Home")))))
+            ("Pm" "Personal + Dailies (30 days)"
+             ((agenda "" ((org-agenda-span 'week)
+                          (org-agenda-files (append org-agenda-files (hd/roam-dailies-files 30)))))
+              (alltodo "" ((org-agenda-files (hd/roam-dailies-files 30))
+                           (org-agenda-overriding-header "All TODOs from Dailies")))))
             ("Ps" "Someday" tags-todo "+@someday")
             ("Pw" "Waiting" tags-todo "+@waiting")))))
 #+end_src
