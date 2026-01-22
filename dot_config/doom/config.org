@@ -59,10 +59,13 @@ Using Monaspace font family with Radon for italics.
 
 ** Theme
 
-Tokyo Night theme.
+Everforest theme with medium contrast.
 
 #+begin_src emacs-lisp
-(setq doom-theme 'doom-tokyo-night)
+(use-package! doom-everforest-theme
+  :config
+  (setq doom-everforest-background "hard"))
+(setq doom-theme 'doom-everforest)
 #+end_src
 
 ** Line Numbers

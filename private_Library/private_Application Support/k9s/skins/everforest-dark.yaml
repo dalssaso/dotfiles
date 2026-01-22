@@ -1,0 +1,111 @@
+# Everforest Dark Hard
+# https://github.com/sainnhe/everforest/blob/master/palette.md
+
+# Background colors (Hard contrast)
+bg_dim: &bg_dim "#1e2326"
+bg0: &bg0 "#272e33"
+bg1: &bg1 "#2e383c"
+bg2: &bg2 "#374145"
+bg3: &bg3 "#414b50"
+
+# Foreground colors
+fg: &fg "#d3c6aa"
+red: &red "#e67e80"
+orange: &orange "#e69875"
+yellow: &yellow "#dbbc7f"
+green: &green "#a7c080"
+aqua: &aqua "#83c092"
+blue: &blue "#7fbbb3"
+purple: &purple "#d699b6"
+grey0: &grey0 "#7a8478"
+grey1: &grey1 "#859289"
+
+# Aliases for k9s
+text: &text "#d3c6aa"
+base: &base "#272e33"
+overlay: &overlay "#2e383c"
+muted: &muted "#414b50"
+pink: &pink "#d699b6"
+
+k9s:
+  body:
+    fgColor: *text
+    bgColor: *base
+    logoColor: *green
+  prompt:
+    fgColor: *text
+    bgColor: *base
+    suggestColor: *green
+    border:
+      command: *orange
+      default: *blue
+  info:
+    fgColor: *green
+    sectionColor: *text
+  dialog:
+    fgColor: *text
+    bgColor: *base
+    buttonFgColor: *text
+    buttonBgColor: *green
+    buttonFocusFgColor: *yellow
+    buttonFocusBgColor: *green
+    labelFgColor: *yellow
+    fieldFgColor: *text
+  frame:
+    border:
+      fgColor: *overlay
+      focusColor: *overlay
+    menu:
+      fgColor: *text
+      keyColor: *green
+      numKeyColor: *green
+    crumbs:
+      fgColor: *text
+      bgColor: *overlay
+      activeColor: *overlay
+    status:
+      newColor: *green
+      modifyColor: *red
+      addColor: *blue
+      errorColor: *pink
+      highlightcolor: *yellow
+      killColor: *muted
+      completedColor: *muted
+    title:
+      fgColor: *text
+      bgColor: *overlay
+      highlightColor: *yellow
+      counterColor: *green
+      filterColor: *green
+  views:
+    charts:
+      bgColor: default
+      defaultDialColors:
+        - *green
+        - *pink
+      defaultChartColors:
+        - *green
+        - *pink
+    table:
+      fgColor: *text
+      bgColor: *base
+      header:
+        fgColor: *text
+        bgColor: *base
+        sorterColor: *red
+    xray:
+      fgColor: *text
+      bgColor: *base
+      cursorColor: *overlay
+      graphicColor: *green
+      showIcons: false
+    yaml:
+      keyColor: *green
+      colonColor: *green
+      valueColor: *text
+    logs:
+      fgColor: *text
+      bgColor: *base
+      indicator:
+        fgColor: *text
+        bgColor: *base

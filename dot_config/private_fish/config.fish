@@ -1,5 +1,7 @@
 if status is-interactive
     zoxide init fish | source
+    # Everforest theme (install: fisher install jtpevehouse/fish-everforest)
+    type -q theme_everforest && theme_everforest dark medium
 end
 
 if status is-interactive
@@ -78,8 +80,8 @@ end
 # Disable greeting message
 set fish_greeting
 
-set -xg BAT_THEME_DARK tokyonight_night
-set -xg BAT_THEME_LIGHT tokyonight_day
+set -xg BAT_THEME_DARK everforest
+set -xg BAT_THEME_LIGHT everforest
 # Emacs as default editor - opens floating frame for git commits etc.
 # Frame closes automatically when editing is done (C-c C-c or save+quit)
 set -xg EDITOR "emacsclient -c -a '' -F '((name . \"Editor\") (width . 80) (height . 25))'"
@@ -89,11 +91,11 @@ set -xg GOPATH $HOME/go
 set -xg GPG_TTY (tty)
 
 set -Ux FZF_DEFAULT_OPTS "\
---color=bg+:#283457,bg:#16161e,spinner:#ff007c,hl:#2ac3de \
---color=fg:#c0caf5,header:#ff9e64,info:#545c7e,pointer:#ff007c \
---color=marker:#ff007c,fg+:#c0caf5,prompt:#7aa2f7,hl+:#2ac3de \
---color=selected-bg:#283457 \
---color=border:#27a1b9,label:#c0caf5"
+--color=bg+:#374145,bg:#272e33,spinner:#83c092,hl:#7fbbb3 \
+--color=fg:#d3c6aa,header:#7fbbb3,info:#83c092,pointer:#83c092 \
+--color=marker:#83c092,fg+:#d3c6aa,prompt:#a7c080,hl+:#83c092 \
+--color=selected-bg:#374145 \
+--color=border:#7fbbb3,label:#d3c6aa"
 
 alias vim='nvim'
 alias v='nvim'

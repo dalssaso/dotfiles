@@ -1,102 +1,123 @@
 colourful: true
 
+# Everforest Hard Palette
+# Background: #272e33
+# Foreground: #d3c6aa
+# Black: #2e383c
+# Red: #e67e80
+# Green: #a7c080
+# Yellow: #dbbc7f
+# Blue: #7fbbb3
+# Magenta: #d699b6
+# Cyan: #83c092
+# White: #d3c6aa
+# Gray: #859289
+# Bright Black: #414b50
+# Bright Red: #e67e80
+# Bright Green: #a7c080
+# Bright Yellow: #dbbc7f
+# Bright Blue: #7fbbb3
+# Bright Magenta: #d699b6
+# Bright Cyan: #83c092
+# Bright White: #d3c6aa
+
 filekinds:
-  normal: { foreground: "#c0caf5" }
-  directory: { foreground: "#7aa2f7" }
-  symlink: { foreground: "#2ac3de" }
-  pipe: { foreground: "#414868" }
-  block_device: { foreground: "#e0af68" }
-  char_device: { foreground: "#e0af68" }
-  socket: { foreground: "#414868" }
-  special: { foreground: "#9d7cd8" }
-  executable: { foreground: "#9ece6a" }
-  mount_point: { foreground: "#b4f9f8" }
+  normal: { foreground: "#d3c6aa" }
+  directory: { foreground: "#e69875" }
+  symlink: { foreground: "#859289" }
+  pipe: { foreground: "#414b50" }
+  block_device: { foreground: "#e67e80" }
+  char_device: { foreground: "#dbbc7f" }
+  socket: { foreground: "#2e383c" }
+  special: { foreground: "#d699b6" }
+  executable: { foreground: "#a7c080" }
+  mount_point: { foreground: "#414b50" }
 
 perms:
-  user_read: { foreground: "#2ac3de" }
-  user_write: { foreground: "#bb9af7" }
-  user_execute_file: { foreground: "#9ece6a" }
-  user_execute_other: { foreground: "#9ece6a" }
-  group_read: { foreground: "#2ac3de" }
-  group_write: { foreground: "#ff9e64" }
-  group_execute: { foreground: "#9ece6a" }
-  other_read: { foreground: "#2ac3de" }
-  other_write: { foreground: "#ff007c" }
-  other_execute: { foreground: "#9ece6a" }
-  special_user_file: { foreground: "#ff007c" }
-  special_other: { foreground: "#db4b4b" }
-  attribute: { foreground: "#737aa2" }
+  user_read: { foreground: "#859289" }
+  user_write: { foreground: "#414b50" }
+  user_execute_file: { foreground: "#a7c080" }
+  user_execute_other: { foreground: "#a7c080" }
+  group_read: { foreground: "#859289" }
+  group_write: { foreground: "#414b50" }
+  group_execute: { foreground: "#a7c080" }
+  other_read: { foreground: "#859289" }
+  other_write: { foreground: "#414b50" }
+  other_execute: { foreground: "#a7c080" }
+  special_user_file: { foreground: "#d699b6" }
+  special_other: { foreground: "#414b50" }
+  attribute: { foreground: "#859289" }
 
 size:
-  major: { foreground: "#2ac3de" }
-  minor: { foreground: "#9d7cd8" }
-  number_byte: { foreground: "#a9b1d6" }
-  number_kilo: { foreground: "#89ddff" }
-  number_mega: { foreground: "#2ac3de" }
-  number_giga: { foreground: "#ff9e64" }
-  number_huge: { foreground: "#ff007c" }
-  unit_byte: { foreground: "#a9b1d6" }
-  unit_kilo: { foreground: "#89ddff" }
-  unit_mega: { foreground: "#2ac3de" }
-  unit_giga: { foreground: "#ff9e64" }
-  unit_huge: { foreground: "#ff007c" }
+  major: { foreground: "#859289" }
+  minor: { foreground: "#e69875" }
+  number_byte: { foreground: "#859289" }
+  number_kilo: { foreground: "#859289" }
+  number_mega: { foreground: "#83c092" }
+  number_giga: { foreground: "#d699b6" }
+  number_huge: { foreground: "#d699b6" }
+  unit_byte: { foreground: "#859289" }
+  unit_kilo: { foreground: "#83c092" }
+  unit_mega: { foreground: "#d699b6" }
+  unit_giga: { foreground: "#d699b6" }
+  unit_huge: { foreground: "#e69875" }
 
 users:
-  user_you: { foreground: "#3d59a1" }
-  user_root: { foreground: "#bb9af7" }
-  user_other: { foreground: "#2ac3de" }
-  group_yours: { foreground: "#89ddff" }
-  group_root: { foreground: "#bb9af7" }
-  group_other: { foreground: "#c0caf5" }
+  user_you: { foreground: "#dbbc7f" }
+  user_root: { foreground: "#e67e80" }
+  user_other: { foreground: "#d699b6" }
+  group_yours: { foreground: "#859289" }
+  group_other: { foreground: "#414b50" }
+  group_root: { foreground: "#e67e80" }
 
 links:
-  normal: { foreground: "#89ddff" }
-  multi_link_file: { foreground: "#2ac3de" }
+  normal: { foreground: "#e69875" }
+  multi_link_file: { foreground: "#83c092" }
 
 git:
-  new: { foreground: "#9ece6a" }
-  modified: { foreground: "#bb9af7" }
-  deleted: { foreground: "#db4b4b" }
-  renamed: { foreground: "#2ac3de" }
-  typechange: { foreground: "#2ac3de" }
-  ignored: { foreground: "#545c7e" }
-  conflicted: { foreground: "#ff9e64" }
+  new: { foreground: "#a7c080" }
+  modified: { foreground: "#dbbc7f" }
+  deleted: { foreground: "#e67e80" }
+  renamed: { foreground: "#83c092" }
+  typechange: { foreground: "#d699b6" }
+  ignored: { foreground: "#414b50" }
+  conflicted: { foreground: "#e67e80" }
 
 git_repo:
-  branch_main: { foreground: "#737aa2" }
-  branch_other: { foreground: "#b4f9f8" }
-  git_clean: { foreground: "#292e42" }
-  git_dirty: { foreground: "#bb9af7" }
+  branch_main: { foreground: "#859289" }
+  branch_other: { foreground: "#d699b6" }
+  git_clean: { foreground: "#a7c080" }
+  git_dirty: { foreground: "#e67e80" }
 
 security_context:
-  colon: { foreground: "#545c7e" }
-  user: { foreground: "#737aa2" }
-  role: { foreground: "#2ac3de" }
-  typ: { foreground: "#3d59a1" }
-  range: { foreground: "#9d7cd8" }
+  colon: { foreground: "#859289" }
+  user: { foreground: "#e69875" }
+  role: { foreground: "#d699b6" }
+  typ: { foreground: "#414b50" }
+  range: { foreground: "#d699b6" }
 
 file_type:
-  image: { foreground: "#89ddff" }
-  video: { foreground: "#b4f9f8" }
-  music: { foreground: "#73daca" }
-  lossless: { foreground: "#41a6b5" }
-  crypto: { foreground: "#db4b4b" }
-  document: { foreground: "#a9b1d6" }
-  compressed: { foreground: "#ff9e64" }
-  temp: { foreground: "#737aa2" }
-  compiled: { foreground: "#737aa2" }
-  build: { foreground: "#1abc9c" }
-  source: { foreground: "#bb9af7" }
+  image: { foreground: "#dbbc7f" }
+  video: { foreground: "#e67e80" }
+  music: { foreground: "#e69875" }
+  lossless: { foreground: "#414b50" }
+  crypto: { foreground: "#2e383c" }
+  document: { foreground: "#859289" }
+  compressed: { foreground: "#d699b6" }
+  temp: { foreground: "#e67e80" }
+  compiled: { foreground: "#83c092" }
+  build: { foreground: "#414b50" }
+  source: { foreground: "#a7c080" }
 
-punctuation: { foreground: "#414868" }
-date: { foreground: "#e0af68" }
-inode: { foreground: "#737aa2" }
-blocks: { foreground: "#737aa2" }
-header: { foreground: "#a9b1d6" }
-octal: { foreground: "#ff9e64" }
-flags: { foreground: "#9d7cd8" }
+punctuation: { foreground: "#859289" }
+date: { foreground: "#83c092" }
+inode: { foreground: "#859289" }
+blocks: { foreground: "#859289" }
+header: { foreground: "#859289" }
+octal: { foreground: "#e69875" }
+flags: { foreground: "#d699b6" }
 
-symlink_path: { foreground: "#89ddff" }
-control_char: { foreground: "#ff9e64" }
-broken_symlink: { foreground: "#ff007c" }
-broken_path_overlay: { foreground: "#ff007c" }
+symlink_path: { foreground: "#e69875" }
+control_char: { foreground: "#83c092" }
+broken_symlink: { foreground: "#e67e80" }
+broken_path_overlay: { foreground: "#859289" }

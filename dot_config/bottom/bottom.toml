@@ -1,0 +1,38 @@
+# Everforest Dark Hard color theme for bottom
+
+[colors]
+table_header_color = "#d3c6aa"
+all_cpu_color = "#d3c6aa"
+avg_cpu_color = "#e67e80"
+cpu_core_colors = [
+  "#e67e80",
+  "#d3c6aa",
+  "#a7c080",
+  "#7fbbb3",
+  "#272e33",
+  "#414b50",
+]
+ram_color = "#a7c080"
+swap_color = "#d3c6aa"
+rx_color = "#a7c080"
+tx_color = "#e67e80"
+widget_title_color = "#d3c6aa"
+border_color = "#374145"
+highlighted_border_color = "#7fbbb3"
+text_color = "#d3c6aa"
+graph_color = "#414b50"
+cursor_color = "#7fbbb3"
+selected_text_color = "#272e33"
+selected_bg_color = "#7fbbb3"
+high_battery_color = "#a7c080"
+medium_battery_color = "#dbbc7f"
+low_battery_color = "#e67e80"
+gpu_core_colors = [
+  "#7fbbb3",
+  "#d3c6aa",
+  "#e67e80",
+  "#a7c080",
+  "#272e33",
+  "#414b50",
+]
+arc_color = "#7fbbb3"

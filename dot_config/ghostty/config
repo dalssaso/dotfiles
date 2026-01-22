@@ -1,7 +1,7 @@
 quit-after-last-window-closed = true
 clipboard-read = allow
 clipboard-write = allow
-theme = dark:TokyoNight,light:TokyoNight Day
+theme = everforest-dark-hard
 mouse-hide-while-typing = true
 macos-titlebar-style = tabs
 window-inherit-working-directory = false

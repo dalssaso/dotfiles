@@ -53,8 +53,9 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 
-;; Catppuccin theme
-(package! catppuccin-theme)
+;; Everforest theme
+(package! doom-everforest-theme
+  :recipe (:host github :repo "Cardoso1994/doom-everforest-theme"))
 (package! wakatime-mode)
 
 ;; Org visual enhancements
