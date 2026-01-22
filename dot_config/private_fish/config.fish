@@ -78,22 +78,22 @@ end
 # Disable greeting message
 set fish_greeting
 
-set -xg BAT_THEME_DARK Catppuccin Mocha
-set -xg BAT_THEME_LIGHT Catppuccin Latte
+set -xg BAT_THEME_DARK tokyonight_night
+set -xg BAT_THEME_LIGHT tokyonight_day
 # Emacs as default editor - opens floating frame for git commits etc.
 # Frame closes automatically when editing is done (C-c C-c or save+quit)
 set -xg EDITOR "emacsclient -c -a '' -F '((name . \"Editor\") (width . 80) (height . 25))'"
-set -xg LS_COLORS (vivid generate catppuccin-mocha)
+# set -xg LS_COLORS (vivid generate catppuccin-mocha)  # Disabled: using eza theme.yml
 set -xg VISUAL $EDITOR
 set -xg GOPATH $HOME/go
 set -xg GPG_TTY (tty)
 
 set -Ux FZF_DEFAULT_OPTS "\
---color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 \
---color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
---color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
---color=selected-bg:#45475A \
---color=border:#6C7086,label:#CDD6F4"
+--color=bg+:#283457,bg:#16161e,spinner:#ff007c,hl:#2ac3de \
+--color=fg:#c0caf5,header:#ff9e64,info:#545c7e,pointer:#ff007c \
+--color=marker:#ff007c,fg+:#c0caf5,prompt:#7aa2f7,hl+:#2ac3de \
+--color=selected-bg:#283457 \
+--color=border:#27a1b9,label:#c0caf5"
 
 alias vim='nvim'
 alias v='nvim'
@@ -115,3 +115,15 @@ end
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init2.fish 2>/dev/null || :
+
+# pnpm
+set -gx PNPM_HOME "/Users/dalssaso/Library/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /Users/dalssaso/.lmstudio/bin
+# End of LM Studio CLI section
+

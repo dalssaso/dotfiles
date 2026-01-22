@@ -1,8 +1,7 @@
 quit-after-last-window-closed = true
 clipboard-read = allow
 clipboard-write = allow
-theme = dark:Catppuccin Mocha,light:Catppuccin Latte
-bold-is-bright = true
+theme = dark:TokyoNight,light:TokyoNight Day
 mouse-hide-while-typing = true
 macos-titlebar-style = tabs
 window-inherit-working-directory = false
@@ -37,7 +36,7 @@ keybind = ctrl+a>r=reload_config
 font-family = Monaspace Neon
 font-style = Regular
 font-style-bold = Bold
-font-style-italic = Regular Italic
+font-style-italic = Italic
 font-style-bold-italic = Bold Italic
 font-size = 15
 keybind = shift+enter=text:\n

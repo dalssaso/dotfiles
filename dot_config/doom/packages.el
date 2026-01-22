@@ -74,6 +74,7 @@
 ;; UI enhancements
 (package! hide-mode-line)
 (package! org-fragtog)
+(package! nyan-mode)
 
 ;; Org-babel extensions
 (package! ob-mermaid)

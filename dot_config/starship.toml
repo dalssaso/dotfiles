@@ -14,7 +14,7 @@ $character"""
 
 right_format = "$kubernetes"
 # Sets user-defined palette
-palette = "catppuccin_mocha"
+palette = "tokyonight"
 add_newline = false
 
 [directory]
@@ -117,3 +117,27 @@ surface0 = "#313244"
 base = "#1e1e2e"
 mantle = "#181825"
 crust = "#11111b"
+
+[palettes.tokyonight]
+# Tokyo Night color palette
+red = "#f7768e"
+orange = "#ff9e64"
+yellow = "#e0af68"
+green = "#9ece6a"
+teal = "#73daca"
+cyan = "#7dcfff"
+blue = "#7aa2f7"
+magenta = "#bb9af7"
+purple = "#9d7cd8"
+text = "#c0caf5"
+subtext1 = "#a9b1d6"
+subtext0 = "#9aa5ce"
+overlay2 = "#787c99"
+overlay1 = "#565f89"
+overlay0 = "#414868"
+surface2 = "#3b4261"
+surface1 = "#292e42"
+surface0 = "#24283b"
+base = "#1a1b26"
+mantle = "#16161e"
+crust = "#13131a"
