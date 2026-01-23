@@ -1,59 +1,69 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-format = """
-$username\
-$hostname\
-$directory\
-$git_branch\
-$git_state\
-$git_status\
-$cmd_duration\
-$line_break\
-$python\
-$character"""
-
-right_format = "$kubernetes"
-# Sets user-defined palette
 palette = "everforest"
 add_newline = false
 
-[directory]
-style = "blue"
+format = """
+[](orange)\
+$os\
+$username\
+[](bg:yellow fg:orange)\
+$directory\
+[](fg:yellow bg:aqua)\
+$git_branch\
+$git_status\
+$git_state\
+[](fg:aqua bg:blue)\
+$python\
+[](fg:blue bg:bg3)\
+$kubernetes\
+[](fg:bg3 bg:bg1)\
+$cmd_duration\
+[](fg:bg1)\
+$line_break$character"""
 
-[character]
-success_symbol = "[❯](purple)"
-error_symbol = "[❯](red)"
-vimcmd_symbol = "[❮](green)"
+[os]
+disabled = false
+style = "bg:orange fg:bg1"
+format = "[ $symbol]($style)"
+
+[os.symbols]
+Macos = ""
+
+[username]
+show_always = true
+style_user = "bg:orange fg:bg1"
+style_root = "bg:orange fg:bg1"
+format = '[ $user ]($style)'
+
+[directory]
+style = "fg:bg1 bg:yellow"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
 
 [git_branch]
-format = "[$branch]($style)"
-style = "bright-black"
+symbol = ""
+style = "bg:aqua fg:bg1"
+format = '[[ $symbol $branch ](fg:bg1 bg:aqua)]($style)'
 
 [git_status]
-format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
-style = "cyan"
-conflicted = "​"
-untracked = "​"
-modified = "​"
-staged = "​"
-renamed = "​"
-deleted = "​"
-stashed = "≡"
+style = "bg:aqua fg:bg1"
+format = '[[($all_status$ahead_behind )](fg:bg1 bg:aqua)]($style)'
 
 [git_state]
-format = '\([$state( $progress_current/$progress_total)]($style)\) '
-style = "bright-black"
-
-[cmd_duration]
-format = "[$duration]($style) "
-style = "yellow"
+style = "bg:aqua fg:bg1"
+format = '[[ \($state( $progress_current/$progress_total)\) ](fg:bg1 bg:aqua)]($style)'
 
 [python]
-format = "[$virtualenv]($style) "
-style = "bright-black"
+symbol = ""
+style = "bg:blue fg:bg1"
+format = '[[ $symbol $virtualenv ](fg:bg1 bg:blue)]($style)'
 
 [kubernetes]
 disabled = false
+style = "bg:bg3 fg:fg"
+format = '[[ ☸ $context(:$namespace) ](fg:fg bg:bg3)]($style)'
 detect_folders = ['clusters', 'distributions']
 detect_files = [
   'Chart.yaml',
@@ -62,100 +72,18 @@ detect_files = [
   'values-prod.yaml',
 ]
 
-[palettes.catppuccin_latte]
-rosewater = "#dc8a78"
-flamingo = "#dd7878"
-pink = "#ea76cb"
-mauve = "#8839ef"
-red = "#d20f39"
-maroon = "#e64553"
-peach = "#fe640b"
-yellow = "#df8e1d"
-green = "#40a02b"
-teal = "#179299"
-sky = "#04a5e5"
-sapphire = "#209fb5"
-blue = "#1e66f5"
-lavender = "#7287fd"
-text = "#4c4f69"
-subtext1 = "#5c5f77"
-subtext0 = "#6c6f85"
-overlay2 = "#7c7f93"
-overlay1 = "#8c8fa1"
-overlay0 = "#9ca0b0"
-surface2 = "#acb0be"
-surface1 = "#bcc0cc"
-surface0 = "#ccd0da"
-base = "#eff1f5"
-mantle = "#e6e9ef"
-crust = "#dce0e8"
+[cmd_duration]
+style = "bg:bg1 fg:fg"
+format = '[[  $duration ](fg:fg bg:bg1)]($style)'
 
-[palettes.catppuccin_mocha]
-rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-maroon = "#eba0ac"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
-blue = "#89b4fa"
-lavender = "#b4befe"
-text = "#cdd6f4"
-subtext1 = "#bac2de"
-subtext0 = "#a6adc8"
-overlay2 = "#9399b2"
-overlay1 = "#7f849c"
-overlay0 = "#6c7086"
-surface2 = "#585b70"
-surface1 = "#45475a"
-surface0 = "#313244"
-base = "#1e1e2e"
-mantle = "#181825"
-crust = "#11111b"
-
-[palettes.tokyonight]
-# Tokyo Night color palette
-red = "#f7768e"
-orange = "#ff9e64"
-yellow = "#e0af68"
-green = "#9ece6a"
-teal = "#73daca"
-cyan = "#7dcfff"
-blue = "#7aa2f7"
-magenta = "#bb9af7"
-purple = "#9d7cd8"
-text = "#c0caf5"
-subtext1 = "#a9b1d6"
-subtext0 = "#9aa5ce"
-overlay2 = "#787c99"
-overlay1 = "#565f89"
-overlay0 = "#414868"
-surface2 = "#3b4261"
-surface1 = "#292e42"
-surface0 = "#24283b"
-base = "#1a1b26"
-mantle = "#16161e"
-crust = "#13131a"
+[character]
+success_symbol = "[❯](purple)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](green)"
 
 [palettes.everforest]
-# Everforest Dark Hard color palette
-bg_dim = "#1e2326"
-bg0 = "#272e33"
 bg1 = "#2e383c"
-bg2 = "#374145"
 bg3 = "#414b50"
-bg4 = "#495156"
-bg5 = "#4f5b58"
-bg_visual = "#543a48"
-bg_red = "#514045"
-bg_green = "#425047"
-bg_blue = "#3a515d"
-bg_yellow = "#4d4c43"
 fg = "#d3c6aa"
 red = "#e67e80"
 orange = "#e69875"
@@ -164,22 +92,3 @@ green = "#a7c080"
 aqua = "#83c092"
 blue = "#7fbbb3"
 purple = "#d699b6"
-grey0 = "#7a8478"
-grey1 = "#859289"
-grey2 = "#9da9a0"
-# Semantic aliases for starship
-text = "#d3c6aa"
-cyan = "#83c092"
-magenta = "#d699b6"
-teal = "#83c092"
-base = "#272e33"
-mantle = "#1e2326"
-crust = "#1e2326"
-surface0 = "#2e383c"
-surface1 = "#374145"
-surface2 = "#414b50"
-overlay0 = "#495156"
-overlay1 = "#4f5b58"
-overlay2 = "#7a8478"
-subtext0 = "#859289"
-subtext1 = "#9da9a0"
