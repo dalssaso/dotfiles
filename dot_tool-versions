@@ -1,5 +1,0 @@
-helm 3.8.2
-helmfile 0.170.1
-kops v1.22.5
-kustomize 3.8.9
-yq 4.42.1
