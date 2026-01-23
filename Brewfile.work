@@ -8,6 +8,7 @@ cask "chef-workstation"
 cask "swiftbar"
 cask "google-drive"
 cask "zoom"
+cask "google-chrome"
 
 brew "alexei-led/spotinfo/spotinfo"
 brew "glab"

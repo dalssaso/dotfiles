@@ -4,5 +4,6 @@ cask "epic-games"
 cask "lm-studio"
 cask "nordvpn"
 cask "steam"
+cask "brave-browser"
 
 mas "Tailscale", id: 1475387142
