@@ -15,30 +15,37 @@ Personal dotfiles managed with [chezmoi](https://www.chezmoi.io/) for macOS with
 ## Prerequisites
 
 - macOS 10.15 or later
-- Command Line Tools: `xcode-select --install`
 
 ## Quick Start
 
-### Initial Setup
+### Fresh Mac Setup
 
-1. Install chezmoi and initialize dotfiles:
+Run the bootstrap script to go from zero to fully configured:
 
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply dalssaso/dotfiles
+curl -fsSL https://raw.githubusercontent.com/dalssaso/dotfiles/main/bootstrap.sh | zsh
 ```
 
-2. During first run, you'll be prompted for:
-   - Email address
-   - Work email address
-   - Whether this is a work machine
+This will:
+1. Install Xcode Command Line Tools
+2. Install Homebrew
+3. Install chezmoi via Homebrew
+4. Run `chezmoi init --apply dalssaso/dotfiles`
 
-3. The setup will automatically:
-   - Install 1Password and 1Password CLI
-   - Install packages from Brewfile
-   - Configure age encryption for secrets
-   - Set up Fish shell as default
-   - Install development tools via mise
-   - Configure macOS system preferences
+During the chezmoi init, you'll be prompted for:
+- Email address
+- Work email address
+- Whether this is a work machine
+
+The setup will then automatically:
+- Install 1Password and 1Password CLI
+- Install packages from Brewfile
+- Configure age encryption for secrets
+- Set up Fish shell as default
+- Install development tools via mise
+- Configure macOS system preferences
+
+The bootstrap script is idempotent — safe to re-run if interrupted.
 
 ### Manual Application
 
