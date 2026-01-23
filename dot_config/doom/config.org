@@ -109,6 +109,16 @@ They are placed in =~/Library/Spelling/=.
           ("pt_BR" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "pt_BR") nil utf-8)
           ("multi" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US,en_GB,pt_BR") nil utf-8)))
 
+  ;; Initialize hunspell dict paths so ispell knows where dictionaries live
+  (ispell-find-hunspell-dictionaries)
+
+  ;; Register "multi" in hunspell's path alist (it only auto-discovers real dicts)
+  (unless (assoc "multi" ispell-hunspell-dict-paths-alist)
+    (let ((en-path (cdr (assoc "en_US" ispell-hunspell-dict-paths-alist))))
+      (when en-path
+        (add-to-list 'ispell-hunspell-dict-paths-alist
+                     (cons "multi" en-path)))))
+
   ;; Use multi-dictionary by default (all three languages)
   (setq ispell-dictionary "multi"
         ispell-local-dictionary "multi"))
@@ -424,14 +434,6 @@ Improvements for navigation, context-switching, and search/discovery.
 Enable buffer preview and improve imenu for faster jumping.
 
 #+begin_src emacs-lisp
-;; Buffer preview in vertico - see contents before switching
-(after! vertico
-  (setq vertico-preselect 'prompt))
-
-(after! consult
-  (consult-customize
-   consult-buffer :preview-key "M-."))
-
 ;; Improve imenu for code files
 (after! imenu
   (setq imenu-max-item-length 100)
@@ -484,12 +486,6 @@ Auto-assign workspaces and quick toggle between org and code.
 Fast search across code and org notes with live preview.
 
 #+begin_src emacs-lisp
-;; Consult ripgrep with live preview
-(after! consult
-  (consult-customize
-   consult-ripgrep :preview-key "M-."
-   consult-grep :preview-key "M-."))
-
 ;; Search org-roam notes
 (defun hd/search-org-roam ()
   "Search org-roam directory with ripgrep."

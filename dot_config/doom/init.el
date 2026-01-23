@@ -69,7 +69,7 @@
        ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       dired             ; making dired pretty [functional]
+       (dired +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        ;;eww               ; the internet is gross
        ;;ibuffer           ; interactive buffer management
@@ -153,7 +153,7 @@
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
        ;;lua               ; one-based indices? one-based indices
-       (markdown +tree-sitter)          ; writing docs for people to ignore
+       (markdown)          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
@@ -167,7 +167,7 @@
             +gnuplot)  ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
-       ;;graphviz          ; diagrams for confusing yourself even more
+       graphviz          ; diagrams for confusing yourself even more
        ;;purescript        ; javascript, but functional
        (python +lsp
                +tree-sitter
@@ -188,7 +188,7 @@
        ;;terra             ; Earth and Moon in alignment for performance.
        (web +lsp +tree-sitter)               ; the tubes
        (yaml +lsp +tree-sitter)              ; JSON, but readable
-       ;;zig               ; C, but simpler
+       (zig +lsp +tree-sitter)               ; C, but simpler
 
        :email
        ;;(mu4e +org +gmail)
