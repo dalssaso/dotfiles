@@ -1,9 +1,10 @@
-cask "audacity"
+cask "brave-browser"
 cask "dropbox"
 cask "epic-games"
 cask "lm-studio"
 cask "nordvpn"
+cask "proton-mail"
 cask "steam"
-cask "brave-browser"
+cask "telegram"
 
 mas "Tailscale", id: 1475387142
