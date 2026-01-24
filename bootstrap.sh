@@ -23,6 +23,8 @@ if command -v brew &>/dev/null; then
   success "Homebrew already installed"
 else
   info "Installing Homebrew..."
+  info "Homebrew requires sudo access. Please enter your password:"
+  sudo -v || fail "sudo authentication failed"
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || fail "Homebrew installation failed"
   # Add brew to PATH for the rest of this script
   if [[ -f /opt/homebrew/bin/brew ]]; then
