@@ -52,9 +52,9 @@ if test -d /opt/homebrew/opt/gnu-sed/libexec/gnubin
 end
 
 if test -d /opt/homebrew/opt/postgresql@16/bin
-    set -g LDFLAGS "-L/opt/homebrew/opt/postgresql@16/lib"
-    set -g CPPFLAGS "-I/opt/homebrew/opt/postgresql@16/include"
-    fish_add_path -Ua /opt/homebrew/opt/postgresql@16/bin
+    set -g LDFLAGS "-L/opt/homebrew/opt/postgresql@18/lib"
+    set -g CPPFLAGS "-I/opt/homebrew/opt/postgresql@18/include"
+    fish_add_path -Ua /opt/homebrew/opt/postgresql@18/bin
 end
 
 if test -d $HOME/.krew/bin
@@ -119,13 +119,12 @@ end
 source ~/.orbstack/shell/init2.fish 2>/dev/null || :
 
 # pnpm
-set -gx PNPM_HOME "/Users/dalssaso/Library/pnpm"
+set -gx PNPM_HOME /Users/dalssaso/Library/pnpm
 if not string match -q -- $PNPM_HOME $PATH
-  set -gx PATH "$PNPM_HOME" $PATH
+    set -gx PATH "$PNPM_HOME" $PATH
 end
 # pnpm end
 
 # Added by LM Studio CLI (lms)
 set -gx PATH $PATH /Users/dalssaso/.lmstudio/bin
 # End of LM Studio CLI section
-
