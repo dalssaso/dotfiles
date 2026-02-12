@@ -76,6 +76,12 @@ Everforest theme with medium contrast.
 #+end_src
 
 * Editor Settings
+** Evil Mode
+
+#+begin_src emacs-lisp
+(setq evil-respect-visual-line-mode nil)
+#+end_src
+
 ** Shell Configuration
 
 #+begin_src emacs-lisp
@@ -804,8 +810,8 @@ Use =SPC t z= for additional zen/focus mode (hides modeline, etc.).
 (use-package! olivetti
   :hook (org-mode . olivetti-mode)
   :config
-  (setq olivetti-body-width 120
-        olivetti-minimum-body-width 100
+  (setq olivetti-body-width 160
+        olivetti-minimum-body-width 120
         olivetti-style 'fancy))
 #+end_src
 
@@ -1237,13 +1243,15 @@ Automatically commit and push changes to org-personal repo.
   (let ((default-directory hd/org-personal-dir))
     (when (and (bound-and-true-p hd/org-personal-dir)
                (file-exists-p (expand-file-name ".git" hd/org-personal-dir)))
-      (start-process "org-sync-add" nil "git" "add" "-A")
       (set-process-sentinel
-       (start-process "org-sync-commit" nil "git" "commit" "-m"
-                      (format "auto: %s" (format-time-string "%Y-%m-%d %H:%M")))
-       (lambda (proc event)
-         (when (string-match-p "finished" event)
-           (start-process "org-sync-push" nil "git" "push")))))))
+       (start-process "org-sync-add" nil "git" "add" "-A")
+       (lambda (_proc _event)
+         (set-process-sentinel
+          (start-process "org-sync-commit" nil "git" "commit" "-m"
+                         (format "auto: %s" (format-time-string "%Y-%m-%d %H:%M")))
+          (lambda (_proc event)
+            (when (string-match-p "finished" event)
+              (start-process "org-sync-push" nil "git" "push")))))))))
 
 (defun hd/org-sync-pull ()
   "Commit pending changes, then pull latest."

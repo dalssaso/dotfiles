@@ -13,8 +13,6 @@ cask "TheBoredTeam/boring-notch/boring-notch", args: { no_quarantine: true }
 cask "bruno"
 cask "chatgpt"
 cask "claude"
-cask "claude-code"
-cask "codex"
 cask "discord"
 cask "elgato-stream-deck"
 cask "font-geist"
