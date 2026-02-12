@@ -80,6 +80,16 @@ Everforest theme with medium contrast.
 
 #+begin_src emacs-lisp
 (setq evil-respect-visual-line-mode nil)
+
+;; Command aliases for common typos (:W, :Q, :Wq, etc.)
+(evil-ex-define-cmd "W[rite]" 'evil-write)
+(evil-ex-define-cmd "Q[uit]" 'evil-quit)
+(evil-ex-define-cmd "Wq" 'evil-save-and-close)
+(evil-ex-define-cmd "WQ" 'evil-save-and-close)
+(evil-ex-define-cmd "Qa[ll]" 'evil-quit-all)
+(evil-ex-define-cmd "QA[ll]" 'evil-quit-all)
+(evil-ex-define-cmd "Wqa[ll]" 'evil-save-and-quit)
+(evil-ex-define-cmd "WQa[ll]" 'evil-save-and-quit)
 #+end_src
 
 ** Shell Configuration
