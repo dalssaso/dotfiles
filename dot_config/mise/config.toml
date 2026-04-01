@@ -37,5 +37,9 @@ elixir = "latest"
 # Helm/Kubernetes tools
 "github:mrjosh/helm-ls" = "latest"
 
+# SQL tools
+"go:github.com/sqls-server/sqls" = "latest"
+"npm:sql-formatter" = "latest"
+
 # Writing/Grammar tools
 "github:ltex-plus/ltex-ls-plus" = "latest"

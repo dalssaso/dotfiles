@@ -1,0 +1,333 @@
+#+TITLE: Doom Emacs SQL Guide (lsp-sqls)
+#+AUTHOR: Henrique Dalssaso
+#+DATE: 2026-02-12
+#+OPTIONS: toc:2 num:t H:3
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper,11pt]
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{booktabs}
+#+LATEX_HEADER: \usepackage{longtable}
+#+LATEX_HEADER: \usepackage{hyperref}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=blue}
+
+* Overview
+
+This document covers SQL development in Doom Emacs using [[https://github.com/sqls-server/sqls][sqls]], a SQL
+language server. It provides completion, hover, formatting, and query
+execution for multiple database engines.
+
+*Supported databases:* PostgreSQL, MySQL/MariaDB, SQLite3, MSSQL, H2, Vertica.
+
+*Leader Key:* SQL-specific commands are under =SPC m= (localleader) in =sql-mode= buffers.
+
+* Installation
+
+sqls is installed via mise (see =~/.config/mise/config.toml=):
+
+#+begin_example
+"go:github.com/sqls-server/sqls" = "latest"
+#+end_example
+
+Verify it's available:
+
+#+begin_example
+$ sqls --version
+#+end_example
+
+If freshly added, run =mise install= first.
+
+* LSP Features
+
+When you open a =.sql= file, LSP starts automatically and provides:
+
+| Feature              | Description                                          |
+|----------------------+------------------------------------------------------|
+| Completion           | Table names, column names, SQL keywords              |
+| JOIN completion      | Automatic JOIN suggestions from foreign keys          |
+| Hover                | Information about tables and columns at point         |
+| Formatting           | SQL formatting via =SPC m == or format-on-save        |
+| Signature help       | Function parameter hints                             |
+| Execute query        | Run SQL and see results in a buffer                  |
+| Switch connection    | Change active database connection                    |
+| Switch database      | Change active database within a connection           |
+
+* Keybindings
+
+All SQL commands use the localleader (=SPC m= in normal mode).
+
+| Keybinding  | Command                    | Description                |
+|-------------+----------------------------+----------------------------|
+| =SPC m e=     | lsp-sql-execute-query      | Execute query (or region)  |
+| =SPC m c=     | lsp-sql-switch-connection  | Switch database connection |
+| =SPC m d=     | lsp-sql-switch-database    | Switch active database     |
+| =SPC m l=     | lsp-sql-show-databases     | List databases             |
+| =SPC m s=     | lsp-sql-show-schemas       | List schemas               |
+| =SPC m t=     | lsp-sql-show-tables        | List tables                |
+
+Additional commands available via =M-x=:
+
+| Command                     | Description                    |
+|-----------------------------+--------------------------------|
+| =lsp-sql-execute-paragraph=  | Execute current SQL paragraph  |
+| =lsp-sql-show-connections=   | Show configured connections    |
+| =lsp-execute-code-action=    | Access all actions via menu    |
+
+* Project Configuration
+
+sqls reads connections from =.sqls/config.yml= in the project root.
+This file should be added to =.gitignore= (it contains credentials).
+
+** Config File Location
+
+#+begin_example
+my-project/
+├── .sqls/
+│   └── config.yml    ← connection config (gitignored)
+├── queries/
+│   ├── users.sql
+│   └── reports.sql
+└── .gitignore
+#+end_example
+
+** PostgreSQL
+
+#+begin_src yaml
+connections:
+  - alias: local-pg
+    driver: postgresql
+    dataSourceName: "host=127.0.0.1 port=5432 user=postgres password=secret dbname=myapp sslmode=disable"
+#+end_src
+
+** MySQL / MariaDB
+
+#+begin_src yaml
+connections:
+  - alias: local-mysql
+    driver: mysql
+    dataSourceName: "root:secret@tcp(127.0.0.1:3306)/myapp"
+#+end_src
+
+MySQL also supports individual parameters:
+
+#+begin_src yaml
+connections:
+  - alias: local-mysql
+    driver: mysql
+    proto: tcp
+    user: root
+    passwd: secret
+    host: 127.0.0.1
+    port: 3306
+    dbName: myapp
+    params:
+      autocommit: "true"
+#+end_src
+
+** SQLite3
+
+#+begin_src yaml
+connections:
+  - alias: local-sqlite
+    driver: sqlite3
+    dataSourceName: "/path/to/database.db"
+#+end_src
+
+** MSSQL
+
+#+begin_src yaml
+connections:
+  - alias: local-mssql
+    driver: mssql
+    dataSourceName: "Server=127.0.0.1;Database=myapp;User Id=sa;Password=secret;"
+#+end_src
+
+** Multiple Connections
+
+Define multiple connections and switch between them with =SPC m c=.
+The first connection is the default.
+
+#+begin_src yaml
+connections:
+  - alias: dev-pg
+    driver: postgresql
+    dataSourceName: "host=127.0.0.1 port=5432 user=postgres password=secret dbname=myapp_dev sslmode=disable"
+
+  - alias: staging-pg
+    driver: postgresql
+    dataSourceName: "host=staging.example.com port=5432 user=readonly password=secret dbname=myapp sslmode=require"
+
+  - alias: local-sqlite
+    driver: sqlite3
+    dataSourceName: "/tmp/test.db"
+#+end_src
+
+** MySQL via SSH Tunnel
+
+#+begin_src yaml
+connections:
+  - alias: prod-via-ssh
+    driver: mysql
+    proto: tcp
+    user: admin
+    passwd: secret
+    host: 192.168.1.100
+    port: 3306
+    dbName: production
+    sshConfig:
+      host: bastion.example.com
+      port: 22
+      user: deploy
+      privateKey: /home/user/.ssh/id_rsa
+#+end_src
+
+** Global Options
+
+#+begin_src yaml
+# Use lowercase SQL keywords in completion
+lowercaseKeywords: false
+
+connections:
+  - alias: dev
+    driver: postgresql
+    dataSourceName: "host=127.0.0.1 port=5432 user=postgres password=secret dbname=dev sslmode=disable"
+#+end_src
+
+* Emacs-Level Connections (Alternative)
+
+Instead of per-project =.sqls/config.yml=, you can define connections in
+your Emacs config. This is useful for connections you always want available.
+
+In =config.org=, set =lsp-sqls-workspace-config-path= to =nil= and define
+connections directly:
+
+#+begin_src emacs-lisp
+(after! lsp-sqls
+  (setq lsp-sqls-workspace-config-path nil)
+  (setq lsp-sqls-connections
+        '(((driver . "postgresql")
+           (dataSourceName . "host=127.0.0.1 port=5432 user=postgres password=secret dbname=dev sslmode=disable"))
+          ((driver . "sqlite3")
+           (dataSourceName . "/tmp/test.db")))))
+#+end_src
+
+The current config uses =lsp-sqls-workspace-config-path "root"= so that
+each project can have its own connections.
+
+* Common Workflows
+
+** Execute a Query
+
+#+begin_example
+1. Open a .sql file in a project with .sqls/config.yml
+2. Write your SQL query
+3. SPC m e                    → Execute query
+   Results appear in a new buffer
+#+end_example
+
+To execute only part of the buffer, select a region first, then =SPC m e=.
+
+** Switch Between Databases
+
+#+begin_example
+1. SPC m c                    → List configured connections
+2. Select connection          → sqls reconnects
+3. SPC m d                    → Switch database within connection
+#+end_example
+
+** Explore Database Structure
+
+#+begin_example
+SPC m l                       → List databases
+SPC m s                       → List schemas
+SPC m t                       → List tables
+#+end_example
+
+** Write Queries with Completion
+
+#+begin_example
+1. Open a .sql file (LSP starts automatically)
+2. Type SELECT and space       → Column/table completion appears
+3. Type FROM and space         → Table name suggestions
+4. Type JOIN and space         → Foreign key JOIN suggestions
+#+end_example
+
+** Format SQL
+
+#+begin_example
+SPC m =                       → Format buffer (via LSP)
+#+end_example
+
+Or with format-on-save enabled (default in this config), just save the file.
+
+* Troubleshooting
+
+** LSP not starting
+
+Check that sqls is in your PATH:
+
+#+begin_example
+$ which sqls
+#+end_example
+
+If using mise, ensure shims are loaded. The Doom config already adds mise
+shims to =exec-path=.
+
+** No completion / empty results
+
+Verify your =.sqls/config.yml= is correct and the database is reachable:
+
+#+begin_example
+$ sqls -config .sqls/config.yml
+#+end_example
+
+Check =*lsp-log*= buffer (=SPC b B= then search for =lsp-log=) for errors.
+
+** Timeout errors
+
+Increase the timeout in =config.org= (default is 10s):
+
+#+begin_src emacs-lisp
+(setq lsp-sqls-timeout 30)
+#+end_src
+
+** Config file not found
+
+Ensure =lsp-sqls-workspace-config-path= is set to ="root"= and the file
+is at =<project-root>/.sqls/config.yml=. The project root is determined
+by projectile (presence of =.git=, =.projectile=, etc.).
+
+* Quick Reference Card
+
+** Keybindings (sql-mode)
+
+| Action              | Keybinding  |
+|---------------------+-------------|
+| Execute query       | =SPC m e=     |
+| Switch connection   | =SPC m c=     |
+| Switch database     | =SPC m d=     |
+| Show databases      | =SPC m l=     |
+| Show schemas        | =SPC m s=     |
+| Show tables         | =SPC m t=     |
+| Format buffer       | =SPC m ==     |
+
+** Config File (.sqls/config.yml)
+
+| Driver     | dataSourceName format                                                |
+|------------+----------------------------------------------------------------------|
+| postgresql | =host=H port=P user=U password=PW dbname=DB sslmode=disable=          |
+| mysql      | =user:pass@tcp(host:port)/dbname=                                      |
+| sqlite3    | =/path/to/file.db=                                                     |
+| mssql      | =Server=H;Database=DB;User Id=U;Password=PW;=                         |
+
+* Exporting This Document
+
+To export this document as PDF:
+
+1. Open this file in Emacs
+2. Press =SPC m e= (or =C-c C-e=)
+3. Press =l p= for LaTeX to PDF
+4. Or press =l o= to generate PDF and open it
+
+Requirements:
+- LaTeX distribution (MacTeX)
+- =pdflatex= in your PATH
