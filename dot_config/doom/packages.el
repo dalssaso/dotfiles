@@ -77,5 +77,10 @@
 (package! org-fragtog)
 (package! nyan-mode)
 
+;; Elixir/Phoenix development
+(package! inf-elixir)
+(package! mix
+  :recipe (:host github :repo "ayrat555/mix.el"))
+
 ;; Org-babel extensions
 (package! ob-mermaid)

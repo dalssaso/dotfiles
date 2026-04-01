@@ -10,6 +10,10 @@ pipx.uvx = true
 # Note: node, go, and uv are installed globally via Homebrew
 # Only project-specific versions should be managed by mise
 
+# BEAM (Erlang/Elixir)
+erlang = "latest"
+elixir = "latest"
+
 # Python tools (via pipx, using uvx backend automatically)
 "pipx:ruff" = "latest"
 
