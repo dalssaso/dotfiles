@@ -16,6 +16,8 @@ elixir = "latest"
 
 # Python tools (via pipx, using uvx backend automatically)
 "pipx:ruff" = "latest"
+"pipx:Pygments" = "latest"
+"npm:basedpyright" = "latest"
 
 # Node.js tools (via npm)
 "npm:prettier" = "latest"

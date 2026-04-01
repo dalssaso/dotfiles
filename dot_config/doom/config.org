@@ -173,6 +173,11 @@ They are placed in =~/Library/Spelling/=.
 (setq-hook! '(yaml-mode-hook yaml-ts-mode-hook)
   tab-width 2
   yaml-indent-offset 2)
+
+;; yaml-ts-mode is missing from lsp--formatting-indent-alist, so lsp-mode
+;; falls back to standard-indent (4) when sending tabSize to yamlls.
+(after! lsp-mode
+  (add-to-list 'lsp--formatting-indent-alist '(yaml-ts-mode . yaml-indent-offset)))
 #+end_src
 
 ** Treesitter
@@ -217,16 +222,40 @@ Configure language-specific formatters (via apheleia) and linters (via flycheck)
 With =+lsp= enabled on the format module, LSP formatting is the default.
 We override specific modes to use our preferred formatters instead.
 
-*** Python (ruff)
+#+begin_src emacs-lisp
+;; Enable LSP inlay hints globally (type hints, parameter names, etc.)
+(after! lsp-mode
+  (setq lsp-inlay-hint-enable t))
+#+end_src
 
-Use ruff for everything: LSP, formatting, and linting.
+*** Python (basedpyright + ruff)
+
+basedpyright as primary LSP (types, completions, inlay hints) with ruff as
+add-on (linting, formatting, import sorting). Ruff's lsp-mode client has
+=:add-on? t= so it starts automatically alongside pyright.
 
 #+begin_src emacs-lisp
-;; Use lsp-mode's built-in ruff client
+;; --- basedpyright (primary: types, completions, inlay hints) ---
+(after! lsp-pyright
+  (setq lsp-pyright-langserver-command "basedpyright")
+
+  ;; Disable features that conflict with ruff
+  (setq lsp-pyright-disable-organize-imports t)
+
+  ;; Type checking strictness
+  (setq lsp-pyright-type-checking-mode "basic")
+
+  ;; Inlay hints
+  (setq lsp-pyright-basedpyright-inlay-hints-variable-types t
+        lsp-pyright-basedpyright-inlay-hints-call-argument-names t
+        lsp-pyright-basedpyright-inlay-hints-function-return-types t
+        lsp-pyright-basedpyright-inlay-hints-generic-types nil))
+
+;; --- ruff (add-on: linting, formatting, import sorting) ---
 (after! lsp-mode
   (require 'lsp-ruff nil t)
-  ;; Disable other Python LSP servers in favor of ruff
-  (setq lsp-disabled-clients '(pyls pylsp pyright mspyls))
+  ;; Disable legacy Python LSP servers
+  (setq lsp-disabled-clients '(pyls pylsp mspyls))
   ;; Configure ruff LSP
   (setq lsp-ruff-log-level "warn"
         lsp-ruff-advertize-fix-all t
@@ -254,10 +283,11 @@ Use ruff for everything: LSP, formatting, and linting.
     flycheck-checker 'python-ruff))
 #+end_src
 
-*** JavaScript & CSS (prettier)
+*** JavaScript & CSS (prettier + inlay hints)
 
 Use prettier for JavaScript, TypeScript, and CSS. Prettier automatically
-respects project configuration files (.prettierrc, etc.).
+respects project configuration files (.prettierrc, etc.). Inlay hints via
+typescript-language-server show parameter names and inferred types.
 
 #+begin_src emacs-lisp
 (after! apheleia
@@ -278,38 +308,59 @@ respects project configuration files (.prettierrc, etc.).
 (setq-hook! '(typescript-mode-hook typescript-ts-mode-hook tsx-ts-mode-hook) +format-with 'prettier-typescript)
 (setq-hook! '(css-mode-hook css-ts-mode-hook) +format-with 'prettier-css)
 (setq-hook! 'scss-mode-hook +format-with 'prettier-scss)
+
+;; TypeScript/JavaScript inlay hints
+(after! lsp-mode
+  (setq lsp-javascript-display-parameter-name-hints "all"
+        lsp-javascript-display-parameter-type-hints t
+        lsp-javascript-display-return-type-hints t
+        lsp-javascript-display-variable-type-hints t
+        lsp-javascript-display-property-declaration-type-hints t
+        lsp-javascript-display-enum-member-value-hints t))
 #+end_src
 
-*** Go (golangci-lint + goimports/gofmt)
+*** Go (golangci-lint v2 / goimports + inlay hints)
 
-Use golangci-lint for linting (already configured by Doom's go module).
-For formatting, use project's golangci-lint config if available, otherwise
-fall back to goimports then gofmt.
+Formatting via golangci-lint fmt on v2 projects, goimports elsewhere.
+Linting via flycheck (Doom's go module). Inlay hints via gopls.
 
 #+begin_src emacs-lisp
-(after! apheleia
-  ;; Define a smart Go formatter that uses golangci-lint if config exists
-  (setf (alist-get 'golangci-lint-fmt apheleia-formatters)
-        '("golangci-lint" "fmt" "--stdin" filepath))
+;; Fix gopls path resolution (mise shims may not be on exec-path when lsp-go loads)
+(after! lsp-go
+  (setq lsp-go-gopls-server-path
+        (or (executable-find "gopls")
+            (expand-file-name "~/.local/share/mise/shims/gopls"))))
 
-  ;; Use goimports as default (includes gofmt)
+;; Gopls inlay hints (no built-in defcustoms, register manually)
+(after! lsp-mode
+  (lsp-register-custom-settings
+   '(("gopls.hints" ((assignVariableTypes . t)
+                     (compositeLiteralFields . t)
+                     (constantValues . t)
+                     (functionTypeParameters . t)
+                     (parameterNames . t)
+                     (rangeVariableTypes . t))))))
+
+;; Formatting: golangci-lint v2 fmt (when available) or goimports fallback
+(after! apheleia
+  ;; golangci-lint v2 fmt: --stdin reads from stdin, writes to stdout
+  ;; --no-config skips heavy config loading to avoid RAM spikes
+  (setf (alist-get 'golangci-lint-fmt apheleia-formatters)
+        '("golangci-lint" "fmt" "--stdin" "--no-config" "-E" "gofumpt,goimports"))
+
   (setf (alist-get 'go-mode apheleia-mode-alist) 'goimports)
   (setf (alist-get 'go-ts-mode apheleia-mode-alist) 'goimports))
 
-;; Custom formatter selection based on project config
 (defun hd/go-formatter ()
-  "Return the appropriate Go formatter based on project config."
-  (if (or (locate-dominating-file default-directory ".golangci.yml")
-          (locate-dominating-file default-directory ".golangci.yaml")
-          (locate-dominating-file default-directory ".golangci.toml")
-          (locate-dominating-file default-directory ".golangci.json"))
+  "Return golangci-lint-fmt if v2 is available, goimports otherwise."
+  (if (and (executable-find "golangci-lint")
+           (= 0 (call-process "golangci-lint" nil nil nil "fmt" "--help")))
       'golangci-lint-fmt
     'goimports))
 
-;; Override LSP formatting with goimports/golangci-lint
 (add-hook! '(go-mode-hook go-ts-mode-hook)
   (defun hd/go-set-formatter-h ()
-    "Set Go formatter based on project configuration."
+    "Set Go formatter based on golangci-lint version."
     (setq-local +format-with (hd/go-formatter))))
 #+end_src
 
@@ -436,6 +487,132 @@ LSP support for Helm chart templates using helm-ls (via lsp-mode's built-in clie
 
 ;; Enable LSP for helm-template-mode
 (add-hook 'helm-template-mode-hook #'lsp!)
+#+end_src
+
+*** SQL (sqls + sql-formatter)
+
+LSP support for SQL files using [[https://github.com/sqls-server/sqls][sqls]]. Provides completion (tables,
+columns, JOIN suggestions), hover, and query execution for
+PostgreSQL, MySQL, SQLite3, and MSSQL.
+
+Formatting uses [[https://github.com/sql-formatter-org/sql-formatter][sql-formatter]] (npm) instead of sqls's built-in formatter,
+which produces non-standard output. Supports per-project =.sql-formatter.json=
+config files.
+
+Connections are configured per-project via =.sqls/config.yml= in the project
+root (see =doom-sql-guide.org= for details).
+
+#+begin_src emacs-lisp
+;; SQL indentation (Emacs defaults tab-width to 8)
+(setq-hook! 'sql-mode-hook
+  tab-width 2
+  indent-tabs-mode nil)
+
+;; Enable LSP for sql-mode
+(after! lsp-mode
+  (require 'lsp-sqls nil t)
+  ;; Look for .sqls/config.yml in project root
+  (setq lsp-sqls-workspace-config-path "root")
+  ;; Generous timeout for slow database introspection
+  (setq lsp-sqls-timeout 10))
+
+(add-hook 'sql-mode-hook #'lsp!)
+
+;; Use sql-formatter (npm) instead of sqls for formatting
+(after! apheleia
+  (setf (alist-get 'sql-formatter apheleia-formatters)
+        '("sql-formatter" "--language" "postgresql"))
+  (setf (alist-get 'sql-mode apheleia-mode-alist) 'sql-formatter))
+(setq-hook! 'sql-mode-hook +format-with 'sql-formatter)
+
+;; Keybindings for SQL operations
+(map! :after sql
+      :map sql-mode-map
+      :localleader
+      :desc "Execute query" "e" #'lsp-sql-execute-query
+      :desc "Switch connection" "c" #'lsp-sql-switch-connection
+      :desc "Switch database" "d" #'lsp-sql-switch-database
+      :desc "Show databases" "l" #'lsp-sql-show-databases
+      :desc "Show schemas" "s" #'lsp-sql-show-schemas
+      :desc "Show tables" "t" #'lsp-sql-show-tables)
+#+end_src
+
+*** Elixir & Phoenix (ElixirLS)
+
+LSP tuning, IEx REPL, mix task runner, exunit test integration, and Credo chaining.
+
+#+begin_src emacs-lisp
+;; ElixirLS tuning
+(after! lsp-mode
+  (setq lsp-elixir-suggest-specs t
+        lsp-elixir-signature-after-complete t
+        lsp-elixir-enable-test-lenses t
+        lsp-elixir-dialyzer-enabled t)
+
+  ;; Ignore build artifacts and deps from file watcher
+  (dolist (dir '("[/\\\\]_build$"
+                "[/\\\\]deps$"
+                "[/\\\\]\\.elixir_ls$"))
+    (add-to-list 'lsp-file-watch-ignored-directories dir)))
+
+;; Testing (exunit)
+(use-package! exunit
+  :hook ((elixir-mode elixir-ts-mode) . exunit-mode)
+  :config
+  (map! :map (elixir-mode-map elixir-ts-mode-map)
+        :localleader
+        (:prefix ("t" . "test")
+         :desc "Run all tests"     "a" #'exunit-verify-all
+         :desc "Run file tests"    "v" #'exunit-verify
+         :desc "Run test at point" "s" #'exunit-verify-single
+         :desc "Rerun last test"   "r" #'exunit-rerun
+         :desc "Toggle test/impl"  "t" #'exunit-toggle-file-and-test)))
+
+;; IEx REPL
+(use-package! inf-elixir
+  :commands (inf-elixir inf-elixir-project inf-elixir-send-line
+             inf-elixir-send-region inf-elixir-send-buffer)
+  :config
+  (map! :map (elixir-mode-map elixir-ts-mode-map)
+        :localleader
+        (:prefix ("i" . "iex")
+         :desc "Start IEx"           "i" #'inf-elixir
+         :desc "Start IEx (project)" "p" #'inf-elixir-project
+         :desc "Send line"           "l" #'inf-elixir-send-line
+         :desc "Send region"         "r" #'inf-elixir-send-region
+         :desc "Send buffer"         "b" #'inf-elixir-send-buffer)))
+
+;; Mix commands
+(use-package! mix
+  :hook ((elixir-mode elixir-ts-mode) . mix-minor-mode)
+  :config
+  (map! :map (elixir-mode-map elixir-ts-mode-map)
+        :localleader
+        (:prefix ("m" . "mix")
+         :desc "Mix command"  "m" #'mix
+         :desc "Run task"     "t" #'mix-execute-task
+         :desc "Compile"      "c" (cmd! (mix-execute-task "compile"))
+         :desc "Deps get"     "d" (cmd! (mix-execute-task "deps.get"))
+         :desc "Ecto migrate" "e" (cmd! (mix-execute-task "ecto.migrate")))))
+
+;; Chain Credo checker after LSP diagnostics
+(defvar-local hd/flycheck-elixir-cache nil)
+
+(defun hd/flycheck-checker-get-elixir (fn checker property)
+  (or (alist-get property (alist-get checker hd/flycheck-elixir-cache))
+      (funcall fn checker property)))
+
+(advice-add 'flycheck-checker-get :around #'hd/flycheck-checker-get-elixir)
+
+(add-hook 'lsp-managed-mode-hook
+          (lambda ()
+            (when (derived-mode-p 'elixir-mode 'elixir-ts-mode)
+              (setq hd/flycheck-elixir-cache
+                    '((lsp . ((next-checkers . (elixir-credo)))))))))
+
+;; Popup rules for test output and REPL
+(set-popup-rule! "^\\*exunit-" :size 0.3 :ttl nil :select nil)
+(set-popup-rule! "^\\*inf-elixir" :size 0.3 :ttl nil :quit nil)
 #+end_src
 
 ** Projectile
@@ -740,7 +917,15 @@ Works like org-appear but for LaTeX math.
   (add-hook 'org-mode-hook (lambda () (display-line-numbers-mode -1)))
 
   ;; Disable git-gutter in org-mode (looks weird with variable-pitch and indentation)
-  (add-hook 'org-mode-hook (lambda () (diff-hl-mode -1))))
+  (add-hook 'org-mode-hook (lambda () (diff-hl-mode -1)))
+
+  ;; Use lualatex for PDF export (full Unicode support)
+  (setq org-latex-compiler "lualatex")
+
+  ;; Enable -shell-escape so minted can call pygmentize for syntax highlighting
+  (setq org-latex-pdf-process
+        '("lualatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "lualatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
 #+end_src
 
 ** Mixed Pitch (Variable + Fixed Fonts)
