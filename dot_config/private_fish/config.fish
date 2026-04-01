@@ -1,5 +1,6 @@
 if status is-interactive
     zoxide init fish | source
+    alias cd='z'
     # Everforest theme (install: fisher install jtpevehouse/fish-everforest)
     type -q theme_everforest && theme_everforest dark medium
 end
@@ -51,7 +52,7 @@ if test -d /opt/homebrew/opt/gnu-sed/libexec/gnubin
     fish_add_path -Ua /opt/homebrew/opt/gnu-sed/libexec/gnubin
 end
 
-if test -d /opt/homebrew/opt/postgresql@16/bin
+if test -d /opt/homebrew/opt/postgresql@18/bin
     set -g LDFLAGS "-L/opt/homebrew/opt/postgresql@18/lib"
     set -g CPPFLAGS "-I/opt/homebrew/opt/postgresql@18/include"
     fish_add_path -Ua /opt/homebrew/opt/postgresql@18/bin
@@ -104,7 +105,6 @@ alias vi='nvim'
 alias ls='eza --git --group-directories-first --icons'
 alias cat='bat'
 alias htop='btm'
-alias cd='z'
 alias kubectl='kubecolor'
 
 # Open project in Emacs workspace
