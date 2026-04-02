@@ -1047,22 +1047,71 @@ Define tag shortcuts for fast tagging.
 ** Capture Templates
 
 #+begin_src emacs-lisp
-;; Org-capture templates (work only - personal uses org-roam dailies)
-(after! org
-  (when (hd/work-machine-p)
-    (setq org-capture-templates
-          '(("t" "Task" entry (file "inbox.org")
-             "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("m" "Meeting" entry (file "inbox.org")
-             "* TODO %? :@meeting:\nSCHEDULED: %^t\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("p" "Pending Reply" entry (file "inbox.org")
-             "* TODO %? :@pending:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("r" "Review" entry (file "inbox.org")
-             "* TODO %? :@review:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("a" "Admin" entry (file "inbox.org")
-             "* TODO %? :@admin:\n:PROPERTIES:\n:CREATED: %U\n:END:")
-            ("d" "Report" entry (file "inbox.org")
-             "* TODO %? :@report:\n:PROPERTIES:\n:CREATED: %U\n:END:")))))
+;; Unified capture templates — all machines, all capture into roam dailies
+;; Wrapped in (after! org-roam) to ensure org-roam-dailies-directory is set
+(after! org-roam
+  (setq org-capture-templates
+        (let ((daily-header "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* Tasks\n\n* Journal\n\n* Links\n"))
+          `(("t" "Task" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("m" "Meeting" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %? :@meeting:\nSCHEDULED: %^t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("r" "Review" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %? :@review:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("p" "Pending" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %? :@pending:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("a" "Admin" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %? :@admin:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("d" "Report" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %? :@report:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("h" "Home" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %? :@home:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("H" "Health" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %? :@health:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("f" "Finance" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %? :@finance:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("e" "Errands" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %? :@errands:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("l" "Learning" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Tasks"))
+             "** TODO %? :@learning:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+             :empty-lines 1)
+            ("j" "Journal" entry
+             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
+                            ,daily-header ("Journal"))
+             "** %<%H:%M> %?\n"
+             :empty-lines 1)))))
 #+end_src
 
 ** Custom Agenda Commands
