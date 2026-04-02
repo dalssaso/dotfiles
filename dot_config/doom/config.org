@@ -1022,9 +1022,17 @@ Set org directories based on machine type.
                       (expand-file-name "agenda" hd/org-personal-dir)))
 
 ;; Unified agenda: org-roam + recent dailies (all machines)
-(setq org-agenda-files
-      (append (list org-roam-directory)
-              (hd/roam-dailies-files 14)))
+;; Must wait for org-roam to set org-roam-directory and define hd/roam-dailies-files
+(after! org-roam
+  (setq org-agenda-files
+        (append (list org-roam-directory)
+                (hd/roam-dailies-files 14)))
+  ;; Refresh dailies list each time agenda opens
+  (add-hook 'org-agenda-mode-hook
+            (lambda ()
+              (setq org-agenda-files
+                    (append (list org-roam-directory)
+                            (hd/roam-dailies-files 14))))))
 #+end_src
 
 ** Tags
