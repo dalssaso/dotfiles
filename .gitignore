@@ -1,3 +1,6 @@
 docs/plans
 *.tex
 *.pdf
+docs/superpowers/
+.superpowers/
+.playwright-mcp/
