@@ -1209,6 +1209,50 @@ Colored tag pills matching the Everforest Dark Hard palette.
                             (:discard (:todo "DONE" :todo "KILL")))))))))
 #+end_src
 
+** Agenda Layout
+
+Clean, centered daily dashboard.
+
+#+begin_src emacs-lisp
+(after! org-agenda
+  ;; Single day view, starting today
+  (setq org-agenda-span 'day)
+  (setq org-agenda-start-day nil)
+
+  ;; Seamless blocks, compact layout
+  (setq org-agenda-block-separator nil)
+  (setq org-agenda-compact-blocks t)
+
+  ;; Tags inline, not right-aligned
+  (setq org-agenda-tags-column 0)
+
+  ;; Custom "now" line
+  (setq org-agenda-current-time-string
+        "< now ────────────────────────────────────────")
+
+  ;; No hourly time grid
+  (setq org-agenda-time-grid '((daily) () "" ""))
+
+  ;; Clean prefix format with icon-aware spacing
+  (setq org-agenda-prefix-format
+        '((agenda . " %-2i %-12:c%?-12t% s")
+          (todo   . " %-2i %-12:c")
+          (tags   . " %-2i %-12:c")
+          (search . " %-2i %-12:c")))
+
+  ;; Skip done items
+  (setq org-agenda-skip-scheduled-if-done t)
+  (setq org-agenda-skip-deadline-if-done t)
+  (setq org-agenda-skip-timestamp-if-done t)
+  (setq org-agenda-skip-scheduled-if-deadline-is-shown t))
+
+;; Olivetti centering in agenda
+(add-hook 'org-agenda-mode-hook #'olivetti-mode)
+
+;; org-modern styling in agenda
+(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+#+end_src
+
 ** Archive Settings
 
 #+begin_src emacs-lisp
