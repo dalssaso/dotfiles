@@ -1021,18 +1021,8 @@ Set org directories based on machine type.
                         hd/org-work-dir
                       (expand-file-name "agenda" hd/org-personal-dir)))
 
-;; Unified agenda: org-roam + recent dailies (all machines)
-;; Must wait for org-roam to set org-roam-directory and define hd/roam-dailies-files
-(after! org-roam
-  (setq org-agenda-files
-        (append (list org-roam-directory)
-                (hd/roam-dailies-files 14)))
-  ;; Refresh dailies list each time agenda opens
-  (add-hook 'org-agenda-mode-hook
-            (lambda ()
-              (setq org-agenda-files
-                    (append (list org-roam-directory)
-                            (hd/roam-dailies-files 14))))))
+;; Unified agenda files — set up in the org-roam after! block below (*** Pull Before Open)
+;; to ensure org-roam-directory and hd/roam-dailies-files are available
 #+end_src
 
 ** Tags
@@ -1079,70 +1069,65 @@ Colored tag pills matching the Everforest Dark Hard palette.
 
 #+begin_src emacs-lisp
 ;; Unified capture templates — all machines, all capture into roam dailies
-;; Wrapped in (after! org-roam) to ensure org-roam-dailies-directory is set
+;; Helper to get today's daily file path (evaluated at capture time, not load time)
+(defun hd/daily-file ()
+  "Return path to today's org-roam daily file, creating it if needed."
+  (let ((daily (expand-file-name (format-time-string "%Y-%m-%d.org") org-roam-dailies-directory)))
+    (unless (file-exists-p daily)
+      (with-temp-file daily
+        (insert (format-time-string "#+title: %Y-%m-%d %A\n#+filetags: :daily:\n\n* Tasks\n\n* Journal\n\n* Links\n"))))
+    daily))
+
 (after! org-roam
   (setq org-capture-templates
-        (let ((daily-header "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* Tasks\n\n* Journal\n\n* Links\n"))
-          `(("t" "Task" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("m" "Meeting" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %? :@meeting:\nSCHEDULED: %^t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("r" "Review" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %? :@review:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("p" "Pending" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %? :@pending:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("a" "Admin" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %? :@admin:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("d" "Report" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %? :@report:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("h" "Home" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %? :@home:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("H" "Health" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %? :@health:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("f" "Finance" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %? :@finance:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("e" "Errands" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %? :@errands:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("l" "Learning" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Tasks"))
-             "** TODO %? :@learning:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-             :empty-lines 1)
-            ("j" "Journal" entry
-             (file+head+olp ,(expand-file-name "%<%Y-%m-%d>.org" org-roam-dailies-directory)
-                            ,daily-header ("Journal"))
-             "** %<%H:%M> %?\n"
-             :empty-lines 1)))))
+        '(("t" "Task" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("m" "Meeting" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %? :@meeting:\nSCHEDULED: %^t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("r" "Review" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %? :@review:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("p" "Pending" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %? :@pending:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("a" "Admin" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %? :@admin:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("d" "Report" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %? :@report:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("h" "Home" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %? :@home:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("H" "Health" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %? :@health:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("f" "Finance" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %? :@finance:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("e" "Errands" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %? :@errands:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("l" "Learning" entry
+           (file+headline hd/daily-file "Tasks")
+           "** TODO %? :@learning:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
+          ("j" "Journal" entry
+           (file+headline hd/daily-file "Journal")
+           "** %<%H:%M> %?\n"
+           :empty-lines 1))))
 #+end_src
 
 ** org-super-agenda
@@ -1705,7 +1690,18 @@ Automatically commit and push changes to org-personal repo.
   (advice-add 'org-roam-node-find :before (lambda (&rest _) (hd/org-sync-pull)))
   (advice-add 'org-roam-dailies-goto-today :before (lambda (&rest _) (hd/org-sync-pull)))
   (advice-add 'org-roam-dailies-goto-yesterday :before (lambda (&rest _) (hd/org-sync-pull)))
-  (advice-add 'org-roam-dailies-goto-date :before (lambda (&rest _) (hd/org-sync-pull))))
+  (advice-add 'org-roam-dailies-goto-date :before (lambda (&rest _) (hd/org-sync-pull)))
+
+  ;; Unified agenda files: org-roam + recent dailies (all machines)
+  (setq org-agenda-files
+        (append (list org-roam-directory)
+                (hd/roam-dailies-files 14)))
+  ;; Refresh dailies list each time agenda opens
+  (add-hook 'org-agenda-mode-hook
+            (lambda ()
+              (setq org-agenda-files
+                    (append (list org-roam-directory)
+                            (hd/roam-dailies-files 14))))))
 #+end_src
 
 *** Dynamic Agenda Integration
