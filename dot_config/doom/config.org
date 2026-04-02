@@ -1191,9 +1191,7 @@ Define tag shortcuts for fast tagging.
 #+begin_src emacs-lisp
 (after! org
   (setq org-archive-location
-        (if (hd/work-machine-p)
-            (concat (expand-file-name "archive.org" hd/org-work-dir) "::* Archive")
-          (concat (expand-file-name "archive.org" (expand-file-name "agenda" hd/org-personal-dir)) "::* Archive"))))
+        (concat (expand-file-name "archive.org" org-roam-directory) "::* Archive")))
 #+end_src
 
 ** Babel Languages
