@@ -1033,13 +1033,15 @@ Define tag shortcuts for fast tagging.
 
 #+begin_src emacs-lisp
 (after! org
+  ;; Unified tags — all contexts available on all machines
   (setq org-tag-alist
-        (if (hd/work-machine-p)
-            '(("@meeting" . ?m) ("@project" . ?p) ("@review" . ?r)
-              ("@admin" . ?a) ("@pending" . ?w) ("@report" . ?d))
-          '(("@home" . ?h) ("@errands" . ?e) ("@online" . ?o)
-            ("@health" . ?H) ("@finance" . ?f) ("@someday" . ?s)
-            ("@waiting" . ?w) ("@learning" . ?l)))))
+        '(;; Work context
+          ("@meeting" . ?m) ("@project" . ?p) ("@review" . ?r)
+          ("@admin" . ?a) ("@pending" . ?w) ("@report" . ?d)
+          ;; Personal context
+          ("@home" . ?h) ("@errands" . ?e) ("@online" . ?o)
+          ("@health" . ?H) ("@finance" . ?f) ("@someday" . ?s)
+          ("@waiting" . ?W) ("@learning" . ?l))))
 #+end_src
 
 ** Capture Templates
