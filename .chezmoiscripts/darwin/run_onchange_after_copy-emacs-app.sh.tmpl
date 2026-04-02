@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Brewfile.common hash: {{ include "Brewfile.common" | sha256sum }}
+# Brewfile.work hash: {{ include "Brewfile.work" | sha256sum }}
+# Brewfile.personal hash: {{ include "Brewfile.work" | sha256sum }}
 
 # Copy Emacs.app to /Applications for Spotlight integration
 if [[ -d /opt/homebrew/opt/emacs-plus@30/Emacs.app ]]; then
-    cp -r /opt/homebrew/opt/emacs-plus@30/Emacs.app /Applications/
-    cp -r "/opt/homebrew/opt/emacs-plus@30/Emacs Client.app" /Applications/
+  cp -r /opt/homebrew/opt/emacs-plus@30/Emacs.app /Applications/
+  cp -r "/opt/homebrew/opt/emacs-plus@30/Emacs Client.app" /Applications/
 fi

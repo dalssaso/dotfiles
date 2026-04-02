@@ -781,7 +781,7 @@ Uses the same identity file as chezmoi (~/.config/chezmoi/key.txt).
   ;; Use the same identity file as chezmoi
   (setq age-program "age"
         age-default-identity "~/.config/chezmoi/key.txt"
-        age-default-recipient "~/.config/chezmoi/key.txt")
+        age-default-recipient "~/.config/chezmoi/key.pub")
 
   ;; Enable age.el globally for .age files
   (age-file-enable))

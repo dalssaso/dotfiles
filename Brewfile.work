@@ -1,4 +1,4 @@
-tap "alexei-led/spotinfo"
+# asdf
 tap "argoproj/tap"
 tap "iann0036/iamlive"
 tap "loft-sh/tap"
@@ -10,7 +10,6 @@ cask "google-drive"
 cask "zoom"
 cask "google-chrome"
 
-brew "alexei-led/spotinfo/spotinfo"
 brew "glab"
 brew "go-task"
 brew "argocd"
