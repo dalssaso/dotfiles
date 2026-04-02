@@ -100,26 +100,33 @@ then refiled to area notes based on tags. Completed tasks return to the daily as
 Run =SPC r B= to refile all tagged TODO tasks from today's daily to their
 respective area notes at once. This fits a GTD-style review workflow.
 
-* Org Capture (Work Only)
+* Org Capture
 
-On work machines, use =SPC X= to capture to inbox.org.
-On personal machines, use =SPC r c= to capture to org-roam dailies instead.
+Use =SPC X= to capture tasks, meetings, and journal entries into today's roam daily.
 
-| Keybinding | Command     | Description             |
-|------------+-------------+-------------------------|
-| =SPC X=      | org-capture | Open capture menu       |
+| Keybinding | Command     | Description       |
+|------------+-------------+-------------------|
+| =SPC X=      | org-capture | Open capture menu |
 | =SPC x=      | org-capture | Open capture menu (alt) |
 
-** Work Machine Capture Templates
+** Capture Templates
 
-| Key | Template      | Description                  |
-|-----+---------------+------------------------------|
-| =t=   | Task          | Generic work TODO            |
-| =m=   | Meeting       | Meeting with scheduled time  |
-| =p=   | Pending Reply | Awaiting reply (slack/email) |
-| =r=   | Review        | Code/document review         |
-| =a=   | Admin         | Administrative task          |
-| =d=   | Report        | Report or documentation      |
+| Key | Template | Tag        | Description                  |
+|-----+----------+------------+------------------------------|
+| =t=   | Task     | (none)     | Generic TODO                 |
+| =m=   | Meeting  | =@meeting=   | Meeting with scheduled time  |
+| =r=   | Review   | =@review=    | Code/document review         |
+| =p=   | Pending  | =@pending=   | Awaiting reply (slack/email) |
+| =a=   | Admin    | =@admin=     | Administrative task          |
+| =d=   | Report   | =@report=    | Report or documentation      |
+| =h=   | Home     | =@home=      | Home task                    |
+| =H=   | Health   | =@health=    | Health-related task          |
+| =f=   | Finance  | =@finance=   | Finance task                 |
+| =e=   | Errands  | =@errands=   | Errands/shopping             |
+| =l=   | Learning | =@learning=  | Learning goal                |
+| =j=   | Journal  | (none)     | Timestamped journal entry    |
+
+All templates capture into today's roam daily note.
 
 ** During Capture
 
@@ -138,22 +145,13 @@ On personal machines, use =SPC r c= to capture to org-roam dailies instead.
 
 ** Custom Agenda Views
 
-*** Personal Machine
+| Key | View     | Description                                |
+|-----+----------+--------------------------------------------|
+| =o=   | Overview | Unified daily dashboard with grouped items |
 
-| Key | View            | Description              |
-|-----+-----------------+--------------------------|
-| =P=   | Personal Agenda | Full personal overview   |
-| =Ps=  | Someday         | All someday/maybe items  |
-| =Pw=  | Waiting         | Items waiting on someone |
-
-*** Work Machine
-
-| Key | View        | Description          |
-|-----+-------------+----------------------|
-| =W=   | Work Agenda | Full work overview   |
-| =Wp=  | Pending     | Awaiting reply items |
-| =Wm=  | Meetings    | All meetings         |
-| =Wr=  | Reviews     | Code/doc reviews     |
+The Overview command shows today's agenda at the top, followed by all
+TODO items grouped by context (meetings, projects, home, etc.) using
+org-super-agenda. See =docs/doom-org-agenda.org= for full details.
 
 ** Inside Agenda View
 
@@ -333,32 +331,20 @@ From the export menu (=SPC m e=):
 
 * Quick Reference Card
 
-** Most Used Daily (Personal)
+** Most Used Daily
 
 | Action               | Keybinding |
 |----------------------+------------|
 | Today's daily note   | =SPC r t=    |
-| Capture to daily     | =SPC r c=    |
-| Smart refile to area | =SPC r R=    |
-| Batch refile (review)| =SPC r B=    |
-| Go to area note      | =SPC r a=    |
-| Find roam node       | =SPC r f=    |
-| Open agenda          | =SPC o a=    |
+| Capture task/meeting | =SPC X=      |
+| Open agenda overview | =SPC o a o=  |
 | Cycle TODO state     | =t=          |
 | Set tags             | =SPC m q=    |
 | Schedule             | =SPC m d s=  |
-
-** Most Used Daily (Work)
-
-| Action             | Keybinding |
-|--------------------+------------|
-| Capture new item   | =SPC X=      |
-| Open agenda        | =SPC o a=    |
-| Cycle TODO state   | =t=          |
-| Set tags           | =SPC m q=    |
-| Schedule           | =SPC m d s=  |
-| Refile             | =SPC m r r=  |
-| Export             | =SPC m e=    |
+| Smart refile to area | =SPC r R=    |
+| Batch refile (review)| =SPC r B=    |
+| Find roam node       | =SPC r f=    |
+| Go to area note      | =SPC r a=    |
 
 ** Navigation
 
