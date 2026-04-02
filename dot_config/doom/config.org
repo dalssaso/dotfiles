@@ -901,11 +901,11 @@ Works like org-appear but for LaTeX math.
   ;; Custom ellipsis for folded sections
   (setq org-ellipsis " ▾")
 
-  ;; Prettier priorities
+  ;; Everforest-themed priority faces
   (setq org-priority-faces
-        '((?A . (:foreground "#ff6b6b" :weight bold))
-          (?B . (:foreground "#feca57"))
-          (?C . (:foreground "#48dbfb"))))
+        '((?A . (:foreground "#e67e80" :weight bold))  ;; red
+          (?B . (:foreground "#dbbc7f"))                ;; yellow
+          (?C . (:foreground "#7fbbb3"))))              ;; blue
 
   ;; Start org files with all headings folded
   (setq org-startup-folded 'content)
@@ -1042,6 +1042,29 @@ Define tag shortcuts for fast tagging.
           ("@home" . ?h) ("@errands" . ?e) ("@online" . ?o)
           ("@health" . ?H) ("@finance" . ?f) ("@someday" . ?s)
           ("@waiting" . ?W) ("@learning" . ?l))))
+#+end_src
+
+** Tag Faces (Everforest)
+
+Colored tag pills matching the Everforest Dark Hard palette.
+
+#+begin_src emacs-lisp
+(after! org
+  (setq org-tag-faces
+        '(("@meeting" . (:foreground "#d699b6"))   ;; purple
+          ("@project" . (:foreground "#e67e80"))   ;; red
+          ("@review"  . (:foreground "#7fbbb3"))   ;; blue
+          ("@admin"   . (:foreground "#e69875"))   ;; orange
+          ("@pending" . (:foreground "#dbbc7f"))   ;; yellow
+          ("@report"  . (:foreground "#9da9a0"))   ;; grey2
+          ("@home"    . (:foreground "#83c092"))   ;; aqua
+          ("@errands" . (:foreground "#a7c080"))   ;; green
+          ("@online"  . (:foreground "#7fbbb3"))   ;; blue
+          ("@health"  . (:foreground "#e67e80"))   ;; red
+          ("@finance" . (:foreground "#dbbc7f"))   ;; yellow
+          ("@someday" . (:foreground "#859289"))   ;; grey1 (dimmed)
+          ("@waiting" . (:foreground "#83c092"))   ;; aqua
+          ("@learning" . (:foreground "#7fbbb3")))))  ;; blue
 #+end_src
 
 ** Capture Templates
