@@ -1,0 +1,240 @@
+#+TITLE: Doom Emacs Org-Agenda Reference
+#+AUTHOR: Henrique Dalssaso
+#+DATE: 2026-04-01
+#+OPTIONS: toc:2 num:t H:3
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper,11pt]
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{booktabs}
+#+LATEX_HEADER: \usepackage{longtable}
+#+LATEX_HEADER: \usepackage{hyperref}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=blue}
+
+* Overview
+
+This document describes the org-agenda setup in Doom Emacs. The agenda uses
+org-roam as its single source of truth — all machines share the same agenda
+view, with work and personal contexts distinguished by tags, not file location.
+
+*Key packages:*
+- =org-super-agenda= — groups items under styled section headers
+- =org-modern= — badge-style TODO keywords and clean tag labels
+- =nerd-icons= — category icons for visual scanning
+- =olivetti= — centered layout for focused viewing
+
+* Agenda Views
+
+** Overview Command (=o=)
+
+The primary agenda view. Access via =SPC o a o=.
+
+*Block 1 — Day Agenda:*
+Shows today's scheduled items and deadlines, grouped into:
+
+| Group   | Contents                        | Color   |
+|---------+---------------------------------+---------|
+| Overdue | Past-due scheduled and deadlines | Red     |
+| Today   | Today's time grid and items     | Yellow  |
+
+*Block 2 — All TODOs:*
+Shows all TODO items from org-roam, grouped by context:
+
+| Group    | Filter        | Color  |
+|----------+---------------+--------|
+| Next     | =NEXT= state    | Blue   |
+| Waiting  | =WAIT= state    | Aqua   |
+| Meetings | =@meeting= tag  | Purple |
+| Reviews  | =@review= tag   | Blue   |
+| Projects | =@project= tag  | Purple |
+| Admin    | =@admin= tag    | Orange |
+| Reports  | =@report= tag   | Grey   |
+| Home     | =@home= tag     | Aqua   |
+| Errands  | =@errands= tag  | Green  |
+| Health   | =@health= tag   | Red    |
+| Finance  | =@finance= tag  | Yellow |
+| Learning | =@learning= tag | Blue   |
+| Someday  | =@someday= tag  | Dimmed |
+
+* Capture Templates
+
+All capture templates create entries in today's roam daily note under =* Tasks=
+(except Journal which goes under =* Journal=).
+
+| Key | Template | Tag        | Description                  |
+|-----+----------+------------+------------------------------|
+| =t=   | Task     | (none)     | Generic TODO                 |
+| =m=   | Meeting  | =@meeting=   | Meeting with scheduled time  |
+| =r=   | Review   | =@review=    | Code/document review         |
+| =p=   | Pending  | =@pending=   | Awaiting reply               |
+| =a=   | Admin    | =@admin=     | Administrative task          |
+| =d=   | Report   | =@report=    | Report or documentation      |
+| =h=   | Home     | =@home=      | Home task                    |
+| =H=   | Health   | =@health=    | Health-related task          |
+| =f=   | Finance  | =@finance=   | Finance task                 |
+| =e=   | Errands  | =@errands=   | Errands/shopping             |
+| =l=   | Learning | =@learning=  | Learning goal                |
+| =j=   | Journal  | (none)     | Timestamped journal entry    |
+
+* Tag System
+
+** All Tags
+
+| Tag        | Key | Color   | Everforest | Context  |
+|------------+-----+---------+------------+----------|
+| =@meeting=   | =m=   | Purple  | =#d699b6=    | Work     |
+| =@project=   | =p=   | Red     | =#e67e80=    | Work     |
+| =@review=    | =r=   | Blue    | =#7fbbb3=    | Work     |
+| =@admin=     | =a=   | Orange  | =#e69875=    | Work     |
+| =@pending=   | =w=   | Yellow  | =#dbbc7f=    | Work     |
+| =@report=    | =d=   | Grey    | =#9da9a0=    | Work     |
+| =@home=      | =h=   | Aqua    | =#83c092=    | Personal |
+| =@errands=   | =e=   | Green   | =#a7c080=    | Personal |
+| =@online=    | =o=   | Blue    | =#7fbbb3=    | Personal |
+| =@health=    | =H=   | Red     | =#e67e80=    | Personal |
+| =@finance=   | =f=   | Yellow  | =#dbbc7f=    | Personal |
+| =@someday=   | =s=   | Dim grey | =#859289=   | Personal |
+| =@waiting=   | =W=   | Aqua    | =#83c092=    | Personal |
+| =@learning=  | =l=   | Blue    | =#7fbbb3=    | Personal |
+
+* Visual Styling
+
+** Keyword Badges
+
+TODO keywords are styled as badges by =org-modern=:
+
+| Keyword | Color   | Hex       |
+|---------+---------+-----------|
+| =TODO=    | Green   | =#a7c080=   |
+| =NEXT=    | Blue    | =#7fbbb3=   |
+| =WAIT=    | Yellow  | =#dbbc7f=   |
+| =DONE=    | Grey    | =#7a8478=   |
+| =KILL=    | Red     | =#e67e80=   |
+
+** Priority Faces
+
+| Priority | Color  | Hex       |
+|----------+--------+-----------|
+| =[#A]=     | Red    | =#e67e80=   |
+| =[#B]=     | Yellow | =#dbbc7f=   |
+| =[#C]=     | Blue   | =#7fbbb3=   |
+
+** Category Icons
+
+Nerd-font icons in the agenda prefix column:
+
+| Category | Icon      |
+|----------+-----------|
+| work     | briefcase |
+| home     | house     |
+| finance  | dollar    |
+| health   | heartbeat |
+| learning | school    |
+| errands  | cart      |
+| daily    | calendar  |
+
+* Keybindings
+
+** Accessing Agenda
+
+| Keybinding | Description              |
+|------------+--------------------------|
+| =SPC o a=    | Open agenda dispatcher    |
+| =SPC o a o=  | Open Overview directly    |
+
+** Inside Agenda
+
+*** Navigation
+
+| Key      | Description               |
+|----------+---------------------------|
+| =j= / =k=   | Move up/down              |
+| =J= / =K=   | Jump to next/prev item    |
+| =RET=      | Go to item in file        |
+| =TAB=      | Go to item (other window) |
+| =.=        | Jump to today             |
+
+*** Actions
+
+| Key  | Description             |
+|------+-------------------------|
+| =t=    | Cycle TODO state        |
+| =:=    | Set tags                |
+| =,=    | Set priority            |
+| =s=    | Schedule item           |
+| =d=    | Set deadline            |
+| =r=    | Refile item             |
+
+*** View Controls
+
+| Key | Description   |
+|-----+---------------|
+| =d=   | Day view      |
+| =w=   | Week view     |
+| =f=   | Forward       |
+| =b=   | Backward      |
+| =g r= | Refresh       |
+| =q=   | Quit          |
+
+* Workflow
+
+** Daily Capture and Review
+
+1. *Capture tasks:* =SPC X= then select template key (=t= for task, =m= for meeting, etc.)
+2. *Review agenda:* =SPC o a o= to open the Overview
+3. *Act on items:* =t= to cycle state, =s= to schedule, =,= to set priority
+4. *End-of-day refile:* =SPC r B= to batch refile tagged tasks to area notes
+
+** Area Notes
+
+Tasks tagged with personal context tags (@home, @errands, etc.) can be
+refiled to area notes for longer-term tracking:
+
+| Tag        | Area File    |
+|------------+--------------|
+| =@home=      | home.org     |
+| =@errands=   | errands.org  |
+| =@online=    | online.org   |
+| =@health=    | health.org   |
+| =@finance=   | finance.org  |
+| =@someday=   | someday.org  |
+| =@learning=  | learning.org |
+
+** Refile Keybindings
+
+| Keybinding | Command                   | Description                      |
+|------------+---------------------------+----------------------------------|
+| =SPC r R=    | hd/refile-to-area         | Smart refile based on tag        |
+| =SPC r B=    | hd/refile-all-daily-tasks | Batch refile all tagged tasks    |
+| =SPC r a=    | hd/goto-area              | Jump to an area note             |
+
+* Customization
+
+** Adding a New Tag
+
+1. Add the tag to =org-tag-alist= in =config.org= (pick an unused key)
+2. Add a face to =org-tag-faces= with an Everforest color
+3. Add a super-agenda group in the Overview command's =alltodo= block
+4. Add a capture template if quick-capture is wanted
+5. Optionally add a category icon mapping
+6. Update this document
+
+** Adding a New Super-Agenda Group
+
+Add an entry to the =org-super-agenda-groups= list in the Overview command.
+Groups are matched in order — first match wins. Use =:order= to control
+display position.
+
+** Everforest Palette Quick Reference
+
+| Name   | Hex       |
+|--------+-----------|
+| red    | =#e67e80=   |
+| orange | =#e69875=   |
+| yellow | =#dbbc7f=   |
+| green  | =#a7c080=   |
+| aqua   | =#83c092=   |
+| blue   | =#7fbbb3=   |
+| purple | =#d699b6=   |
+| grey0  | =#7a8478=   |
+| grey1  | =#859289=   |
+| grey2  | =#9da9a0=   |
