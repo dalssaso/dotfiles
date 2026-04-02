@@ -1016,16 +1016,15 @@ Use =SPC t z= for additional zen/focus mode (hides modeline, etc.).
 Set org directories based on machine type.
 
 #+begin_src emacs-lisp
+;; org-directory stays conditional (used for non-agenda file resolution)
 (setq org-directory (if (hd/work-machine-p)
                         hd/org-work-dir
                       (expand-file-name "agenda" hd/org-personal-dir)))
 
+;; Unified agenda: org-roam + recent dailies (all machines)
 (setq org-agenda-files
-      (if (hd/work-machine-p)
-          (list (expand-file-name "agenda.org" hd/org-work-dir)
-                (expand-file-name "inbox.org" hd/org-work-dir))
-        (list (expand-file-name "agenda.org" (expand-file-name "agenda" hd/org-personal-dir))
-              (expand-file-name "inbox.org" (expand-file-name "agenda" hd/org-personal-dir)))))
+      (append (list org-roam-directory)
+              (hd/roam-dailies-files 14)))
 #+end_src
 
 ** Tags
