@@ -1214,7 +1214,7 @@ Colored tag pills matching the Everforest Dark Hard palette.
                              :tag "@someday"
                              :order 90
                              :face (:foreground "#859289"))
-                            (:discard (:todo "DONE" :todo "KILL"))))))))))
+                            (:discard (:todo "DONE" :todo "KILL")))))))))))
 #+end_src
 
 ** Agenda Layout
