@@ -1082,7 +1082,7 @@ Colored tag pills matching the Everforest Dark Hard palette.
   (setq org-capture-templates
         '(("t" "Task" entry
            (file+headline hd/daily-file "Tasks")
-           "** TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           "** TODO %?\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
            :empty-lines 1)
           ("m" "Meeting" entry
            (file+headline hd/daily-file "Tasks")
@@ -1090,39 +1090,39 @@ Colored tag pills matching the Everforest Dark Hard palette.
            :empty-lines 1)
           ("r" "Review" entry
            (file+headline hd/daily-file "Tasks")
-           "** TODO %? :@review:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           "** TODO %? :@review:\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
            :empty-lines 1)
           ("p" "Pending" entry
            (file+headline hd/daily-file "Tasks")
-           "** TODO %? :@pending:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           "** TODO %? :@pending:\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
            :empty-lines 1)
           ("a" "Admin" entry
            (file+headline hd/daily-file "Tasks")
-           "** TODO %? :@admin:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           "** TODO %? :@admin:\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
            :empty-lines 1)
           ("d" "Report" entry
            (file+headline hd/daily-file "Tasks")
-           "** TODO %? :@report:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           "** TODO %? :@report:\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
            :empty-lines 1)
           ("h" "Home" entry
            (file+headline hd/daily-file "Tasks")
-           "** TODO %? :@home:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           "** TODO %? :@home:\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
            :empty-lines 1)
           ("H" "Health" entry
            (file+headline hd/daily-file "Tasks")
-           "** TODO %? :@health:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           "** TODO %? :@health:\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
            :empty-lines 1)
           ("f" "Finance" entry
            (file+headline hd/daily-file "Tasks")
-           "** TODO %? :@finance:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           "** TODO %? :@finance:\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
            :empty-lines 1)
           ("e" "Errands" entry
            (file+headline hd/daily-file "Tasks")
-           "** TODO %? :@errands:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           "** TODO %? :@errands:\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
            :empty-lines 1)
           ("l" "Learning" entry
            (file+headline hd/daily-file "Tasks")
-           "** TODO %? :@learning:\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           "** TODO %? :@learning:\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
            :empty-lines 1)
           ("j" "Journal" entry
            (file+headline hd/daily-file "Journal")
