@@ -1253,6 +1253,66 @@ Clean, centered daily dashboard.
 (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 #+end_src
 
+** Category Icons
+
+Nerd-font icons for agenda category prefix.
+
+#+begin_src emacs-lisp
+(after! (:and org-agenda nerd-icons)
+  (setq org-agenda-category-icon-alist
+        `(("work"     ,(nerd-icons-mdicon "nf-md-briefcase" :height 0.9) nil nil :ascent center)
+          ("home"     ,(nerd-icons-mdicon "nf-md-home" :height 0.9) nil nil :ascent center)
+          ("finance"  ,(nerd-icons-mdicon "nf-md-currency_usd" :height 0.9) nil nil :ascent center)
+          ("health"   ,(nerd-icons-mdicon "nf-md-heart_pulse" :height 0.9) nil nil :ascent center)
+          ("learning" ,(nerd-icons-mdicon "nf-md-school" :height 0.9) nil nil :ascent center)
+          ("errands"  ,(nerd-icons-mdicon "nf-md-cart_outline" :height 0.9) nil nil :ascent center)
+          ("daily"    ,(nerd-icons-mdicon "nf-md-calendar_today" :height 0.9) nil nil :ascent center))))
+#+end_src
+
+** Super-Agenda Header Styling
+
+Custom faces for super-agenda group headers with nerd-font icons.
+
+#+begin_src emacs-lisp
+(after! org-super-agenda
+  ;; Style the group headers
+  (custom-set-faces!
+    '(org-super-agenda-header :inherit variable-pitch :weight bold :height 1.1))
+
+  ;; Add nerd-font icons to group names via advice
+  (defvar hd/super-agenda-group-icons
+    '(("Overdue"  . ("nf-md-fire" . "#e67e80"))
+      ("Today"    . ("nf-md-calendar_today" . "#dbbc7f"))
+      ("Next"     . ("nf-md-arrow_right_bold" . "#7fbbb3"))
+      ("Waiting"  . ("nf-md-clock_outline" . "#83c092"))
+      ("Meetings" . ("nf-md-account_group" . "#d699b6"))
+      ("Reviews"  . ("nf-md-eye" . "#7fbbb3"))
+      ("Projects" . ("nf-md-folder_multiple" . "#d699b6"))
+      ("Admin"    . ("nf-md-cog" . "#e69875"))
+      ("Reports"  . ("nf-md-file_document" . "#9da9a0"))
+      ("Home"     . ("nf-md-home" . "#83c092"))
+      ("Errands"  . ("nf-md-cart" . "#a7c080"))
+      ("Health"   . ("nf-md-heart" . "#e67e80"))
+      ("Finance"  . ("nf-md-currency_usd" . "#dbbc7f"))
+      ("Learning" . ("nf-md-book_open_variant" . "#7fbbb3"))
+      ("Someday"  . ("nf-md-dots_horizontal" . "#859289")))
+    "Mapping of super-agenda group names to (nerd-icon-name . color).")
+
+  (defun hd/org-super-agenda-format-header (orig-fn name &rest args)
+    "Prepend nerd-font icon to super-agenda group header NAME."
+    (let* ((icon-spec (alist-get name hd/super-agenda-group-icons nil nil #'string=))
+           (result (apply orig-fn name args)))
+      (if icon-spec
+          (let ((icon (nerd-icons-mdicon (car icon-spec) :face `(:foreground ,(cdr icon-spec))))
+                (colored-name (propertize name 'face `(:foreground ,(cdr icon-spec) :weight bold))))
+            (replace-regexp-in-string (regexp-quote name) (concat icon " " colored-name) result t t))
+        result)))
+
+  ;; NOTE: org-super-agenda--make-agenda-header is a private API (double-dash).
+  ;; May break on package updates — check after upgrading org-super-agenda.
+  (advice-add 'org-super-agenda--make-agenda-header :around #'hd/org-super-agenda-format-header))
+#+end_src
+
 ** Archive Settings
 
 #+begin_src emacs-lisp
