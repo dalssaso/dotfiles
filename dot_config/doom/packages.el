@@ -62,6 +62,8 @@
 (package! org-modern)
 (package! org-appear)
 (package! olivetti)
+(package! org-super-agenda)
+(package! nerd-icons)
 
 ;; Chezmoi integration
 (package! chezmoi)
