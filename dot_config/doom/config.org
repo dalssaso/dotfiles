@@ -1114,46 +1114,76 @@ Define tag shortcuts for fast tagging.
              :empty-lines 1)))))
 #+end_src
 
+** org-super-agenda
+
+#+begin_src emacs-lisp
+(use-package! org-super-agenda
+  :after org-agenda
+  :config
+  (org-super-agenda-mode))
+#+end_src
+
 ** Custom Agenda Commands
 
 #+begin_src emacs-lisp
 (after! org-agenda
   (setq org-agenda-custom-commands
-        (if (hd/work-machine-p)
-            ;; Work agenda commands
-            '(("W" "Work Agenda"
-               ((agenda "" ((org-agenda-span 'day)))
-                (tags-todo "+@pending" ((org-agenda-overriding-header "Awaiting Reply")))
-                (tags-todo "+@meeting" ((org-agenda-overriding-header "Meetings")))
-                (tags-todo "+@review" ((org-agenda-overriding-header "Reviews")))
-                (tags-todo "+@project" ((org-agenda-overriding-header "Projects")))
-                (tags-todo "+@admin" ((org-agenda-overriding-header "Admin")))
-                (tags-todo "+@report" ((org-agenda-overriding-header "Reports")))))
-              ("Wp" "Pending" tags-todo "+@pending")
-              ("Wm" "Meetings" tags-todo "+@meeting")
-              ("Wr" "Reviews" tags-todo "+@review"))
-          ;; Personal agenda commands
-          '(("P" "Personal Agenda"
-             ((agenda "" ((org-agenda-span 'day)))
-              (tags-todo "+@waiting" ((org-agenda-overriding-header "Waiting")))
-              (tags-todo "+@errands" ((org-agenda-overriding-header "Errands")))
-              (tags-todo "+@home" ((org-agenda-overriding-header "Home")))
-              (tags-todo "+@health" ((org-agenda-overriding-header "Health")))
-              (tags-todo "+@finance" ((org-agenda-overriding-header "Finance")))
-              (tags-todo "+@learning" ((org-agenda-overriding-header "Learning")))))
-            ("Pd" "Personal + Dailies (7 days)"
-             ((agenda "" ((org-agenda-span 'day)
-                          (org-agenda-files (append org-agenda-files (hd/roam-dailies-files 7)))))
-              (tags-todo "+@waiting" ((org-agenda-overriding-header "Waiting")))
-              (tags-todo "+@errands" ((org-agenda-overriding-header "Errands")))
-              (tags-todo "+@home" ((org-agenda-overriding-header "Home")))))
-            ("Pm" "Personal + Dailies (30 days)"
-             ((agenda "" ((org-agenda-span 'week)
-                          (org-agenda-files (append org-agenda-files (hd/roam-dailies-files 30)))))
-              (alltodo "" ((org-agenda-files (hd/roam-dailies-files 30))
-                           (org-agenda-overriding-header "All TODOs from Dailies")))))
-            ("Ps" "Someday" tags-todo "+@someday")
-            ("Pw" "Waiting" tags-todo "+@waiting")))))
+        '(("o" "Overview"
+           ((agenda "" ((org-agenda-span 'day)
+                        (org-super-agenda-groups
+                         '((:name "Overdue"
+                            :scheduled past
+                            :deadline past
+                            :order 1
+                            :face (:foreground "#e67e80" :weight bold))
+                           (:name "Today"
+                            :time-grid t
+                            :date today
+                            :scheduled today
+                            :order 2)))))
+            (alltodo "" ((org-agenda-overriding-header "")
+                         (org-super-agenda-groups
+                          '((:name "Next"
+                             :todo "NEXT"
+                             :order 1)
+                            (:name "Waiting"
+                             :todo "WAIT"
+                             :order 2)
+                            (:name "Meetings"
+                             :tag "@meeting"
+                             :order 3)
+                            (:name "Reviews"
+                             :tag "@review"
+                             :order 4)
+                            (:name "Projects"
+                             :tag "@project"
+                             :order 5)
+                            (:name "Admin"
+                             :tag "@admin"
+                             :order 6)
+                            (:name "Reports"
+                             :tag "@report"
+                             :order 7)
+                            (:name "Home"
+                             :tag "@home"
+                             :order 8)
+                            (:name "Errands"
+                             :tag "@errands"
+                             :order 9)
+                            (:name "Health"
+                             :tag "@health"
+                             :order 10)
+                            (:name "Finance"
+                             :tag "@finance"
+                             :order 11)
+                            (:name "Learning"
+                             :tag "@learning"
+                             :order 12)
+                            (:name "Someday"
+                             :tag "@someday"
+                             :order 90
+                             :face (:foreground "#859289"))
+                            (:discard (:todo "DONE" :todo "KILL")))))))))
 #+end_src
 
 ** Archive Settings
