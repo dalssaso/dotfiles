@@ -11,6 +11,7 @@ dot_config/private_fish/fish_variableskey.txt.age
 key.txt.age
 docs/**
 Brewfile.*
+scripts
 .config/doom/config.el
 
 # Deployed via run_onchange_before script (needs to exist before brew install)

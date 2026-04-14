@@ -33,11 +33,11 @@ keybind = ctrl+a>r=reload_config
 # keybind = global:cmd+`=toggle_quick_terminal
 
 #
-font-family = Geist Mono
+font-family = Berkeley Mono
 font-style = Regular
 font-style-bold = Bold
-font-style-italic = Italic
-font-style-bold-italic = Bold Italic
+font-style-italic = Oblique
+font-style-bold-italic = Bold Oblique
 font-size = 15
 keybind = shift+enter=text:\n
 
