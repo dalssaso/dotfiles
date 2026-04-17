@@ -20,7 +20,7 @@ if not command -q op
     exit 1
 end
 
-set -l work_dir (mktemp -d -t berkeley-mono-update)
+set -l work_dir (mktemp -d -t berkeley-mono-update.XXXXXX)
 set -l flat_dir "$work_dir/flat"
 mkdir -p $flat_dir
 
