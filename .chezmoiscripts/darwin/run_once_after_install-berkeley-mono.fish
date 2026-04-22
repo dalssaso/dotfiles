@@ -10,17 +10,17 @@ if test -f $marker
 end
 
 if not command -q op
-    echo "$tag 1Password CLI (op) not found — skipping install."
-    exit 0
+    echo "$tag 1Password CLI (op) not found — install it and retry."
+    exit 1
 end
 
 set -l tmp_zip (mktemp -t berkeley-mono.XXXXXX.zip)
 
 echo "$tag fetching font from 1Password (may prompt for auth)..."
 if not op document get "Berkeley Mono Font" --vault Personal --out-file $tmp_zip --force
-    echo "$tag failed to fetch from 1Password — skipping install."
+    echo "$tag failed to fetch from 1Password — sign in (op signin) and retry."
     rm -f $tmp_zip
-    exit 0
+    exit 1
 end
 
 mkdir -p $font_dir
