@@ -17,6 +17,13 @@ cat {{ joinPath .chezmoi.sourceDir "Brewfile.work" | quote }} >> /tmp/Brewfile.c
 cat {{ joinPath .chezmoi.sourceDir "Brewfile.personal" | quote }} >> /tmp/Brewfile.combined
 {{ end -}}
 
+# Trust third-party taps before bundling. Homebrew 5.2/6.0 will ignore
+# untrusted taps once HOMEBREW_REQUIRE_TAP_TRUST becomes the default.
+# brew trust is idempotent and local machine state, so it must run here.
+brew bundle list --taps --file=/tmp/Brewfile.combined 2>/dev/null | while read -r tap; do
+  brew trust "$tap"
+done
+
 brew bundle --file=/tmp/Brewfile.combined
 brew cleanup
 rm /tmp/Brewfile.combined
