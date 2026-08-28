@@ -60,15 +60,14 @@ comments/doc strings. Symbol font stays MesloLGS Nerd Font Mono.
 
 ** Theme
 
-Kanagawa theme, Dragon variant by default.
+Ayu theme, Mirage variant by default.
 
 #+begin_src emacs-lisp
-(use-package! kanagawa-themes :demand t)
 ;; Real value set by `hd/theme-apply-appearance' below, from detection.
-(setq doom-theme 'kanagawa-dragon)
+(setq doom-theme 'doom-ayu-mirage)
 
 (add-to-list 'load-path doom-user-dir)
-(require 'kanagawa-palette)
+(require 'ayu-palette)
 
 (defface hd/agenda-overdue-face '((t :weight bold)) "Overdue agenda items.")
 (defface hd/agenda-someday-face '((t)) "Someday agenda items.")
@@ -77,8 +76,8 @@ Kanagawa theme, Dragon variant by default.
   "Mapping of super-agenda group names to (nerd-icon-name . color).")
 
 (defun hd/apply-org-faces (variant)
-  "Rebuild the org face tables for VARIANT (`dragon' or `lotus')."
-  (cl-flet ((c (role) (hd/kanagawa-color variant role)))
+  "Rebuild the org face tables for VARIANT (`dark' or `light')."
+  (cl-flet ((c (role) (hd/ayu-color variant role)))
     (setq org-priority-faces
           `((?A . (:foreground ,(c 'red) :weight bold))
             (?B . (:foreground ,(c 'yellow)))
@@ -117,10 +116,10 @@ Kanagawa theme, Dragon variant by default.
     (set-face-foreground 'hd/agenda-overdue-face (c 'red))
     (set-face-foreground 'hd/agenda-someday-face (c 'grey0))))
 
-(hd/apply-org-faces 'dragon)
+(hd/apply-org-faces 'dark)
 
 (defvar hd/current-variant nil
-  "The Kanagawa variant currently applied, or nil if none yet.")
+  "The Ayu variant currently applied, or nil if none yet.")
 
 (defun hd/detect-appearance ()
   "Return `light' or `dark' for the current macOS appearance.
@@ -136,14 +135,13 @@ and leaves it nil, so fall back to asking macOS directly."
         'light)))
 
 (defun hd/theme-apply-appearance (&optional appearance)
-  "Load the Kanagawa variant matching APPEARANCE (`dark' or `light').
+  "Load the Ayu variant matching APPEARANCE (`dark' or `light').
 With no argument, detect the current appearance."
   (interactive)
-  (let* ((appearance (or appearance (hd/detect-appearance)))
-         (variant (pcase appearance ('light 'lotus) (_ 'dragon))))
+  (let ((variant (or appearance (hd/detect-appearance))))
     (unless (eq variant hd/current-variant)
       (setq hd/current-variant variant)
-      (setq doom-theme (if (eq variant 'lotus) 'kanagawa-lotus 'kanagawa-dragon))
+      (setq doom-theme (if (eq variant 'light) 'doom-ayu-light 'doom-ayu-mirage))
       (mapc #'disable-theme custom-enabled-themes)
       (load-theme doom-theme t)
       (hd/apply-org-faces variant))))
@@ -156,7 +154,7 @@ With no argument, detect the current appearance."
 (add-hook 'after-make-frame-functions
           (lambda (_frame) (hd/theme-apply-appearance)))
 
-;; Apply once at load from real detection rather than assuming dragon.
+;; Apply once at load from real detection rather than assuming dark.
 (hd/theme-apply-appearance)
 #+end_src
 
@@ -1131,7 +1129,7 @@ Define tag shortcuts for fast tagging.
 
 ** Tag Faces
 
-Colored tag pills matching the active Kanagawa variant. Set by
+Colored tag pills matching the active Ayu variant. Set by
 =hd/apply-org-faces= (see Theme section).
 
 ** Capture Templates
