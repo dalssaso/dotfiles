@@ -1,8 +1,6 @@
 if status is-interactive
     zoxide init fish | source
     alias cd='z'
-    # Everforest theme (install: fisher install jtpevehouse/fish-everforest)
-    type -q theme_everforest && theme_everforest dark medium
 end
 
 if status is-interactive
@@ -81,8 +79,10 @@ end
 # Disable greeting message
 set fish_greeting
 
-set -xg BAT_THEME_DARK everforest
-set -xg BAT_THEME_LIGHT everforest
+# Unset BAT_THEME so bat's `auto` detection picks between these two.
+set -e BAT_THEME
+set -Ux BAT_THEME_DARK "Kanagawa Dragon"
+set -Ux BAT_THEME_LIGHT "Kanagawa Lotus"
 # Emacs as default editor - opens floating frame for git commits etc.
 # Frame closes automatically when editing is done (C-c C-c or save+quit)
 set -xg EDITOR "emacsclient -c -a '' -F '((name . \"Editor\") (width . 80) (height . 25))'"
