@@ -81,8 +81,8 @@ set fish_greeting
 
 # Unset BAT_THEME so bat's `auto` detection picks between these two.
 set -e BAT_THEME
-set -Ux BAT_THEME_DARK "Kanagawa Dragon"
-set -Ux BAT_THEME_LIGHT "Kanagawa Lotus"
+set -gx BAT_THEME_DARK "Kanagawa Dragon"
+set -gx BAT_THEME_LIGHT "Kanagawa Lotus"
 # Emacs as default editor - opens floating frame for git commits etc.
 # Frame closes automatically when editing is done (C-c C-c or save+quit)
 set -xg EDITOR "emacsclient -c -a '' -F '((name . \"Editor\") (width . 80) (height . 25))'"
