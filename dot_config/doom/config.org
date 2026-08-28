@@ -66,13 +66,68 @@ Kanagawa theme, Dragon variant by default.
 (use-package! kanagawa-themes :demand t)
 (setq doom-theme 'kanagawa-dragon)
 
+(add-to-list 'load-path doom-user-dir)
+(require 'kanagawa-palette)
+
+(defface hd/agenda-overdue-face '((t :weight bold)) "Overdue agenda items.")
+(defface hd/agenda-someday-face '((t)) "Someday agenda items.")
+
+(defvar hd/super-agenda-group-icons nil
+  "Mapping of super-agenda group names to (nerd-icon-name . color).")
+
+(defun hd/apply-org-faces (variant)
+  "Rebuild the org face tables for VARIANT (`dragon' or `lotus')."
+  (cl-flet ((c (role) (hd/kanagawa-color variant role)))
+    (setq org-priority-faces
+          `((?A . (:foreground ,(c 'red) :weight bold))
+            (?B . (:foreground ,(c 'yellow)))
+            (?C . (:foreground ,(c 'blue)))))
+    (setq org-tag-faces
+          `(("@meeting" . (:foreground ,(c 'purple)))
+            ("@project" . (:foreground ,(c 'red)))
+            ("@review"  . (:foreground ,(c 'blue)))
+            ("@admin"   . (:foreground ,(c 'orange)))
+            ("@pending" . (:foreground ,(c 'yellow)))
+            ("@report"  . (:foreground ,(c 'grey1)))
+            ("@home"    . (:foreground ,(c 'aqua)))
+            ("@errands" . (:foreground ,(c 'green)))
+            ("@online"  . (:foreground ,(c 'blue)))
+            ("@health"  . (:foreground ,(c 'red)))
+            ("@finance" . (:foreground ,(c 'yellow)))
+            ("@someday" . (:foreground ,(c 'grey0)))
+            ("@waiting" . (:foreground ,(c 'aqua)))
+            ("@learning" . (:foreground ,(c 'blue)))))
+    (setq hd/super-agenda-group-icons
+          `(("Overdue"  . ("nf-md-fire" . ,(c 'red)))
+            ("Today"    . ("nf-md-calendar_today" . ,(c 'yellow)))
+            ("Next"     . ("nf-md-arrow_right_bold" . ,(c 'blue)))
+            ("Waiting"  . ("nf-md-clock_outline" . ,(c 'aqua)))
+            ("Meetings" . ("nf-md-account_group" . ,(c 'purple)))
+            ("Reviews"  . ("nf-md-eye" . ,(c 'blue)))
+            ("Projects" . ("nf-md-folder_multiple" . ,(c 'purple)))
+            ("Admin"    . ("nf-md-cog" . ,(c 'orange)))
+            ("Reports"  . ("nf-md-file_document" . ,(c 'grey1)))
+            ("Home"     . ("nf-md-home" . ,(c 'aqua)))
+            ("Errands"  . ("nf-md-cart" . ,(c 'green)))
+            ("Health"   . ("nf-md-heart" . ,(c 'red)))
+            ("Finance"  . ("nf-md-currency_usd" . ,(c 'yellow)))
+            ("Learning" . ("nf-md-book_open_variant" . ,(c 'blue)))
+            ("Someday"  . ("nf-md-dots_horizontal" . ,(c 'grey0)))))
+    (set-face-foreground 'hd/agenda-overdue-face (c 'red))
+    (set-face-foreground 'hd/agenda-someday-face (c 'grey0))))
+
+(hd/apply-org-faces 'dragon)
+
 (defun hd/theme-apply-appearance (appearance)
   "Load the Kanagawa variant matching APPEARANCE (`dark' or `light')."
   (setq doom-theme (pcase appearance
                      ('light 'kanagawa-lotus)
                      (_ 'kanagawa-dragon)))
   (mapc #'disable-theme custom-enabled-themes)
-  (load-theme doom-theme t))
+  (load-theme doom-theme t)
+  (hd/apply-org-faces (pcase appearance
+                        ('light 'lotus)
+                        (_ 'dragon))))
 
 (add-hook 'ns-system-appearance-change-functions #'hd/theme-apply-appearance)
 #+end_src
@@ -909,11 +964,7 @@ Works like org-appear but for LaTeX math.
   ;; Custom ellipsis for folded sections
   (setq org-ellipsis " ▾")
 
-  ;; Kanagawa Dragon-themed priority faces
-  (setq org-priority-faces
-        '((?A . (:foreground "#c4746e" :weight bold))  ;; red
-          (?B . (:foreground "#c4b28a"))                ;; yellow
-          (?C . (:foreground "#8ba4b0"))))              ;; blue
+  ;; Priority faces are set by hd/apply-org-faces (see Theme section)
 
   ;; Start org files with all headings folded
   (setq org-startup-folded 'content)
@@ -1050,28 +1101,10 @@ Define tag shortcuts for fast tagging.
           ("@waiting" . ?W) ("@learning" . ?l))))
 #+end_src
 
-** Tag Faces (Kanagawa Dragon)
+** Tag Faces
 
-Colored tag pills matching the Kanagawa Dragon palette.
-
-#+begin_src emacs-lisp
-(after! org
-  (setq org-tag-faces
-        '(("@meeting" . (:foreground "#a292a3"))   ;; purple
-          ("@project" . (:foreground "#c4746e"))   ;; red
-          ("@review"  . (:foreground "#8ba4b0"))   ;; blue
-          ("@admin"   . (:foreground "#b6927b"))   ;; orange
-          ("@pending" . (:foreground "#c4b28a"))   ;; yellow
-          ("@report"  . (:foreground "#a6a69c"))   ;; grey1
-          ("@home"    . (:foreground "#8ea4a2"))   ;; aqua
-          ("@errands" . (:foreground "#8a9a7b"))   ;; green
-          ("@online"  . (:foreground "#8ba4b0"))   ;; blue
-          ("@health"  . (:foreground "#c4746e"))   ;; red
-          ("@finance" . (:foreground "#c4b28a"))   ;; yellow
-          ("@someday" . (:foreground "#7a8382"))   ;; grey0 (dimmed)
-          ("@waiting" . (:foreground "#8ea4a2"))   ;; aqua
-          ("@learning" . (:foreground "#8ba4b0")))))  ;; blue
-#+end_src
+Colored tag pills matching the active Kanagawa variant. Set by
+=hd/apply-org-faces= (see Theme section).
 
 ** Capture Templates
 
@@ -1159,7 +1192,7 @@ Colored tag pills matching the Kanagawa Dragon palette.
                             :scheduled past
                             :deadline past
                             :order 1
-                            :face (:foreground "#c4746e" :weight bold))
+                            :face hd/agenda-overdue-face)
                            (:name "Today"
                             :time-grid t
                             :date today
@@ -1206,7 +1239,7 @@ Colored tag pills matching the Kanagawa Dragon palette.
                             (:name "Someday"
                              :tag "@someday"
                              :order 90
-                             :face (:foreground "#7a8382"))
+                             :face hd/agenda-someday-face)
                             (:discard (:todo "DONE" :todo "KILL")))))))))))
 #+end_src
 
@@ -1280,24 +1313,8 @@ Custom faces for super-agenda group headers with nerd-font icons.
   (custom-set-faces!
     '(org-super-agenda-header :inherit variable-pitch :weight bold :height 1.1))
 
-  ;; Add nerd-font icons to group names via advice
-  (defvar hd/super-agenda-group-icons
-    '(("Overdue"  . ("nf-md-fire" . "#c4746e"))
-      ("Today"    . ("nf-md-calendar_today" . "#c4b28a"))
-      ("Next"     . ("nf-md-arrow_right_bold" . "#8ba4b0"))
-      ("Waiting"  . ("nf-md-clock_outline" . "#8ea4a2"))
-      ("Meetings" . ("nf-md-account_group" . "#a292a3"))
-      ("Reviews"  . ("nf-md-eye" . "#8ba4b0"))
-      ("Projects" . ("nf-md-folder_multiple" . "#a292a3"))
-      ("Admin"    . ("nf-md-cog" . "#b6927b"))
-      ("Reports"  . ("nf-md-file_document" . "#a6a69c"))
-      ("Home"     . ("nf-md-home" . "#8ea4a2"))
-      ("Errands"  . ("nf-md-cart" . "#8a9a7b"))
-      ("Health"   . ("nf-md-heart" . "#c4746e"))
-      ("Finance"  . ("nf-md-currency_usd" . "#c4b28a"))
-      ("Learning" . ("nf-md-book_open_variant" . "#8ba4b0"))
-      ("Someday"  . ("nf-md-dots_horizontal" . "#7a8382")))
-    "Mapping of super-agenda group names to (nerd-icon-name . color).")
+  ;; Icons and colors for hd/super-agenda-group-icons are set by
+  ;; hd/apply-org-faces (see Theme section); this advice only reads it.
 
   (defun hd/org-super-agenda-format-header (orig-fn name &rest args)
     "Prepend nerd-font icon to super-agenda group header NAME."
