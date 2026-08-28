@@ -1,31 +1,25 @@
-# Everforest Dark Hard
-# https://github.com/sainnhe/everforest/blob/master/palette.md
+bg_dim: &bg_dim "{{ .bg_dim }}"
+bg0: &bg0 "{{ .bg0 }}"
+bg1: &bg1 "{{ .bg1 }}"
+bg2: &bg2 "{{ .bg2 }}"
+bg3: &bg3 "{{ .bg3 }}"
 
-# Background colors (Hard contrast)
-bg_dim: &bg_dim "#1e2326"
-bg0: &bg0 "#272e33"
-bg1: &bg1 "#2e383c"
-bg2: &bg2 "#374145"
-bg3: &bg3 "#414b50"
+fg: &fg "{{ .fg }}"
+red: &red "{{ .red }}"
+orange: &orange "{{ .orange }}"
+yellow: &yellow "{{ .yellow }}"
+green: &green "{{ .green }}"
+aqua: &aqua "{{ .aqua }}"
+blue: &blue "{{ .blue }}"
+purple: &purple "{{ .purple }}"
+grey0: &grey0 "{{ .grey0 }}"
+grey1: &grey1 "{{ .grey1 }}"
 
-# Foreground colors
-fg: &fg "#d3c6aa"
-red: &red "#e67e80"
-orange: &orange "#e69875"
-yellow: &yellow "#dbbc7f"
-green: &green "#a7c080"
-aqua: &aqua "#83c092"
-blue: &blue "#7fbbb3"
-purple: &purple "#d699b6"
-grey0: &grey0 "#7a8478"
-grey1: &grey1 "#859289"
-
-# Aliases for k9s
-text: &text "#d3c6aa"
-base: &base "#272e33"
-overlay: &overlay "#2e383c"
-muted: &muted "#414b50"
-pink: &pink "#d699b6"
+text: &text "{{ .fg }}"
+base: &base "{{ .bg0 }}"
+overlay: &overlay "{{ .bg2 }}"
+muted: &muted "{{ .bg3 }}"
+pink: &pink "{{ .purple }}"
 
 k9s:
   body:
