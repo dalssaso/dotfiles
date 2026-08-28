@@ -60,13 +60,20 @@ comments/doc strings. Symbol font stays MesloLGS Nerd Font Mono.
 
 ** Theme
 
-Everforest theme with medium contrast.
+Kanagawa theme, Dragon variant by default.
 
 #+begin_src emacs-lisp
-(use-package! doom-everforest-theme
-  :config
-  (setq doom-everforest-background "hard"))
-(setq doom-theme 'doom-everforest)
+(require 'kanagawa-themes)
+(setq doom-theme 'kanagawa-dragon)
+
+(defun hd/theme-apply-appearance (appearance)
+  "Load the Kanagawa variant matching APPEARANCE (`dark' or `light')."
+  (setq doom-theme (pcase appearance
+                     ('dark 'kanagawa-dragon)
+                     ('light 'kanagawa-lotus)))
+  (load-theme doom-theme t))
+
+(add-hook 'ns-system-appearance-change-functions #'hd/theme-apply-appearance)
 #+end_src
 
 ** Line Numbers
@@ -901,11 +908,11 @@ Works like org-appear but for LaTeX math.
   ;; Custom ellipsis for folded sections
   (setq org-ellipsis " ▾")
 
-  ;; Everforest-themed priority faces
+  ;; Kanagawa Dragon-themed priority faces
   (setq org-priority-faces
-        '((?A . (:foreground "#e67e80" :weight bold))  ;; red
-          (?B . (:foreground "#dbbc7f"))                ;; yellow
-          (?C . (:foreground "#7fbbb3"))))              ;; blue
+        '((?A . (:foreground "#c4746e" :weight bold))  ;; red
+          (?B . (:foreground "#c4b28a"))                ;; yellow
+          (?C . (:foreground "#8ba4b0"))))              ;; blue
 
   ;; Start org files with all headings folded
   (setq org-startup-folded 'content)
@@ -1042,27 +1049,27 @@ Define tag shortcuts for fast tagging.
           ("@waiting" . ?W) ("@learning" . ?l))))
 #+end_src
 
-** Tag Faces (Everforest)
+** Tag Faces (Kanagawa Dragon)
 
-Colored tag pills matching the Everforest Dark Hard palette.
+Colored tag pills matching the Kanagawa Dragon palette.
 
 #+begin_src emacs-lisp
 (after! org
   (setq org-tag-faces
-        '(("@meeting" . (:foreground "#d699b6"))   ;; purple
-          ("@project" . (:foreground "#e67e80"))   ;; red
-          ("@review"  . (:foreground "#7fbbb3"))   ;; blue
-          ("@admin"   . (:foreground "#e69875"))   ;; orange
-          ("@pending" . (:foreground "#dbbc7f"))   ;; yellow
+        '(("@meeting" . (:foreground "#a292a3"))   ;; purple
+          ("@project" . (:foreground "#c4746e"))   ;; red
+          ("@review"  . (:foreground "#8ba4b0"))   ;; blue
+          ("@admin"   . (:foreground "#b6927b"))   ;; orange
+          ("@pending" . (:foreground "#c4b28a"))   ;; yellow
           ("@report"  . (:foreground "#9da9a0"))   ;; grey2
-          ("@home"    . (:foreground "#83c092"))   ;; aqua
-          ("@errands" . (:foreground "#a7c080"))   ;; green
-          ("@online"  . (:foreground "#7fbbb3"))   ;; blue
-          ("@health"  . (:foreground "#e67e80"))   ;; red
-          ("@finance" . (:foreground "#dbbc7f"))   ;; yellow
-          ("@someday" . (:foreground "#859289"))   ;; grey1 (dimmed)
-          ("@waiting" . (:foreground "#83c092"))   ;; aqua
-          ("@learning" . (:foreground "#7fbbb3")))))  ;; blue
+          ("@home"    . (:foreground "#8ea4a2"))   ;; aqua
+          ("@errands" . (:foreground "#8a9a7b"))   ;; green
+          ("@online"  . (:foreground "#8ba4b0"))   ;; blue
+          ("@health"  . (:foreground "#c4746e"))   ;; red
+          ("@finance" . (:foreground "#c4b28a"))   ;; yellow
+          ("@someday" . (:foreground "#7a8382"))   ;; grey1 (dimmed)
+          ("@waiting" . (:foreground "#8ea4a2"))   ;; aqua
+          ("@learning" . (:foreground "#8ba4b0")))))  ;; blue
 #+end_src
 
 ** Capture Templates
@@ -1151,7 +1158,7 @@ Colored tag pills matching the Everforest Dark Hard palette.
                             :scheduled past
                             :deadline past
                             :order 1
-                            :face (:foreground "#e67e80" :weight bold))
+                            :face (:foreground "#c4746e" :weight bold))
                            (:name "Today"
                             :time-grid t
                             :date today
@@ -1198,7 +1205,7 @@ Colored tag pills matching the Everforest Dark Hard palette.
                             (:name "Someday"
                              :tag "@someday"
                              :order 90
-                             :face (:foreground "#859289"))
+                             :face (:foreground "#7a8382"))
                             (:discard (:todo "DONE" :todo "KILL")))))))))))
 #+end_src
 
@@ -1274,21 +1281,21 @@ Custom faces for super-agenda group headers with nerd-font icons.
 
   ;; Add nerd-font icons to group names via advice
   (defvar hd/super-agenda-group-icons
-    '(("Overdue"  . ("nf-md-fire" . "#e67e80"))
-      ("Today"    . ("nf-md-calendar_today" . "#dbbc7f"))
-      ("Next"     . ("nf-md-arrow_right_bold" . "#7fbbb3"))
-      ("Waiting"  . ("nf-md-clock_outline" . "#83c092"))
-      ("Meetings" . ("nf-md-account_group" . "#d699b6"))
-      ("Reviews"  . ("nf-md-eye" . "#7fbbb3"))
-      ("Projects" . ("nf-md-folder_multiple" . "#d699b6"))
-      ("Admin"    . ("nf-md-cog" . "#e69875"))
+    '(("Overdue"  . ("nf-md-fire" . "#c4746e"))
+      ("Today"    . ("nf-md-calendar_today" . "#c4b28a"))
+      ("Next"     . ("nf-md-arrow_right_bold" . "#8ba4b0"))
+      ("Waiting"  . ("nf-md-clock_outline" . "#8ea4a2"))
+      ("Meetings" . ("nf-md-account_group" . "#a292a3"))
+      ("Reviews"  . ("nf-md-eye" . "#8ba4b0"))
+      ("Projects" . ("nf-md-folder_multiple" . "#a292a3"))
+      ("Admin"    . ("nf-md-cog" . "#b6927b"))
       ("Reports"  . ("nf-md-file_document" . "#9da9a0"))
-      ("Home"     . ("nf-md-home" . "#83c092"))
-      ("Errands"  . ("nf-md-cart" . "#a7c080"))
-      ("Health"   . ("nf-md-heart" . "#e67e80"))
-      ("Finance"  . ("nf-md-currency_usd" . "#dbbc7f"))
-      ("Learning" . ("nf-md-book_open_variant" . "#7fbbb3"))
-      ("Someday"  . ("nf-md-dots_horizontal" . "#859289")))
+      ("Home"     . ("nf-md-home" . "#8ea4a2"))
+      ("Errands"  . ("nf-md-cart" . "#8a9a7b"))
+      ("Health"   . ("nf-md-heart" . "#c4746e"))
+      ("Finance"  . ("nf-md-currency_usd" . "#c4b28a"))
+      ("Learning" . ("nf-md-book_open_variant" . "#8ba4b0"))
+      ("Someday"  . ("nf-md-dots_horizontal" . "#7a8382")))
     "Mapping of super-agenda group names to (nerd-icon-name . color).")
 
   (defun hd/org-super-agenda-format-header (orig-fn name &rest args)
