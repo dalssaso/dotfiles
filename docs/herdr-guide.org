@@ -27,7 +27,7 @@ wait for input. Without a sidebar you find that out by cycling through panes.
 
 *Docs:* https://herdr.dev/docs/
 
-* Installation on this setup
+* Installation
 
 Herdr is declared in =Brewfile.common= alongside everything else:
 
@@ -40,8 +40,6 @@ That is the only thing that needs to be checked in. On a fresh machine,
 =sha256sum= of =Brewfile.common= as a comment, so editing the Brewfile changes
 the script hash and chezmoi re-runs =brew bundle= on the next =chezmoi apply=.
 
-Verify:
-
 #+begin_src fish
 herdr --version
 #+end_src
@@ -50,26 +48,62 @@ herdr --version
 
 Homebrew's formula installs zsh completions only. Fish completions are generated
 from the binary and checked in at
-=dot_config/private_fish/completions/herdr.fish=:
+=dot_config/private_fish/completions/herdr.fish=. Regenerate after a version
+bump that adds subcommands, then re-add to chezmoi:
 
 #+begin_src fish
 herdr completion fish > ~/.config/fish/completions/herdr.fish
+chezmoi add ~/.config/fish/completions/herdr.fish
 #+end_src
 
-Regenerate after a major version bump, then re-add to chezmoi.
-
-** Keeping it running
-
-Herdr's server can run as a login service, or start on demand when you first
-run =herdr=:
+** Keeping the server running
 
 #+begin_src fish
-# Optional -- persistent server across reboots
-brew services start herdr
-
-# Or just let `herdr` start it on first use
-herdr
+brew services start herdr   # optional: persistent across reboots
+herdr                       # or just let it start on first use
 #+end_src
+
+* The Ghostty handoff
+
+/This is the most important thing in this document./
+
+Ghostty previously implemented its own tmux-style =ctrl+a= prefix for tabs,
+splits, and split navigation. Herdr now owns that prefix, and *every*
+=ctrl+a>= binding was removed from =dot_config/ghostty/config=.
+
+That removal is not optional or cosmetic. Ghostty *consumes* a leader key:
+pressing =ctrl+a= puts Ghostty into a pending-sequence state and buffers the
+keypress rather than forwarding it to the running program. This is precisely
+what Ghostty's =end_key_sequence= action exists to undo. So if a single
+=ctrl+a>= binding survives in the Ghostty config, Ghostty swallows =ctrl+a= and
+Herdr never receives its prefix at all.
+
+*If the Herdr prefix ever stops responding, check the Ghostty config for a
+=ctrl+a>= line first.*
+
+What changed:
+
+| Was                            | Now                                       |
+|--------------------------------+-------------------------------------------|
+| =ctrl+a>c/n/p/o=  tabs         | Herdr tabs                                |
+| =ctrl+a>\= =ctrl+a>minus=      | Herdr splits (=prefix+v= / =prefix+minus=) |
+| =ctrl+a>h/j/k/l=  goto_split   | Herdr pane focus                          |
+| =ctrl+a>x=        close_surface | Herdr =close_pane=                        |
+| =ctrl+a>equal=    equalize     | dropped                                   |
+| =ctrl+shift+hjkl= resize_split | Herdr direct pane resize                  |
+| =ctrl+a>q=        quit Ghostty | Herdr *detach* -- see below               |
+| =ctrl+a>r=        reload_config | =cmd+shift+r=                            |
+| --                             | quit is native =cmd+q=                    |
+
+Two behaviour changes worth internalising:
+
+- =ctrl+a= then =q= used to *quit Ghostty*. It now *detaches* -- the client
+  exits, the server and every agent keep running, and you land back at the fish
+  prompt. Run =herdr= to reattach exactly where you left off. This is tmux's
+  =prefix+d=.
+- Split-right was =ctrl+a>\=; it is now =prefix+v=. =backslash= is not among
+  Herdr's documented punctuation key names (=minus=, =comma=, =ampersand=,
+  =plus=, =backtick=), so it was not worth betting on.
 
 * Concept model
 
@@ -87,125 +121,212 @@ its state; that is what populates the sidebar.
 *Modes:*
 
 - *Terminal mode* -- the default. Keys go to the program in the pane.
-- *Prefix mode* -- entered with the prefix key. The next chord is a Herdr command.
+- *Prefix mode* -- entered with =ctrl+a=. The next chord is a Herdr command.
 - *Navigate mode* -- movement shortcuts win while it is open.
 - *Copy mode* -- vim-style selection over the scrollback.
 
 * Daily workflow
 
 #+begin_src fish
-# Launch or attach, in a project directory
 cd ~/src/some-project
-herdr
+herdr                       # launch or attach
 
-# Named session, if you want more than one server namespace
-herdr --session review
-
-# Attach to a Herdr server on another host over SSH
-herdr --remote myhost
-
-# Status of local client and running server
-herdr status
+herdr --session review      # a separate named server namespace
+herdr --remote myhost       # attach to a Herdr server over SSH
+herdr status                # local client and server status
 #+end_src
 
 Inside a pane, start an agent normally (=claude=, =codex=). Herdr picks it up --
-no wrapper command. Detaching closes the client, not the processes; run =herdr=
-again to reattach.
+no wrapper command.
 
 ** Git worktrees
 
 Herdr creates and tracks git worktrees as workspaces, checked out under
-=~/.herdr/worktrees= by default (=worktrees.directory=). This pairs directly with
-running several agents in isolation on the same repository.
+=~/.herdr/worktrees=. Default binding =prefix+shift+g=.
 
-#+begin_src fish
-herdr worktree --help
-#+end_src
-
-Default binding =prefix+shift+g= creates a new worktree workspace.
+That directory sits outside the =includeIf gitdir:= scopes in =~/.gitconfig=,
+which looks like it would break per-account git identity. *It does not.*
+=includeIf gitdir:= matches the *main repository*, not the linked worktree -- a
+worktree of an =~/src/oss= repo created under =/tmp= still resolves the oss
+identity. Verified empirically; no mitigation needed.
 
 * Keybindings
 
-Default prefix is =ctrl+b=. Press =prefix+?= for searchable in-app help.
+Prefix is =ctrl+a=. Press =prefix+?= for searchable in-app help.
 
-| Action              | Binding             |
-|---------------------+---------------------|
-| Help                | =prefix+?=          |
-| Settings            | =prefix+s=          |
-| Detach              | =prefix+q=          |
-| Reload config       | =prefix+shift+r=    |
-| Toggle sidebar      | =prefix+b=          |
-| Goto picker         | =prefix+g=          |
-| Workspace picker    | =prefix+w=          |
-|---------------------+---------------------|
-| Split right         | =prefix+v=          |
-| Split down          | =prefix+minus=      |
-| Close pane          | =prefix+x=          |
-| Zoom pane           | =prefix+z=          |
-| Focus pane          | =prefix+h/j/k/l=    |
-| Cycle panes         | =prefix+tab=        |
-| Resize mode         | =prefix+r=          |
-| Rename pane         | =prefix+shift+p=    |
-| Edit scrollback     | =prefix+e=          |
-|---------------------+---------------------|
-| New tab             | =prefix+c=          |
+** Panes, tabs, workspaces
+
+| Action              | Binding                 |
+|---------------------+-------------------------|
+| Help                | =prefix+?=              |
+| Settings            | =prefix+s=              |
+| Detach              | =prefix+q=              |
+| Reload config       | =prefix+shift+r=        |
+| Toggle sidebar      | =prefix+b=              |
+| Goto picker         | =prefix+g=              |
+| Workspace picker    | =prefix+w=              |
+|---------------------+-------------------------|
+| Split right         | =prefix+v=              |
+| Split down          | =prefix+minus=          |
+| Close pane          | =prefix+x=              |
+| Zoom pane           | =prefix+z=              |
+| Focus pane          | =prefix+h/j/k/l=        |
+| Last pane           | =prefix+tab=            |
+| Resize mode         | =prefix+r=              |
+| Resize directly     | =ctrl+shift+h/j/k/l=    |
+| Rename pane         | =prefix+shift+p=        |
+| Scrollback to editor | =prefix+e=             |
+|---------------------+-------------------------|
+| New tab             | =prefix+c=              |
 | Next / prev tab     | =prefix+n= / =prefix+p= |
-| Jump to tab         | =prefix+1..9=       |
-| Rename tab          | =prefix+shift+t=    |
-| Close tab           | =prefix+shift+x=    |
-|---------------------+---------------------|
-| New workspace       | =prefix+shift+n=    |
-| New worktree        | =prefix+shift+g=    |
-| Rename workspace    | =prefix+shift+w=    |
-| Close workspace     | =prefix+shift+d=    |
+| Jump to tab         | =prefix+1..9=           |
+| Rename tab          | =prefix+shift+t=        |
+| Close tab           | =prefix+shift+x=        |
+|---------------------+-------------------------|
+| New workspace       | =prefix+shift+n=        |
+| New worktree        | =prefix+shift+g=        |
+| Rename workspace    | =prefix+shift+w=        |
+| Close workspace     | =prefix+shift+d=        |
 
-Several actions ship unbound by default and are worth binding by hand:
-=next_workspace=, =previous_workspace=, =next_agent=, =previous_agent=,
-=focus_agent= (indexed, e.g. =prefix+alt+1..9=), =last_pane=, =move_tab_next=,
-=move_tab_previous=, and the direct =resize_pane_*= chords.
+** Agent layer
+
+=alt= is the agent modifier, because =prefix+h/j/k/l= is already pane focus.
+
+| Action         | Binding           |
+|----------------+-------------------|
+| Next agent     | =prefix+alt+j=    |
+| Previous agent | =prefix+alt+k=    |
+| Focus agent /n/ | =prefix+alt+1..9= |
+
+The sidebar is sorted by =priority=, so blocked agents float to the top and
+these bindings walk an attention queue rather than a static project tree.
+
+* Copy, paste, and scrolling
+
+Notably less painful than tmux, mostly because the common case needs no mode.
+
+** Mouse
+
+- *Drag-select copies* straight to the system clipboard (=copy_on_select = true=).
+  No mode, no prefix. A toast confirms it.
+- Wheel scrolls the pane scrollback, three lines per notch
+  (=mouse_scroll_lines=).
+- Real draggable scrollbars beside each pane (=pane_scrollbars=).
+- Paste is =cmd+v=, native. Ghostty already sets =clipboard-read = allow= and
+  =clipboard-write = allow=, so nothing is in the way.
+
+** Copy mode
+
+Enter with =prefix+[=.
+
+| Purpose   | Keys                                             |
+|-----------+--------------------------------------------------|
+| Move      | =h/j/k/l=, =w/b/e=, =W/B/E=, ={= =}=             |
+| Page      | =PageUp/PageDown=, =ctrl+b= / =ctrl+f=           |
+| Half page | =ctrl+u= / =ctrl+d=                              |
+| Search    | =/= forward, =?= backward, =n= / =N= to repeat   |
+| Select    | =v= or =Space=                                   |
+| Copy      | =y= or =Enter=                                   |
+| Exit      | =q= or =Esc= (Esc clears selection/search first) |
+
+Search is case-insensitive unless the query contains an uppercase letter.
+
+Two improvements over tmux: copy mode *does not pause the pane* -- output stays
+live, follows at the bottom, and stays pinned when you scroll into history. And
+the vim keys are simply there; there is no vi-mode option to set first.
+
+=ctrl+b= and =ctrl+f= page within copy mode without colliding with anything,
+since the prefix is =ctrl+a=.
+
+=prefix+e= dumps the pane scrollback into your editor -- the escape hatch when
+the whole buffer belongs in Emacs.
+
+** Cmd+click on URLs -- open question
+
+=ui.mouse_capture = true= (kept, since mouse-first is the point) means Herdr
+handles clicks rather than the terminal. Herdr's own config comment says setting
+it =false= is what lets "the terminal handle normal clicks, such as Cmd-clicking
+URLs."
+
+Ghostty's documentation does not describe Cmd+click behaviour under application
+mouse reporting, so this is *untested*. Expected workaround is *Shift+click*, the
+conventional bypass for mouse reporting. If that fails and opening URLs from
+panes matters, set =mouse_capture = false= and drive Herdr from the keyboard.
+
+(=right_click_passthrough_modifier= exists but forwards right-click gestures
+only, and explicitly rejects Shift.)
 
 * Configuration
 
-Config lives at =~/.config/herdr/config.toml=. It does not exist until you create
-it -- every value has a built-in default.
+Config lives at =~/.config/herdr/config.toml=, tracked in chezmoi at
+=dot_config/herdr/config.toml=. Only values differing from the defaults are set.
 
-Print the fully commented default as a starting point:
+Print the fully commented defaults for reference -- this is authoritative for the
+installed version, unlike the website:
 
 #+begin_src fish
-herdr --default-config > ~/.config/herdr/config.toml
+herdr --default-config
 #+end_src
 
 Validate and reload without restarting the server:
 
 #+begin_src fish
-herdr config check
-herdr server reload-config    # or prefix+shift+r
+herdr config check                 # -> "config: ok"
+herdr server reload-config         # or prefix+shift+r
+herdr config reset-keys            # back up and strip custom keybindings
 #+end_src
 
-If custom keybindings break something, =herdr config reset-keys= backs up the
-file and strips them.
+** What is set, and why
 
-** Sections worth knowing
+| Setting                            | Value              | Reason                                                     |
+|------------------------------------+--------------------+------------------------------------------------------------|
+| =keys.prefix=                      | =ctrl+a=           | Reuses existing muscle memory; Ghostty gave up the leader   |
+| =theme.name=                       | =terminal=         | Inherits Ghostty's everforest palette; Herdr ships no Everforest |
+| =ui.accent=                        | =green=            | Everforest's signature                                      |
+| =ui.agent_panel_sort=              | =priority=         | Blocked agents float to the top                             |
+| =ui.status_indicators=             | =symbols=          | Distinct glyphs beat color-only dots                        |
+| =ui.window_title=                  | ={workspace} · {tab}= | See below                                                |
+| =ui.toast.delivery=                | =system=           | Reaches Notification Center when Ghostty is not focused     |
+| =advanced.scrollback_limit_bytes=  | =50000000=         | Agent output is verbose; 10 MB default truncates            |
+| =keys.next_agent= / =previous_agent= | =prefix+alt+j/k= | Agent layer on alt                                          |
+| =keys.focus_agent=                 | =prefix+alt+1..9=  | Direct jump                                                 |
+| =keys.last_pane=                   | =prefix+tab=       | Back-and-forth                                              |
+| =keys.cycle_pane_next=             | ="" (cleared)      | Owns prefix+tab by default; must be cleared to free it      |
+| =keys.resize_pane_*=               | =ctrl+shift+hjkl=  | Chords freed when Ghostty's split-resize was removed        |
 
-| Section         | What it controls                                          |
-|-----------------+-----------------------------------------------------------|
-| =[theme]=       | Built-in theme, light/dark =auto_switch=, per-token overrides |
-| =[terminal]=    | =default_shell=, login vs non-login, new-pane cwd policy   |
-| =[keys]=        | Prefix, every action binding, custom =[[keys.command]]=    |
-| =[server]=      | Headless virtual terminal size when nothing is attached    |
-| =[ui]=          | Sidebar, borders, mouse capture, tab bar, window title     |
-| =[ui.toast]=    | Notification delivery: =off=, =herdr=, =terminal=, =system= |
-| =[ui.sound]=    | Per-agent sound on state change in background workspaces   |
-| =[session]=     | =resume_agents_on_restore=                                 |
-| =[worktrees]=   | Checkout root directory                                    |
-| =[remote]=      | Whether Herdr manages SSH keepalive for =--remote=         |
-| =[experimental]= | Nested Herdr, Kitty graphics, pane history                |
-| =[advanced]=    | =scrollback_limit_bytes=                                   |
+*Deliberately left at defaults:*
+
+- =terminal.default_shell = ""= resolves =$SHELL= -> fish.
+- =terminal.shell_mode = "auto"= uses *login shells on macOS*. This is
+  load-bearing: it is what puts mise shims and Homebrew paths in every pane.
+- =terminal.new_cwd = "follow"= inherits the source pane, which is better than
+  Ghostty's =working-directory = home=.
+- =session.resume_agents_on_restore = true= resumes agent panes into their native
+  conversations after a server restart.
+- =experimental.allow_nested = false= -- relevant because agents running inside
+  panes may try to launch =herdr=.
+- =worktrees.directory = "~/.herdr/worktrees"= -- safe, see above.
+
+** Window title
+
+=ui.window_title= is written to the *outer* terminal, which with
+=macos-titlebar-style = tabs= means the Ghostty tab strip.
+
+#+begin_example
+default    "{hostname}: {workspace}"   ->   mymac: some-project
+here       "{workspace} · {tab}"       ->   some-project · agents
+#+end_example
+
+In a narrow tab, =\{hostname\}= spends characters on a constant, while =\{tab\}=
+says which layout you are looking at. Tokens: =\{hostname\}=, =\{workspace\}=,
+=\{tab\}=, =\{pane\}=, =\{terminal_title\}=.
+
+*Caveat:* the title renders on the *server*, so =\{hostname\}= names the host the
+panes actually run on. Restore it if you start using =herdr --remote=.
 
 ** Custom commands
 
-Arbitrary chords can launch a command in a popup, a temporary pane, or detached
-in the background:
+Arbitrary chords can launch a command in a popup, a temporary pane, or detached:
 
 #+begin_src toml
 [[keys.command]]
@@ -216,35 +337,26 @@ width = "80%"
 height = "80%"
 #+end_src
 
-** Tracking config in chezmoi
+* Verifying the setup
 
-Once the config is settled, add it to the source tree so it travels:
-
-#+begin_src fish
-chezmoi add ~/.config/herdr/config.toml
-#+end_src
+1. =herdr config check= -> =config: ok=
+2. =ctrl+a= then =c= creates a Herdr tab. If nothing happens, Ghostty is still
+   swallowing the prefix -- grep its config for =ctrl+a>=.
+3. =ctrl+a= then =q= detaches; =herdr= reattaches with panes intact.
+4. Drag-select copies; =cmd+v= pastes.
+5. Shift+click a URL in a pane and note whether it opens -- this resolves the
+   open question above.
 
 * Notes and gotchas
 
-- *Prefix conflict.* =ctrl+b= is the tmux default and is also =backward-char= in
-  emacs-style shell line editing. If it collides with your shell or an agent TUI,
-  set =keys.prefix= to something free -- =f12= and =ctrl+space= are common picks.
-- *Mouse capture vs. the host terminal.* =ui.mouse_capture = true= means Herdr
-  handles clicks. Set it false if you would rather keep the outer terminal's
-  Cmd-click-to-open-URL and native selection.
-- *Login shells.* =terminal.shell_mode = "auto"= uses login shells on macOS, so
-  new panes get the full environment. Relevant when tools come from a version
-  manager rather than the system path.
+- *Update channel.* =herdr update= self-updates the binary, drifting from the
+  Homebrew-managed version. Prefer =brew upgrade herdr= so the package manager
+  stays the source of truth.
+- *Completions go stale.* They are generated from the binary; regenerate after
+  upgrades that add subcommands.
 - *Nesting.* Launching Herdr inside a Herdr pane is blocked unless
   =experimental.allow_nested = true=.
-- *Scrollback.* Defaults to 10 MB per pane. Long agent runs produce a lot of
-  output; raise =advanced.scrollback_limit_bytes= if you scroll back and find it
-  truncated.
-- *Update channel.* =herdr update= self-updates the binary, which will drift from
-  the Homebrew-managed version. Prefer =brew upgrade herdr= to keep the package
-  manager as the source of truth.
-- *Completions go stale.* They are generated from the binary, so regenerate
-  =herdr.fish= after upgrades that add subcommands.
+- *Notification permission.* =delivery = "system"= makes macOS prompt once.
 
 * Command reference
 

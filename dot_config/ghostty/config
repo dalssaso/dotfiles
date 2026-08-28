@@ -7,29 +7,16 @@ macos-titlebar-style = tabs
 window-inherit-working-directory = false
 working-directory = home
 
-# For tmux like keybinding
-keybind = ctrl+a>q=quit
-keybind = ctrl+a>c=new_tab
-keybind = ctrl+a>p=previous_tab
-keybind = ctrl+a>n=next_tab
-keybind = ctrl+a>o=toggle_tab_overview
+# Tabs, splits, and split navigation are owned by herdr, not Ghostty.
+# ctrl+a is herdr's prefix -- see docs/herdr-guide.org.
 #
-# to create splat and navigate it
-keybind = ctrl+a>\=new_split:right
-keybind = ctrl+a>minus=new_split:down
-keybind = ctrl+a>h=goto_split:left
-keybind = ctrl+a>j=goto_split:bottom
-keybind = ctrl+a>k=goto_split:top
-keybind = ctrl+a>l=goto_split:right
-keybind = ctrl+a>x=close_surface
-keybind = ctrl+a>equal=equalize_splits
-
-# for resizing split
-keybind = ctrl+shift+h=resize_split:left,10
-keybind = ctrl+shift+l=resize_split:right,10
-keybind = ctrl+shift+k=resize_split:up,10
-keybind = ctrl+shift+j=resize_split:down,10
-keybind = ctrl+a>r=reload_config
+# No `ctrl+a>` sequence may be defined here. Ghostty consumes a leader key
+# (it buffers the press instead of forwarding it, which is what end_key_sequence
+# exists to undo), so a single surviving ctrl+a> binding would swallow the
+# prefix and herdr would never receive it.
+#
+# ctrl+shift+h/j/k/l is likewise left free -- herdr binds it to pane resize.
+keybind = cmd+shift+r=reload_config
 # keybind = global:cmd+`=toggle_quick_terminal
 
 #

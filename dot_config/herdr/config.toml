@@ -1,0 +1,62 @@
+# herdr configuration
+# Only values that differ from the built-in defaults are set here.
+# Print the fully commented defaults with: herdr --default-config
+
+onboarding = false
+
+[theme]
+# Inherit Ghostty's active palette (everforest-dark-hard) instead of shipping
+# a separate one. Follows along automatically if the Ghostty theme changes.
+name = "terminal"
+
+[terminal]
+# default_shell / shell_mode / new_cwd stay at defaults:
+# $SHELL -> fish, login shells on macOS (needed for mise + Homebrew paths),
+# and new panes inherit the source pane's cwd.
+
+[keys]
+# Herdr owns the tmux-style prefix. Ghostty's ctrl+a> sequences were removed --
+# Ghostty consumes a leader key rather than forwarding it, so any surviving
+# ctrl+a> binding there would swallow this prefix.
+prefix = "ctrl+a"
+
+# Agent layer: alt distinguishes agent motion from pane motion,
+# since prefix+h/j/k/l is already pane focus.
+next_agent = "prefix+alt+j"
+previous_agent = "prefix+alt+k"
+focus_agent = "prefix+alt+1..9"
+
+# Back-and-forth between the last two panes. Must clear cycle_pane_next,
+# which owns prefix+tab by default.
+last_pane = "prefix+tab"
+cycle_pane_next = ""
+
+# Direct resize without entering resize mode. These chords were freed up
+# when Ghostty's split-resize bindings were removed.
+resize_pane_left = "ctrl+shift+h"
+resize_pane_down = "ctrl+shift+j"
+resize_pane_up = "ctrl+shift+k"
+resize_pane_right = "ctrl+shift+l"
+
+[ui]
+accent = "green"
+
+# Sort the sidebar as an attention queue so blocked agents float to the top,
+# which is what makes next_agent/previous_agent useful.
+agent_panel_sort = "priority"
+
+# Distinct glyphs per state rather than color-only dots.
+status_indicators = "symbols"
+
+# Rendered into Ghostty's tab strip (macos-titlebar-style = tabs), where
+# {hostname} is a constant. Restore {hostname} if using `herdr --remote`.
+window_title = "{workspace} · {tab}"
+
+[ui.toast]
+# Reach macOS Notification Center directly, so a blocked agent is visible
+# even when Ghostty is not the focused application.
+delivery = "system"
+
+[advanced]
+# Agent output is verbose; the 10 MB default truncates long runs.
+scrollback_limit_bytes = 50000000
