@@ -150,6 +150,63 @@ which looks like it would break per-account git identity. *It does not.*
 worktree of an =~/src/oss= repo created under =/tmp= still resolves the oss
 identity. Verified empirically; no mitigation needed.
 
+* Agent integration
+
+Herdr detects agents heuristically on its own -- the sidebar works with nothing
+installed. The optional integration installs a hook that lets the agent report
+its *session reference* back to Herdr.
+
+#+begin_src fish
+herdr integration status          # 17 supported agents, install state each
+herdr integration install claude
+#+end_src
+
+*What it actually does, precisely:* it reports the session id and transcript path
+only. It does /not/ improve working/blocked/done detection -- that stays
+heuristic. Its single purpose is enabling
+=session.resume_agents_on_restore = true=, which without it is a silent no-op:
+agent panes come back as plain shells after a server restart instead of resuming
+their conversations.
+
+** Footprint
+
+Installing =claude= writes =~/.claude/hooks/herdr-agent-state.sh= and adds one
+=SessionStart= entry to =~/.claude/settings.json=. Existing hooks are preserved
+-- the installer appends rather than replacing.
+
+The script is defensive by construction, verified by reading it:
+
+- Exits 0 immediately unless =HERDR_ENV=1= and =HERDR_SOCKET_PATH= and
+  =HERDR_PANE_ID= are all set, so it is *completely inert outside a Herdr pane*.
+- Ignores every action but =session=, and skips subagents entirely.
+- Sends one JSON-RPC =pane.report_agent_session= message over a local unix
+  socket with a 0.5s timeout, swallowing all exceptions. It cannot hang or fail
+  a Claude Code session.
+- Cleans its temp file via a =trap=.
+
+Verified: inert outside Herdr, exit 0 against a dead socket, exit 0 for
+subagents, no temp files leaked.
+
+** Not tracked in chezmoi -- deliberately
+
+The script's own header reads:
+
+#+begin_quote
+managed by herdr; reinstalling or updating the integration overwrites this file.
+add custom hooks beside this file instead of editing it.
+#+end_quote
+
+It is versioned (=HERDR_INTEGRATION_VERSION=) and Herdr replaces it on upgrade,
+so checking it into chezmoi would set up a fight between the two over the same
+file. Track the /command/ instead of the /artifact/ if this needs to survive a
+machine rebuild. Note that =~/.claude/= is not chezmoi-managed at all today.
+
+Check for drift after a Herdr upgrade:
+
+#+begin_src fish
+herdr integration status   # "current (vN)" vs "outdated"
+#+end_src
+
 * Keybindings
 
 Prefix is =ctrl+a=. Press =prefix+?= for searchable in-app help.
