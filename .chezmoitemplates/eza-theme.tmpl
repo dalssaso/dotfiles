@@ -1,0 +1,102 @@
+colourful: true
+
+filekinds:
+  normal: { foreground: "{{ .fg }}" }
+  directory: { foreground: "{{ .orange }}" }
+  symlink: { foreground: "{{ .grey0 }}" }
+  pipe: { foreground: "{{ .bg3 }}" }
+  block_device: { foreground: "{{ .red }}" }
+  char_device: { foreground: "{{ .yellow }}" }
+  socket: { foreground: "{{ .bg1 }}" }
+  special: { foreground: "{{ .purple }}" }
+  executable: { foreground: "{{ .green }}" }
+  mount_point: { foreground: "{{ .bg3 }}" }
+
+perms:
+  user_read: { foreground: "{{ .grey0 }}" }
+  user_write: { foreground: "{{ .bg3 }}" }
+  user_execute_file: { foreground: "{{ .green }}" }
+  user_execute_other: { foreground: "{{ .green }}" }
+  group_read: { foreground: "{{ .grey0 }}" }
+  group_write: { foreground: "{{ .bg3 }}" }
+  group_execute: { foreground: "{{ .green }}" }
+  other_read: { foreground: "{{ .grey0 }}" }
+  other_write: { foreground: "{{ .bg3 }}" }
+  other_execute: { foreground: "{{ .green }}" }
+  special_user_file: { foreground: "{{ .purple }}" }
+  special_other: { foreground: "{{ .bg3 }}" }
+  attribute: { foreground: "{{ .grey0 }}" }
+
+size:
+  major: { foreground: "{{ .grey0 }}" }
+  minor: { foreground: "{{ .orange }}" }
+  number_byte: { foreground: "{{ .grey0 }}" }
+  number_kilo: { foreground: "{{ .grey0 }}" }
+  number_mega: { foreground: "{{ .aqua }}" }
+  number_giga: { foreground: "{{ .purple }}" }
+  number_huge: { foreground: "{{ .purple }}" }
+  unit_byte: { foreground: "{{ .grey0 }}" }
+  unit_kilo: { foreground: "{{ .aqua }}" }
+  unit_mega: { foreground: "{{ .purple }}" }
+  unit_giga: { foreground: "{{ .purple }}" }
+  unit_huge: { foreground: "{{ .orange }}" }
+
+users:
+  user_you: { foreground: "{{ .yellow }}" }
+  user_root: { foreground: "{{ .red }}" }
+  user_other: { foreground: "{{ .purple }}" }
+  group_yours: { foreground: "{{ .grey0 }}" }
+  group_other: { foreground: "{{ .bg3 }}" }
+  group_root: { foreground: "{{ .red }}" }
+
+links:
+  normal: { foreground: "{{ .orange }}" }
+  multi_link_file: { foreground: "{{ .aqua }}" }
+
+git:
+  new: { foreground: "{{ .green }}" }
+  modified: { foreground: "{{ .yellow }}" }
+  deleted: { foreground: "{{ .red }}" }
+  renamed: { foreground: "{{ .aqua }}" }
+  typechange: { foreground: "{{ .purple }}" }
+  ignored: { foreground: "{{ .bg3 }}" }
+  conflicted: { foreground: "{{ .red }}" }
+
+git_repo:
+  branch_main: { foreground: "{{ .grey0 }}" }
+  branch_other: { foreground: "{{ .purple }}" }
+  git_clean: { foreground: "{{ .green }}" }
+  git_dirty: { foreground: "{{ .red }}" }
+
+security_context:
+  colon: { foreground: "{{ .grey0 }}" }
+  user: { foreground: "{{ .orange }}" }
+  role: { foreground: "{{ .purple }}" }
+  typ: { foreground: "{{ .bg3 }}" }
+  range: { foreground: "{{ .purple }}" }
+
+file_type:
+  image: { foreground: "{{ .yellow }}" }
+  video: { foreground: "{{ .red }}" }
+  music: { foreground: "{{ .orange }}" }
+  lossless: { foreground: "{{ .bg3 }}" }
+  crypto: { foreground: "{{ .bg1 }}" }
+  document: { foreground: "{{ .grey0 }}" }
+  compressed: { foreground: "{{ .purple }}" }
+  temp: { foreground: "{{ .red }}" }
+  compiled: { foreground: "{{ .aqua }}" }
+  build: { foreground: "{{ .bg3 }}" }
+  source: { foreground: "{{ .green }}" }
+
+punctuation: { foreground: "{{ .grey0 }}" }
+date: { foreground: "{{ .aqua }}" }
+inode: { foreground: "{{ .grey0 }}" }
+blocks: { foreground: "{{ .grey0 }}" }
+header: { foreground: "{{ .grey0 }}" }
+octal: { foreground: "{{ .orange }}" }
+flags: { foreground: "{{ .purple }}" }
+
+symlink_path: { foreground: "{{ .orange }}" }
+control_char: { foreground: "{{ .aqua }}" }
+broken_symlink: { foreground: "{{ .red }}" }
+broken_path_overlay: { foreground: "{{ .grey0 }}" }
