@@ -63,14 +63,15 @@ comments/doc strings. Symbol font stays MesloLGS Nerd Font Mono.
 Kanagawa theme, Dragon variant by default.
 
 #+begin_src emacs-lisp
-(require 'kanagawa-themes)
+(use-package! kanagawa-themes :demand t)
 (setq doom-theme 'kanagawa-dragon)
 
 (defun hd/theme-apply-appearance (appearance)
   "Load the Kanagawa variant matching APPEARANCE (`dark' or `light')."
   (setq doom-theme (pcase appearance
-                     ('dark 'kanagawa-dragon)
-                     ('light 'kanagawa-lotus)))
+                     ('light 'kanagawa-lotus)
+                     (_ 'kanagawa-dragon)))
+  (mapc #'disable-theme custom-enabled-themes)
   (load-theme doom-theme t))
 
 (add-hook 'ns-system-appearance-change-functions #'hd/theme-apply-appearance)
@@ -1067,7 +1068,7 @@ Colored tag pills matching the Kanagawa Dragon palette.
           ("@online"  . (:foreground "#8ba4b0"))   ;; blue
           ("@health"  . (:foreground "#c4746e"))   ;; red
           ("@finance" . (:foreground "#c4b28a"))   ;; yellow
-          ("@someday" . (:foreground "#7a8382"))   ;; grey1 (dimmed)
+          ("@someday" . (:foreground "#7a8382"))   ;; grey0 (dimmed)
           ("@waiting" . (:foreground "#8ea4a2"))   ;; aqua
           ("@learning" . (:foreground "#8ba4b0")))))  ;; blue
 #+end_src
