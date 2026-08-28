@@ -2,7 +2,8 @@ function theme-sync --description 'Point every themed tool at the Kanagawa varia
     set -l variant $argv[1]
 
     if test -z "$variant"
-        if test (defaults read -g AppleInterfaceStyle 2>/dev/null) = Dark
+        set -l style (defaults read -g AppleInterfaceStyle 2>/dev/null)
+        if test "$style" = Dark
             set variant dark
         else
             set variant light
@@ -35,8 +36,8 @@ function theme-sync --description 'Point every themed tool at the Kanagawa varia
     end
 
     for sock in $TMPDIR/nvim.$USER/*/nvim.*.0
-        test -S $sock; or continue
-        nvim --server $sock --remote-expr "execute('set background=$bg | colorscheme kanagawa')" >/dev/null 2>&1
+        test -S "$sock"; or continue
+        timeout 2 nvim --server "$sock" --remote-expr "execute('set background=$bg | colorscheme kanagawa')" >/dev/null 2>&1
     end
 
     return 0
