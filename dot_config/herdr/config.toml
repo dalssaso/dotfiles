@@ -5,8 +5,8 @@
 onboarding = false
 
 [theme]
-# Inherit Ghostty's active palette (everforest-dark-hard) instead of shipping
-# a separate one. Follows along automatically if the Ghostty theme changes.
+# Inherit Ghostty's active palette (Kanagawa Dragon/Lotus) instead of shipping
+# a separate one. Follows the light/dark switch automatically.
 name = "terminal"
 
 [terminal]
