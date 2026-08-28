@@ -64,6 +64,7 @@ Kanagawa theme, Dragon variant by default.
 
 #+begin_src emacs-lisp
 (use-package! kanagawa-themes :demand t)
+;; Real value set by `hd/theme-apply-appearance' below, from detection.
 (setq doom-theme 'kanagawa-dragon)
 
 (add-to-list 'load-path doom-user-dir)
@@ -118,18 +119,45 @@ Kanagawa theme, Dragon variant by default.
 
 (hd/apply-org-faces 'dragon)
 
-(defun hd/theme-apply-appearance (appearance)
-  "Load the Kanagawa variant matching APPEARANCE (`dark' or `light')."
-  (setq doom-theme (pcase appearance
-                     ('light 'kanagawa-lotus)
-                     (_ 'kanagawa-dragon)))
-  (mapc #'disable-theme custom-enabled-themes)
-  (load-theme doom-theme t)
-  (hd/apply-org-faces (pcase appearance
-                        ('light 'lotus)
-                        (_ 'dragon))))
+(defvar hd/current-variant nil
+  "The Kanagawa variant currently applied, or nil if none yet.")
+
+(defun hd/detect-appearance ()
+  "Return `light' or `dark' for the current macOS appearance.
+Prefer `ns-system-appearance', which Cocoa only populates once a graphical
+frame exists. A --bg-daemon with only terminal frames has no NS connection
+and leaves it nil, so fall back to asking macOS directly."
+  (or (and (boundp 'ns-system-appearance) ns-system-appearance)
+      (if (string= (string-trim
+                    (shell-command-to-string
+                     "defaults read -g AppleInterfaceStyle 2>/dev/null"))
+                   "Dark")
+          'dark
+        'light)))
+
+(defun hd/theme-apply-appearance (&optional appearance)
+  "Load the Kanagawa variant matching APPEARANCE (`dark' or `light').
+With no argument, detect the current appearance."
+  (interactive)
+  (let* ((appearance (or appearance (hd/detect-appearance)))
+         (variant (pcase appearance ('light 'lotus) (_ 'dragon))))
+    (unless (eq variant hd/current-variant)
+      (setq hd/current-variant variant)
+      (setq doom-theme (if (eq variant 'lotus) 'kanagawa-lotus 'kanagawa-dragon))
+      (mapc #'disable-theme custom-enabled-themes)
+      (load-theme doom-theme t)
+      (hd/apply-org-faces variant))))
 
 (add-hook 'ns-system-appearance-change-functions #'hd/theme-apply-appearance)
+
+;; A --bg-daemon has no NS connection until a graphical frame exists, so the
+;; hook above never fires for terminal-only sessions. Re-check on every new
+;; frame; the `hd/current-variant' guard makes a no-op cheap.
+(add-hook 'after-make-frame-functions
+          (lambda (_frame) (hd/theme-apply-appearance)))
+
+;; Apply once at load from real detection rather than assuming dragon.
+(hd/theme-apply-appearance)
 #+end_src
 
 ** Line Numbers
