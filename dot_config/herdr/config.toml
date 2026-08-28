@@ -5,7 +5,7 @@
 onboarding = false
 
 [theme]
-# Inherit Ghostty's active palette (Kanagawa Dragon/Lotus) instead of shipping
+# Inherit Ghostty's active palette (Ayu Mirage/Light) instead of shipping
 # a separate one. Follows the light/dark switch automatically.
 name = "terminal"
 

@@ -79,22 +79,22 @@ All capture templates create entries in today's roam daily note under =* Tasks=
 
 ** All Tags
 
-| Tag         | Key | Color    | Kanagawa  | Context  |
+| Tag         | Key | Color    | Ayu       | Context  |
 |-------------+-----+----------+-----------+----------|
-| =@meeting=  | =m= | Purple   | =#a292a3= | Work     |
-| =@project=  | =p= | Red      | =#c4746e= | Work     |
-| =@review=   | =r= | Blue     | =#8ba4b0= | Work     |
-| =@admin=    | =a= | Orange   | =#b6927b= | Work     |
-| =@pending=  | =w= | Yellow   | =#c4b28a= | Work     |
-| =@report=   | =d= | Grey     | =#a6a69c= | Work     |
-| =@home=     | =h= | Aqua     | =#8ea4a2= | Personal |
-| =@errands=  | =e= | Green    | =#8a9a7b= | Personal |
-| =@online=   | =o= | Blue     | =#8ba4b0= | Personal |
-| =@health=   | =H= | Red      | =#c4746e= | Personal |
-| =@finance=  | =f= | Yellow   | =#c4b28a= | Personal |
-| =@someday=  | =s= | Dim grey | =#7a8382= | Personal |
-| =@waiting=  | =W= | Aqua     | =#8ea4a2= | Personal |
-| =@learning= | =l= | Blue     | =#8ba4b0= | Personal |
+| =@meeting=  | =m= | Purple   | =#dfbfff= | Work     |
+| =@project=  | =p= | Red      | =#f28779= | Work     |
+| =@review=   | =r= | Blue     | =#73d0ff= | Work     |
+| =@admin=    | =a= | Orange   | =#ffad66= | Work     |
+| =@pending=  | =w= | Yellow   | =#ffd173= | Work     |
+| =@report=   | =d= | Grey     | =#9ea2a7= | Work     |
+| =@home=     | =h= | Aqua     | =#95e6cb= | Personal |
+| =@errands=  | =e= | Green    | =#d5ff80= | Personal |
+| =@online=   | =o= | Blue     | =#73d0ff= | Personal |
+| =@health=   | =H= | Red      | =#f28779= | Personal |
+| =@finance=  | =f= | Yellow   | =#ffd173= | Personal |
+| =@someday=  | =s= | Dim grey | =#6c7a8b= | Personal |
+| =@waiting=  | =W= | Aqua     | =#95e6cb= | Personal |
+| =@learning= | =l= | Blue     | =#73d0ff= | Personal |
 
 * Visual Styling
 
@@ -104,19 +104,19 @@ TODO keywords are styled as badges by =org-modern=:
 
 | Keyword | Color   | Hex       |
 |---------+---------+-----------|
-| =TODO=    | Green   | =#8a9a7b=   |
-| =NEXT=    | Blue    | =#8ba4b0=   |
-| =WAIT=    | Yellow  | =#c4b28a=   |
-| =DONE=    | Grey    | =#7a8382=   |
-| =KILL=    | Red     | =#c4746e=   |
+| =TODO=    | Green   | =#d5ff80=   |
+| =NEXT=    | Blue    | =#73d0ff=   |
+| =WAIT=    | Yellow  | =#ffd173=   |
+| =DONE=    | Grey    | =#6c7a8b=   |
+| =KILL=    | Red     | =#f28779=   |
 
 ** Priority Faces
 
 | Priority | Color  | Hex       |
 |----------+--------+-----------|
-| =[#A]=     | Red    | =#c4746e=   |
-| =[#B]=     | Yellow | =#c4b28a=   |
-| =[#C]=     | Blue   | =#8ba4b0=   |
+| =[#A]=     | Red    | =#f28779=   |
+| =[#B]=     | Yellow | =#ffd173=   |
+| =[#C]=     | Blue   | =#73d0ff=   |
 
 ** Category Icons
 
@@ -212,7 +212,7 @@ refiled to area notes for longer-term tracking:
 ** Adding a New Tag
 
 1. Add the tag to =org-tag-alist= in =config.org= (pick an unused key)
-2. Add a face to =org-tag-faces= with a Kanagawa Dragon color
+2. Add a face to =org-tag-faces= with an Ayu Mirage color
 3. Add a super-agenda group in the Overview command's =alltodo= block
 4. Add a capture template if quick-capture is wanted
 5. Optionally add a category icon mapping
@@ -224,16 +224,16 @@ Add an entry to the =org-super-agenda-groups= list in the Overview command.
 Groups are matched in order — first match wins. Use =:order= to control
 display position.
 
-** Kanagawa Palette Quick Reference
+** Ayu Palette Quick Reference
 
 | Name   | Hex       |
 |--------+-----------|
-| red    | =#c4746e= |
-| orange | =#b6927b= |
-| yellow | =#c4b28a= |
-| green  | =#8a9a7b= |
-| aqua   | =#8ea4a2= |
-| blue   | =#8ba4b0= |
-| purple | =#a292a3= |
-| grey0  | =#7a8382= |
-| grey1  | =#a6a69c= |
+| red    | =#f28779= |
+| orange | =#ffad66= |
+| yellow | =#ffd173= |
+| green  | =#d5ff80= |
+| aqua   | =#95e6cb= |
+| blue   | =#73d0ff= |
+| purple | =#dfbfff= |
+| grey0  | =#6c7a8b= |
+| grey1  | =#9ea2a7= |
