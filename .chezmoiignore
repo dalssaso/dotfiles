@@ -1,5 +1,7 @@
 .config/nvim/plugin/packer_compiled.lua
 .config/fish/fish_variables
+# Runtime-managed symlink: theme-sync points it at the active k9s skin.
+Library/Application Support/k9s/skins/kanagawa.yaml
 dot_config/ltex-dictionary.txt
 README.md
 bootstrap.sh
