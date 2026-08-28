@@ -1,0 +1,38 @@
+# Kanagawa semantic roles.
+# Source: rebelot/kanagawa.nvim lua/kanagawa/colors.lua
+# Role names are theme-agnostic on purpose -- swapping themes later means
+# editing only this file.
+
+[palette.dragon]
+bg_dim = "#0d0c0c"   # dragonBlack0
+bg0    = "#181616"   # dragonBlack3
+bg1    = "#1d1c19"   # dragonBlack2
+bg2    = "#282727"   # dragonBlack4
+bg3    = "#393836"   # dragonBlack5
+fg     = "#c5c9c5"   # dragonWhite
+grey0  = "#7a8382"   # dragonGray3
+grey1  = "#a6a69c"   # dragonGray
+red    = "#c4746e"   # dragonRed
+orange = "#b6927b"   # dragonOrange
+yellow = "#c4b28a"   # dragonYellow
+green  = "#8a9a7b"   # dragonGreen2
+aqua   = "#8ea4a2"   # dragonAqua
+blue   = "#8ba4b0"   # dragonBlue2
+purple = "#a292a3"   # dragonPink
+
+[palette.lotus]
+bg_dim = "#e5ddb0"   # lotusWhite2
+bg0    = "#f2ecbc"   # lotusWhite3
+bg1    = "#e7dba0"   # lotusWhite4
+bg2    = "#e4d794"   # lotusWhite5
+bg3    = "#c9cbd1"   # lotusViolet3
+fg     = "#545464"   # lotusInk1
+grey0  = "#8a8980"   # lotusGray3
+grey1  = "#716e61"   # lotusGray2
+red    = "#c84053"   # lotusRed
+orange = "#cc6d00"   # lotusOrange
+yellow = "#77713f"   # lotusYellow
+green  = "#6f894e"   # lotusGreen
+aqua   = "#597b75"   # lotusAqua
+blue   = "#4d699b"   # lotusBlue4
+purple = "#b35b79"   # lotusPink
