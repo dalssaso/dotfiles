@@ -83,6 +83,13 @@ set fish_greeting
 set -e BAT_THEME
 set -gx BAT_THEME_DARK "Ayu Mirage"
 set -gx BAT_THEME_LIGHT "Ayu Light"
+
+# theme-sync sets these as universals. An inherited exported copy lands in
+# global scope here, and a global shadows a universal, so a nested fish
+# would silently ignore theme changes without dropping it first.
+for var in STARSHIP_CONFIG EZA_CONFIG_DIR __theme_btm_config FZF_DEFAULT_OPTS_FILE
+    set -e -g $var 2>/dev/null; or true
+end
 # Emacs as default editor - opens floating frame for git commits etc.
 # Frame closes automatically when editing is done (C-c C-c or save+quit)
 set -xg EDITOR "emacsclient -c -a '' -F '((name . \"Editor\") (width . 80) (height . 25))'"

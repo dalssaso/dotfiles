@@ -22,6 +22,12 @@ function theme-sync --description 'Point every themed tool at the Ayu variant fo
             return 1
     end
 
+    # An inherited copy of these lands in global scope, and a global
+    # shadows a universal, so drop any global before setting it.
+    for var in STARSHIP_CONFIG EZA_CONFIG_DIR __theme_btm_config FZF_DEFAULT_OPTS_FILE
+        set -e -g $var 2>/dev/null; or true
+    end
+
     set -Ux STARSHIP_CONFIG ~/.config/starship-$variant.toml
     set -Ux EZA_CONFIG_DIR ~/.config/eza-$variant
     set -Ux __theme_btm_config ~/.config/bottom/bottom-$variant.toml
