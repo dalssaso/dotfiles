@@ -53,9 +53,13 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 
-;; Kanagawa theme (not in doom-themes)
-(package! kanagawa-themes
-  :recipe (:host github :repo "Fabiokleis/kanagawa-emacs"))
+;; doom-ayu-* upstream carries ayu's pre-2021-revision palette; doom-ayu-light's
+;; common-ui is #ba9199 where ayu specifies #8a9199, which breaks line numbers
+;; and indent guides. Pinned to a fork until the upstream PR lands, then drop
+;; the :recipe and this comment.
+(package! doom-themes
+  :recipe (:host github :repo "gettheforkoff/doomemacs-themes")
+  :pin "c78eab71d3be255451ddc95a0627e2b1569ea1ff")
 (package! wakatime-mode)
 
 ;; Org visual enhancements

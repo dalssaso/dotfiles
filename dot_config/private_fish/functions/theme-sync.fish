@@ -1,4 +1,4 @@
-function theme-sync --description 'Point every themed tool at the Kanagawa variant for the current appearance'
+function theme-sync --description 'Point every themed tool at the Ayu variant for the current appearance'
     set -l variant $argv[1]
 
     if test -z "$variant"
@@ -10,35 +10,40 @@ function theme-sync --description 'Point every themed tool at the Kanagawa varia
         end
     end
 
-    set -l pal
     switch $variant
-        case dark Dark
-            set pal dragon
-        case light Light
-            set pal lotus
+        case Dark
+            set variant dark
+        case Light
+            set variant light
+        case dark light
+            # already normalised
         case '*'
             echo "theme-sync: unknown appearance '$variant'" >&2
             return 1
     end
 
-    set -Ux STARSHIP_CONFIG ~/.config/starship-$pal.toml
-    set -Ux EZA_CONFIG_DIR ~/.config/eza-$pal
-    set -Ux __theme_btm_config ~/.config/bottom/bottom-$pal.toml
-    set -Ux FZF_DEFAULT_OPTS_FILE ~/.config/fzf-$pal.conf
+    # An inherited copy of these lands in global scope, and a global
+    # shadows a universal, so drop any global before setting it.
+    for var in STARSHIP_CONFIG EZA_CONFIG_DIR __theme_btm_config FZF_DEFAULT_OPTS_FILE
+        set -e -g $var 2>/dev/null; or true
+    end
+    # fzf applies FZF_DEFAULT_OPTS after FZF_DEFAULT_OPTS_FILE, so an inherited
+    # stale copy silently overrides the theme file. Erase it.
+    set -e -g FZF_DEFAULT_OPTS 2>/dev/null; or true
+
+    set -Ux STARSHIP_CONFIG ~/.config/starship-$variant.toml
+    set -Ux EZA_CONFIG_DIR ~/.config/eza-$variant
+    set -Ux __theme_btm_config ~/.config/bottom/bottom-$variant.toml
+    set -Ux FZF_DEFAULT_OPTS_FILE ~/.config/fzf-$variant.conf
 
     set -l skins ~/Library/Application\ Support/k9s/skins
     if test -d "$skins"
-        ln -sfn kanagawa-$pal.yaml $skins/kanagawa.yaml
-    end
-
-    set -l bg dark
-    if test $pal = lotus
-        set bg light
+        ln -sfn ayu-$variant.yaml $skins/ayu.yaml
     end
 
     for sock in $TMPDIR/nvim.$USER/*/nvim.*.0
         test -S "$sock"; or continue
-        timeout 2 nvim --server "$sock" --remote-expr "execute('set background=$bg | colorscheme kanagawa')" >/dev/null 2>&1
+        timeout 2 nvim --server "$sock" --remote-expr "execute('set background=$variant | colorscheme ayu')" >/dev/null 2>&1
     end
 
     return 0

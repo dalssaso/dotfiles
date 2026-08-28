@@ -33,3 +33,18 @@ Library/Application Support/k9s/skins/tokyonight.yaml
 .config/nvim/lua/plugins/tokyonight.lua
 .config/nvim/lua/plugins/catppuccin.lua
 .config/nvim/lua/plugins/everforest.lua
+.config/starship-dragon.toml
+.config/starship-lotus.toml
+.config/eza-dragon/theme.yml
+.config/eza-lotus/theme.yml
+.config/bottom/bottom-dragon.toml
+.config/bottom/bottom-lotus.toml
+.config/fzf-dragon.conf
+.config/fzf-lotus.conf
+.config/bat/themes/Kanagawa Dragon.tmTheme
+.config/bat/themes/Kanagawa Lotus.tmTheme
+.config/doom/kanagawa-palette.el
+.config/nvim/lua/plugins/kanagawa.lua
+Library/Application Support/k9s/skins/kanagawa.yaml
+Library/Application Support/k9s/skins/kanagawa-dragon.yaml
+Library/Application Support/k9s/skins/kanagawa-lotus.yaml

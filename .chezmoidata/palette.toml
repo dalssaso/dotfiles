@@ -1,38 +1,47 @@
-# Kanagawa semantic roles.
-# Source: rebelot/kanagawa.nvim lua/kanagawa/colors.lua
-# Role names are theme-agnostic on purpose -- swapping themes later means
-# editing only this file.
+# Ayu semantic roles.
+# Source: Shatur/neovim-ayu lua/ayu/colors.lua (current upstream ayu spec),
+# corroborated for bg/fg and the accents by Ghostty's bundled Ayu Mirage and
+# Ayu Light themes.
+# Role and variant names are theme-agnostic on purpose -- swapping themes later
+# means editing only this file.
+#
+# Two values are derived rather than taken from ayu, both in the dark variant:
+#   bg1   -- ayu has no surface between bg (#1f2430) and guide_normal
+#            (#323843); this is their channel-wise midpoint.
+#   grey1 -- ayu's Mirage comment (#6c7a8b) and ui (#707a8c) are nearly the
+#            same colour, which would collapse grey0 and grey1 into one role;
+#            this is the midpoint of ui -> fg.
 
-[palette.dragon]
-bg_dim = "#0d0c0c"   # dragonBlack0
-bg0    = "#181616"   # dragonBlack3
-bg1    = "#1d1c19"   # dragonBlack2
-bg2    = "#282727"   # dragonBlack4
-bg3    = "#393836"   # dragonBlack5
-fg     = "#c5c9c5"   # dragonWhite
-grey0  = "#7a8382"   # dragonGray3
-grey1  = "#a6a69c"   # dragonGray
-red    = "#c4746e"   # dragonRed
-orange = "#b6927b"   # dragonOrange
-yellow = "#c4b28a"   # dragonYellow
-green  = "#8a9a7b"   # dragonGreen2
-aqua   = "#8ea4a2"   # dragonAqua
-blue   = "#8ba4b0"   # dragonBlue2
-purple = "#a292a3"   # dragonPink
+[palette.dark]
+bg_dim = "#171b24"   # line
+bg0    = "#1f2430"   # bg
+bg1    = "#282e39"   # derived
+bg2    = "#323843"   # guide_normal
+bg3    = "#444a55"   # guide_active
+fg     = "#cccac2"   # fg
+grey0  = "#6c7a8b"   # comment
+grey1  = "#9ea2a7"   # derived
+red    = "#f28779"   # markup
+orange = "#ffad66"   # keyword
+yellow = "#ffd173"   # func
+green  = "#d5ff80"   # string
+aqua   = "#95e6cb"   # regexp
+blue   = "#73d0ff"   # entity
+purple = "#dfbfff"   # constant
 
-[palette.lotus]
-bg_dim = "#e5ddb0"   # lotusWhite2
-bg0    = "#f2ecbc"   # lotusWhite3
-bg1    = "#e7dba0"   # lotusWhite4
-bg2    = "#e4d794"   # lotusWhite5
-bg3    = "#c9cbd1"   # lotusViolet3
-fg     = "#545464"   # lotusInk1
-grey0  = "#8a8980"   # lotusGray3
-grey1  = "#716e61"   # lotusGray2
-red    = "#c84053"   # lotusRed
-orange = "#cc6d00"   # lotusOrange
-yellow = "#77713f"   # lotusYellow
-green  = "#6f894e"   # lotusGreen
-aqua   = "#597b75"   # lotusAqua
-blue   = "#4d699b"   # lotusBlue4
-purple = "#b35b79"   # lotusPink
+[palette.light]
+bg_dim = "#f3f4f5"   # panel_bg
+bg0    = "#f8f9fa"   # bg
+bg1    = "#e7eaed"   # line
+bg2    = "#e4e6e9"   # guide_normal
+bg3    = "#cccfd3"   # gutter_normal
+fg     = "#5c6166"   # fg
+grey0  = "#abadb1"   # comment
+grey1  = "#8a9199"   # ui
+red    = "#f07171"   # markup
+orange = "#fa8d3e"   # keyword
+yellow = "#f2ae49"   # func
+green  = "#86b300"   # string
+aqua   = "#4cbf99"   # regexp
+blue   = "#399ee6"   # entity
+purple = "#a37acc"   # constant
