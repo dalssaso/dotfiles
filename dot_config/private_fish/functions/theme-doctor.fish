@@ -1,8 +1,8 @@
 function theme-doctor --description 'Report the resolved theme of every themed tool'
-    set -l expected dragon
+    set -l expected dark
     set -l style (defaults read -g AppleInterfaceStyle 2>/dev/null)
     if test "$style" != Dark
-        set expected lotus
+        set expected light
     end
     echo "system appearance expects: $expected"
     echo
@@ -34,16 +34,16 @@ function theme-doctor --description 'Report the resolved theme of every themed t
         printf '%-10s %s\n' fzf 'FZF_DEFAULT_OPTS_FILE unset'
     end
 
-    set -l k9s_skin ~/Library/Application\ Support/k9s/skins/kanagawa.yaml
+    set -l k9s_skin ~/Library/Application\ Support/k9s/skins/ayu.yaml
     if test -L "$k9s_skin"
         printf '%-10s %s\n' k9s (readlink "$k9s_skin")
     else
-        printf '%-10s %s\n' k9s 'kanagawa.yaml symlink missing'
+        printf '%-10s %s\n' k9s 'ayu.yaml symlink missing'
     end
 
     # Probe a RUNNING nvim, not a fresh headless one. A headless nvim has no
     # terminal, so it can never answer OSC 11 and always reports `dark` --
-    # which is a false failure in Lotus. Running instances are also what
+    # which is a false failure in the light variant. Running instances are also what
     # theme-sync actually controls.
     set -l nvim_state "no running instance"
     for sock in $TMPDIR/nvim.$USER/*/nvim.*.0

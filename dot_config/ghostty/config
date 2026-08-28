@@ -1,7 +1,7 @@
 quit-after-last-window-closed = true
 clipboard-read = allow
 clipboard-write = allow
-theme = light:Kanagawa Lotus,dark:Kanagawa Dragon
+theme = light:Ayu Light,dark:Ayu Mirage
 mouse-hide-while-typing = true
 macos-titlebar-style = tabs
 window-inherit-working-directory = false
