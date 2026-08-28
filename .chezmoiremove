@@ -1,0 +1,35 @@
+.config/ghostty/themes/everforest-dark-hard
+.config/ghostty/themes/everforest-dark-medium
+.config/ghostty/themes/everforest-dark-soft
+.config/ghostty/themes/everforest-light-hard
+.config/ghostty/themes/everforest-light-medium
+.config/ghostty/themes/everforest-light-soft
+.config/bat/themes/everforest.tmTheme
+.config/bat/themes/tokyonight_day.tmTheme
+.config/bat/themes/tokyonight_night.tmTheme
+.config/bat/themes/Catppuccin-frappe.tmTheme
+.config/bat/themes/Catppuccin-macchiato.tmTheme
+.config/bat/themes/Catppuccin-mocha.tmTheme
+.config/bat/themes/rose-pine-dawn.tmTheme
+.config/bat/themes/rose-pine-moon.tmTheme
+.config/fish/themes/Catppuccin Frappe.theme
+.config/fish/themes/Catppuccin Latte.theme
+.config/fish/themes/Catppuccin Macchiato.theme
+.config/fish/themes/Catppuccin Mocha.theme
+.config/eza/theme.yml
+.config/bottom/bottom.toml
+Library/Application Support/eza/theme.yml
+Library/Application Support/k9s/skins/everforest-dark.yaml
+Library/Application Support/k9s/skins/catppuccin-frappe.yaml
+Library/Application Support/k9s/skins/catppuccin-frappe-transparent.yaml
+Library/Application Support/k9s/skins/catppuccin-latte.yaml
+Library/Application Support/k9s/skins/catppuccin-latte-transparent.yaml
+Library/Application Support/k9s/skins/catppuccin-macchiato.yaml
+Library/Application Support/k9s/skins/catppuccin-macchiato-transparent.yaml
+Library/Application Support/k9s/skins/catppuccin-mocha.yaml
+Library/Application Support/k9s/skins/catppuccin-mocha-transparent.yaml
+Library/Application Support/k9s/skins/rose-pine-moon.yaml
+Library/Application Support/k9s/skins/tokyonight.yaml
+.config/nvim/lua/plugins/tokyonight.lua
+.config/nvim/lua/plugins/catppuccin.lua
+.config/nvim/lua/plugins/everforest.lua
