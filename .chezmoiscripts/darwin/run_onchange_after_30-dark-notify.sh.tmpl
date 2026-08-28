@@ -28,3 +28,7 @@ PLIST_EOF
 
 launchctl bootout "gui/$(id -u)/local.dark-notify" 2>/dev/null || true
 launchctl bootstrap "gui/$(id -u)" "$PLIST"
+
+# Seed the theme pointers now. Everything else depends on theme-sync having run
+# at least once, and run_onchange_ is hash-gated so there is no automatic retry.
+/opt/homebrew/bin/fish -c theme-sync || true
