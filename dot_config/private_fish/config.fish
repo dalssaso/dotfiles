@@ -90,13 +90,6 @@ set -xg VISUAL $EDITOR
 set -xg GOPATH $HOME/go
 set -xg GPG_TTY (tty)
 
-set -Ux FZF_DEFAULT_OPTS "\
---color=bg+:#374145,bg:#272e33,spinner:#83c092,hl:#7fbbb3 \
---color=fg:#d3c6aa,header:#7fbbb3,info:#83c092,pointer:#83c092 \
---color=marker:#83c092,fg+:#d3c6aa,prompt:#a7c080,hl+:#83c092 \
---color=selected-bg:#374145 \
---color=border:#7fbbb3,label:#d3c6aa"
-
 alias vim='nvim'
 alias v='nvim'
 alias vi='nvim'
