@@ -41,9 +41,21 @@ function theme-doctor --description 'Report the resolved theme of every themed t
         printf '%-10s %s\n' k9s 'kanagawa.yaml symlink missing'
     end
 
-    printf '%-10s %s\n' nvim (nvim --headless -c 'lua io.write(vim.g.colors_name.." "..vim.o.background)' -c q 2>&1)
+    # Probe a RUNNING nvim, not a fresh headless one. A headless nvim has no
+    # terminal, so it can never answer OSC 11 and always reports `dark` --
+    # which is a false failure in Lotus. Running instances are also what
+    # theme-sync actually controls.
+    set -l nvim_state "no running instance"
+    for sock in $TMPDIR/nvim.$USER/*/nvim.*.0
+        test -S "$sock"; or continue
+        set nvim_state (timeout 2 nvim --server "$sock" --remote-expr \
+            'g:colors_name .. " " .. &background' 2>/dev/null)
+        or set nvim_state "unreachable socket"
+        break
+    end
+    printf '%-10s %s\n' nvim $nvim_state
 
-    if pgrep -q -f 'emacs.*daemon'
+    if pgrep -qif 'emacs.*daemon'   # -i: the process is `Emacs`, capital E
         printf '%-10s %s\n' doom (emacsclient -e 'doom-theme' 2>/dev/null)
     else
         printf '%-10s %s\n' doom 'daemon not running'
