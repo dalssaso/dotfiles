@@ -104,19 +104,19 @@ TODO keywords are styled as badges by =org-modern=:
 
 | Keyword | Color   | Hex       |
 |---------+---------+-----------|
-| =TODO=    | Green   | =#a7c080=   |
-| =NEXT=    | Blue    | =#7fbbb3=   |
-| =WAIT=    | Yellow  | =#dbbc7f=   |
-| =DONE=    | Grey    | =#7a8478=   |
-| =KILL=    | Red     | =#e67e80=   |
+| =TODO=    | Green   | =#8a9a7b=   |
+| =NEXT=    | Blue    | =#8ba4b0=   |
+| =WAIT=    | Yellow  | =#c4b28a=   |
+| =DONE=    | Grey    | =#7a8382=   |
+| =KILL=    | Red     | =#c4746e=   |
 
 ** Priority Faces
 
 | Priority | Color  | Hex       |
 |----------+--------+-----------|
-| =[#A]=     | Red    | =#e67e80=   |
-| =[#B]=     | Yellow | =#dbbc7f=   |
-| =[#C]=     | Blue   | =#7fbbb3=   |
+| =[#A]=     | Red    | =#c4746e=   |
+| =[#B]=     | Yellow | =#c4b28a=   |
+| =[#C]=     | Blue   | =#8ba4b0=   |
 
 ** Category Icons
 
@@ -235,6 +235,5 @@ display position.
 | aqua   | =#8ea4a2= |
 | blue   | =#8ba4b0= |
 | purple | =#a292a3= |
-| grey0  | =#7a8478= |
-| grey1  | =#7a8382= |
+| grey0  | =#7a8382= |
 | grey1  | =#a6a69c= |
