@@ -335,21 +335,21 @@ herdr config reset-keys            # back up and strip custom keybindings
 
 ** What is set, and why
 
-| Setting                            | Value              | Reason                                                     |
-|------------------------------------+--------------------+------------------------------------------------------------|
-| =keys.prefix=                      | =ctrl+a=           | Reuses existing muscle memory; Ghostty gave up the leader   |
-| =theme.name=                       | =terminal=         | Inherits Ghostty's Kanagawa palette, and its light/dark switch |
-| =ui.accent=                        | =green=            | Reads from the terminal palette                                |
-| =ui.agent_panel_sort=              | =priority=         | Blocked agents float to the top                             |
-| =ui.status_indicators=             | =symbols=          | Distinct glyphs beat color-only dots                        |
-| =ui.window_title=                  | ={workspace} · {tab}= | See below                                                |
-| =ui.toast.delivery=                | =system=           | Reaches Notification Center when Ghostty is not focused     |
-| =advanced.scrollback_limit_bytes=  | =50000000=         | Agent output is verbose; 10 MB default truncates            |
-| =keys.next_agent= / =previous_agent= | =prefix+alt+j/k= | Agent layer on alt                                          |
-| =keys.focus_agent=                 | =prefix+alt+1..9=  | Direct jump                                                 |
-| =keys.last_pane=                   | =prefix+tab=       | Back-and-forth                                              |
-| =keys.cycle_pane_next=             | ="" (cleared)      | Owns prefix+tab by default; must be cleared to free it      |
-| =keys.resize_pane_*=               | =ctrl+shift+hjkl=  | Chords freed when Ghostty's split-resize was removed        |
+| Setting                              | Value                 | Reason                                                         |
+|--------------------------------------+-----------------------+----------------------------------------------------------------|
+| =keys.prefix=                        | =ctrl+a=              | Reuses existing muscle memory; Ghostty gave up the leader      |
+| =theme.name=                         | =terminal=            | Inherits Ghostty's Kanagawa palette, and its light/dark switch |
+| =ui.accent=                          | =green=               | Reads from the terminal palette                                |
+| =ui.agent_panel_sort=                | =priority=            | Blocked agents float to the top                                |
+| =ui.status_indicators=               | =symbols=             | Distinct glyphs beat color-only dots                           |
+| =ui.window_title=                    | ={workspace} · {tab}= | See below                                                      |
+| =ui.toast.delivery=                  | =system=              | Reaches Notification Center when Ghostty is not focused        |
+| =advanced.scrollback_limit_bytes=    | =50000000=            | Agent output is verbose; 10 MB default truncates               |
+| =keys.next_agent= / =previous_agent= | =prefix+alt+j/k=      | Agent layer on alt                                             |
+| =keys.focus_agent=                   | =prefix+alt+1..9=     | Direct jump                                                    |
+| =keys.last_pane=                     | =prefix+tab=          | Back-and-forth                                                 |
+| =keys.cycle_pane_next=               | ="" (cleared)         | Owns prefix+tab by default; must be cleared to free it         |
+| =keys.resize_pane_*=                 | =ctrl+shift+hjkl=     | Chords freed when Ghostty's split-resize was removed           |
 
 *Deliberately left at defaults:*
 
