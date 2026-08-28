@@ -26,7 +26,7 @@ elixir = "latest"
 
 # Go tools
 "go:golang.org/x/tools/cmd/goimports" = "latest"
-"go:github.com/golangci/golangci-lint/cmd/golangci-lint" = "latest"
+"go:github.com/golangci/golangci-lint/v2/cmd/golangci-lint" = "latest"
 "go:github.com/fatih/gomodifytags" = "latest"
 "go:github.com/cweill/gotests/gotests" = "latest"
 "go:github.com/x-motemen/gore/cmd/gore" = "latest"
