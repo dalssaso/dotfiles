@@ -1061,7 +1061,7 @@ Colored tag pills matching the Kanagawa Dragon palette.
           ("@review"  . (:foreground "#8ba4b0"))   ;; blue
           ("@admin"   . (:foreground "#b6927b"))   ;; orange
           ("@pending" . (:foreground "#c4b28a"))   ;; yellow
-          ("@report"  . (:foreground "#9da9a0"))   ;; grey2
+          ("@report"  . (:foreground "#a6a69c"))   ;; grey1
           ("@home"    . (:foreground "#8ea4a2"))   ;; aqua
           ("@errands" . (:foreground "#8a9a7b"))   ;; green
           ("@online"  . (:foreground "#8ba4b0"))   ;; blue
@@ -1289,7 +1289,7 @@ Custom faces for super-agenda group headers with nerd-font icons.
       ("Reviews"  . ("nf-md-eye" . "#8ba4b0"))
       ("Projects" . ("nf-md-folder_multiple" . "#a292a3"))
       ("Admin"    . ("nf-md-cog" . "#b6927b"))
-      ("Reports"  . ("nf-md-file_document" . "#9da9a0"))
+      ("Reports"  . ("nf-md-file_document" . "#a6a69c"))
       ("Home"     . ("nf-md-home" . "#8ea4a2"))
       ("Errands"  . ("nf-md-cart" . "#8a9a7b"))
       ("Health"   . ("nf-md-heart" . "#c4746e"))
