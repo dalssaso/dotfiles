@@ -1,0 +1,267 @@
+#+TITLE: Herdr Guide
+#+AUTHOR: Henrique Dalssaso
+#+DATE: 2026-08-28
+#+OPTIONS: toc:2 num:t H:3
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper,11pt]
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{booktabs}
+#+LATEX_HEADER: \usepackage{longtable}
+#+LATEX_HEADER: \usepackage{hyperref}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=blue}
+
+* Overview
+
+Herdr is a terminal workspace manager built for AI coding agents. It is a
+multiplexer like tmux -- a background server owns the terminal processes, so
+panes survive detaching -- with two differences that matter:
+
+1. *Mouse-first.* Click panes, drag split borders, right-click for a pane menu.
+   Keyboard is optional rather than mandatory.
+2. *Agent-aware.* It detects panes running =claude=, =codex=, and friends, and
+   shows each one's state in a sidebar across every project at once:
+   =working=, =blocked=, =done=, =idle=, =unknown=.
+
+The second point is the reason to use it. Agents fail quietly -- they stop and
+wait for input. Without a sidebar you find that out by cycling through panes.
+
+*Docs:* https://herdr.dev/docs/
+
+* Installation on this setup
+
+Herdr is declared in =Brewfile.common= alongside everything else:
+
+#+begin_src ruby
+brew "herdr"
+#+end_src
+
+That is the only thing that needs to be checked in. On a fresh machine,
+=.chezmoiscripts/darwin/run_onchange_before_install-packages.sh.tmpl= embeds a
+=sha256sum= of =Brewfile.common= as a comment, so editing the Brewfile changes
+the script hash and chezmoi re-runs =brew bundle= on the next =chezmoi apply=.
+
+Verify:
+
+#+begin_src fish
+herdr --version
+#+end_src
+
+** Shell completions
+
+Homebrew's formula installs zsh completions only. Fish completions are generated
+from the binary and checked in at
+=dot_config/private_fish/completions/herdr.fish=:
+
+#+begin_src fish
+herdr completion fish > ~/.config/fish/completions/herdr.fish
+#+end_src
+
+Regenerate after a major version bump, then re-add to chezmoi.
+
+** Keeping it running
+
+Herdr's server can run as a login service, or start on demand when you first
+run =herdr=:
+
+#+begin_src fish
+# Optional -- persistent server across reboots
+brew services start herdr
+
+# Or just let `herdr` start it on first use
+herdr
+#+end_src
+
+* Concept model
+
+#+begin_example
+herdr server               persistent, survives detach
+└── Session                server namespace  (--session <name>)
+    └── Workspace          one per project
+        └── Tab            layout separator
+            └── Pane       a terminal: shell, agent, TUI
+#+end_example
+
+An *agent* is a recognized process inside a pane. Herdr identifies it and tracks
+its state; that is what populates the sidebar.
+
+*Modes:*
+
+- *Terminal mode* -- the default. Keys go to the program in the pane.
+- *Prefix mode* -- entered with the prefix key. The next chord is a Herdr command.
+- *Navigate mode* -- movement shortcuts win while it is open.
+- *Copy mode* -- vim-style selection over the scrollback.
+
+* Daily workflow
+
+#+begin_src fish
+# Launch or attach, in a project directory
+cd ~/src/some-project
+herdr
+
+# Named session, if you want more than one server namespace
+herdr --session review
+
+# Attach to a Herdr server on another host over SSH
+herdr --remote myhost
+
+# Status of local client and running server
+herdr status
+#+end_src
+
+Inside a pane, start an agent normally (=claude=, =codex=). Herdr picks it up --
+no wrapper command. Detaching closes the client, not the processes; run =herdr=
+again to reattach.
+
+** Git worktrees
+
+Herdr creates and tracks git worktrees as workspaces, checked out under
+=~/.herdr/worktrees= by default (=worktrees.directory=). This pairs directly with
+running several agents in isolation on the same repository.
+
+#+begin_src fish
+herdr worktree --help
+#+end_src
+
+Default binding =prefix+shift+g= creates a new worktree workspace.
+
+* Keybindings
+
+Default prefix is =ctrl+b=. Press =prefix+?= for searchable in-app help.
+
+| Action              | Binding             |
+|---------------------+---------------------|
+| Help                | =prefix+?=          |
+| Settings            | =prefix+s=          |
+| Detach              | =prefix+q=          |
+| Reload config       | =prefix+shift+r=    |
+| Toggle sidebar      | =prefix+b=          |
+| Goto picker         | =prefix+g=          |
+| Workspace picker    | =prefix+w=          |
+|---------------------+---------------------|
+| Split right         | =prefix+v=          |
+| Split down          | =prefix+minus=      |
+| Close pane          | =prefix+x=          |
+| Zoom pane           | =prefix+z=          |
+| Focus pane          | =prefix+h/j/k/l=    |
+| Cycle panes         | =prefix+tab=        |
+| Resize mode         | =prefix+r=          |
+| Rename pane         | =prefix+shift+p=    |
+| Edit scrollback     | =prefix+e=          |
+|---------------------+---------------------|
+| New tab             | =prefix+c=          |
+| Next / prev tab     | =prefix+n= / =prefix+p= |
+| Jump to tab         | =prefix+1..9=       |
+| Rename tab          | =prefix+shift+t=    |
+| Close tab           | =prefix+shift+x=    |
+|---------------------+---------------------|
+| New workspace       | =prefix+shift+n=    |
+| New worktree        | =prefix+shift+g=    |
+| Rename workspace    | =prefix+shift+w=    |
+| Close workspace     | =prefix+shift+d=    |
+
+Several actions ship unbound by default and are worth binding by hand:
+=next_workspace=, =previous_workspace=, =next_agent=, =previous_agent=,
+=focus_agent= (indexed, e.g. =prefix+alt+1..9=), =last_pane=, =move_tab_next=,
+=move_tab_previous=, and the direct =resize_pane_*= chords.
+
+* Configuration
+
+Config lives at =~/.config/herdr/config.toml=. It does not exist until you create
+it -- every value has a built-in default.
+
+Print the fully commented default as a starting point:
+
+#+begin_src fish
+herdr --default-config > ~/.config/herdr/config.toml
+#+end_src
+
+Validate and reload without restarting the server:
+
+#+begin_src fish
+herdr config check
+herdr server reload-config    # or prefix+shift+r
+#+end_src
+
+If custom keybindings break something, =herdr config reset-keys= backs up the
+file and strips them.
+
+** Sections worth knowing
+
+| Section         | What it controls                                          |
+|-----------------+-----------------------------------------------------------|
+| =[theme]=       | Built-in theme, light/dark =auto_switch=, per-token overrides |
+| =[terminal]=    | =default_shell=, login vs non-login, new-pane cwd policy   |
+| =[keys]=        | Prefix, every action binding, custom =[[keys.command]]=    |
+| =[server]=      | Headless virtual terminal size when nothing is attached    |
+| =[ui]=          | Sidebar, borders, mouse capture, tab bar, window title     |
+| =[ui.toast]=    | Notification delivery: =off=, =herdr=, =terminal=, =system= |
+| =[ui.sound]=    | Per-agent sound on state change in background workspaces   |
+| =[session]=     | =resume_agents_on_restore=                                 |
+| =[worktrees]=   | Checkout root directory                                    |
+| =[remote]=      | Whether Herdr manages SSH keepalive for =--remote=         |
+| =[experimental]= | Nested Herdr, Kitty graphics, pane history                |
+| =[advanced]=    | =scrollback_limit_bytes=                                   |
+
+** Custom commands
+
+Arbitrary chords can launch a command in a popup, a temporary pane, or detached
+in the background:
+
+#+begin_src toml
+[[keys.command]]
+key = "prefix+alt+g"
+type = "popup"          # or "pane" / "shell"
+command = "lazygit"
+width = "80%"
+height = "80%"
+#+end_src
+
+** Tracking config in chezmoi
+
+Once the config is settled, add it to the source tree so it travels:
+
+#+begin_src fish
+chezmoi add ~/.config/herdr/config.toml
+#+end_src
+
+* Notes and gotchas
+
+- *Prefix conflict.* =ctrl+b= is the tmux default and is also =backward-char= in
+  emacs-style shell line editing. If it collides with your shell or an agent TUI,
+  set =keys.prefix= to something free -- =f12= and =ctrl+space= are common picks.
+- *Mouse capture vs. the host terminal.* =ui.mouse_capture = true= means Herdr
+  handles clicks. Set it false if you would rather keep the outer terminal's
+  Cmd-click-to-open-URL and native selection.
+- *Login shells.* =terminal.shell_mode = "auto"= uses login shells on macOS, so
+  new panes get the full environment. Relevant when tools come from a version
+  manager rather than the system path.
+- *Nesting.* Launching Herdr inside a Herdr pane is blocked unless
+  =experimental.allow_nested = true=.
+- *Scrollback.* Defaults to 10 MB per pane. Long agent runs produce a lot of
+  output; raise =advanced.scrollback_limit_bytes= if you scroll back and find it
+  truncated.
+- *Update channel.* =herdr update= self-updates the binary, which will drift from
+  the Homebrew-managed version. Prefer =brew upgrade herdr= to keep the package
+  manager as the source of truth.
+- *Completions go stale.* They are generated from the binary, so regenerate
+  =herdr.fish= after upgrades that add subcommands.
+
+* Command reference
+
+#+begin_src fish
+herdr                              # launch or attach
+herdr --session <name>             # named session
+herdr --remote <ssh-target>        # attach over SSH
+herdr --default-config             # print commented default config
+herdr status                       # client and server status
+herdr config check                 # validate config.toml
+herdr config reset-keys            # back up config, drop custom keybindings
+herdr server stop                  # stop the server via its API socket
+herdr server reload-config         # reload config.toml in place
+herdr channel set stable|preview   # update channel
+herdr completion fish              # shell completions
+#+end_src
+
+Subcommand groups over the socket API, each with its own =--help=:
+=workspace=, =worktree=, =tab=, =pane=, =agent=, =session=, =notification=,
+=integration=, =api=.
