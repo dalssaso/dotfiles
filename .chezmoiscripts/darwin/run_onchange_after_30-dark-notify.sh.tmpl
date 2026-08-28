@@ -1,0 +1,30 @@
+#!/bin/sh
+# theme-sync hash: {{ include "dot_config/private_fish/functions/theme-sync.fish" | sha256sum }}
+set -eu
+
+PLIST="$HOME/Library/LaunchAgents/local.dark-notify.plist"
+mkdir -p "$HOME/Library/LaunchAgents"
+
+cat > "$PLIST" <<'PLIST_EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>local.dark-notify</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/dark-notify</string>
+    <string>-c</string>
+    <string>/opt/homebrew/bin/fish -c 'theme-sync'</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+</dict>
+</plist>
+PLIST_EOF
+
+launchctl bootout "gui/$(id -u)/local.dark-notify" 2>/dev/null || true
+launchctl bootstrap "gui/$(id -u)" "$PLIST"
