@@ -338,8 +338,8 @@ herdr config reset-keys            # back up and strip custom keybindings
 | Setting                            | Value              | Reason                                                     |
 |------------------------------------+--------------------+------------------------------------------------------------|
 | =keys.prefix=                      | =ctrl+a=           | Reuses existing muscle memory; Ghostty gave up the leader   |
-| =theme.name=                       | =terminal=         | Inherits Ghostty's everforest palette; Herdr ships no Everforest |
-| =ui.accent=                        | =green=            | Everforest's signature                                      |
+| =theme.name=                       | =terminal=         | Inherits Ghostty's Kanagawa palette, and its light/dark switch |
+| =ui.accent=                        | =green=            | Reads from the terminal palette                                |
 | =ui.agent_panel_sort=              | =priority=         | Blocked agents float to the top                             |
 | =ui.status_indicators=             | =symbols=          | Distinct glyphs beat color-only dots                        |
 | =ui.window_title=                  | ={workspace} · {tab}= | See below                                                |

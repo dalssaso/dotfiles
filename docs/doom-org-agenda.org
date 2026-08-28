@@ -79,22 +79,22 @@ All capture templates create entries in today's roam daily note under =* Tasks=
 
 ** All Tags
 
-| Tag        | Key | Color   | Everforest | Context  |
-|------------+-----+---------+------------+----------|
-| =@meeting=   | =m=   | Purple  | =#d699b6=    | Work     |
-| =@project=   | =p=   | Red     | =#e67e80=    | Work     |
-| =@review=    | =r=   | Blue    | =#7fbbb3=    | Work     |
-| =@admin=     | =a=   | Orange  | =#e69875=    | Work     |
-| =@pending=   | =w=   | Yellow  | =#dbbc7f=    | Work     |
-| =@report=    | =d=   | Grey    | =#9da9a0=    | Work     |
-| =@home=      | =h=   | Aqua    | =#83c092=    | Personal |
-| =@errands=   | =e=   | Green   | =#a7c080=    | Personal |
-| =@online=    | =o=   | Blue    | =#7fbbb3=    | Personal |
-| =@health=    | =H=   | Red     | =#e67e80=    | Personal |
-| =@finance=   | =f=   | Yellow  | =#dbbc7f=    | Personal |
-| =@someday=   | =s=   | Dim grey | =#859289=   | Personal |
-| =@waiting=   | =W=   | Aqua    | =#83c092=    | Personal |
-| =@learning=  | =l=   | Blue    | =#7fbbb3=    | Personal |
+| Tag         | Key | Color    | Kanagawa  | Context  |
+|-------------+-----+----------+-----------+----------|
+| =@meeting=  | =m= | Purple   | =#a292a3= | Work     |
+| =@project=  | =p= | Red      | =#c4746e= | Work     |
+| =@review=   | =r= | Blue     | =#8ba4b0= | Work     |
+| =@admin=    | =a= | Orange   | =#b6927b= | Work     |
+| =@pending=  | =w= | Yellow   | =#c4b28a= | Work     |
+| =@report=   | =d= | Grey     | =#a6a69c= | Work     |
+| =@home=     | =h= | Aqua     | =#8ea4a2= | Personal |
+| =@errands=  | =e= | Green    | =#8a9a7b= | Personal |
+| =@online=   | =o= | Blue     | =#8ba4b0= | Personal |
+| =@health=   | =H= | Red      | =#c4746e= | Personal |
+| =@finance=  | =f= | Yellow   | =#c4b28a= | Personal |
+| =@someday=  | =s= | Dim grey | =#7a8382= | Personal |
+| =@waiting=  | =W= | Aqua     | =#8ea4a2= | Personal |
+| =@learning= | =l= | Blue     | =#8ba4b0= | Personal |
 
 * Visual Styling
 
@@ -212,7 +212,7 @@ refiled to area notes for longer-term tracking:
 ** Adding a New Tag
 
 1. Add the tag to =org-tag-alist= in =config.org= (pick an unused key)
-2. Add a face to =org-tag-faces= with an Everforest color
+2. Add a face to =org-tag-faces= with a Kanagawa Dragon color
 3. Add a super-agenda group in the Overview command's =alltodo= block
 4. Add a capture template if quick-capture is wanted
 5. Optionally add a category icon mapping
@@ -224,17 +224,17 @@ Add an entry to the =org-super-agenda-groups= list in the Overview command.
 Groups are matched in order — first match wins. Use =:order= to control
 display position.
 
-** Everforest Palette Quick Reference
+** Kanagawa Palette Quick Reference
 
 | Name   | Hex       |
 |--------+-----------|
-| red    | =#e67e80=   |
-| orange | =#e69875=   |
-| yellow | =#dbbc7f=   |
-| green  | =#a7c080=   |
-| aqua   | =#83c092=   |
-| blue   | =#7fbbb3=   |
-| purple | =#d699b6=   |
-| grey0  | =#7a8478=   |
-| grey1  | =#859289=   |
-| grey2  | =#9da9a0=   |
+| red    | =#c4746e= |
+| orange | =#b6927b= |
+| yellow | =#c4b28a= |
+| green  | =#8a9a7b= |
+| aqua   | =#8ea4a2= |
+| blue   | =#8ba4b0= |
+| purple | =#a292a3= |
+| grey0  | =#7a8478= |
+| grey1  | =#7a8382= |
+| grey1  | =#a6a69c= |

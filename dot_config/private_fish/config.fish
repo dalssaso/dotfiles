@@ -86,7 +86,6 @@ set -gx BAT_THEME_LIGHT "Kanagawa Lotus"
 # Emacs as default editor - opens floating frame for git commits etc.
 # Frame closes automatically when editing is done (C-c C-c or save+quit)
 set -xg EDITOR "emacsclient -c -a '' -F '((name . \"Editor\") (width . 80) (height . 25))'"
-# set -xg LS_COLORS (vivid generate catppuccin-mocha)  # Disabled: using eza theme.yml
 set -xg VISUAL $EDITOR
 set -xg GOPATH $HOME/go
 set -xg GPG_TTY (tty)
