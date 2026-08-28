@@ -24,6 +24,7 @@ function theme-sync --description 'Point every themed tool at the Kanagawa varia
     set -Ux STARSHIP_CONFIG ~/.config/starship-$pal.toml
     set -Ux EZA_CONFIG_DIR ~/.config/eza-$pal
     set -Ux __theme_btm_config ~/.config/bottom/bottom-$pal.toml
+    set -Ux FZF_DEFAULT_OPTS_FILE ~/.config/fzf-$pal.conf
 
     set -l skins ~/Library/Application\ Support/k9s/skins
     if test -d "$skins"

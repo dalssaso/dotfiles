@@ -28,6 +28,12 @@ function theme-doctor --description 'Report the resolved theme of every themed t
         printf '%-10s %s\n' bottom '__theme_btm_config unset'
     end
 
+    if set -q FZF_DEFAULT_OPTS_FILE
+        printf '%-10s %s\n' fzf (basename "$FZF_DEFAULT_OPTS_FILE")
+    else
+        printf '%-10s %s\n' fzf 'FZF_DEFAULT_OPTS_FILE unset'
+    end
+
     set -l k9s_skin ~/Library/Application\ Support/k9s/skins/kanagawa.yaml
     if test -L "$k9s_skin"
         printf '%-10s %s\n' k9s (readlink "$k9s_skin")
