@@ -27,6 +27,9 @@ function theme-sync --description 'Point every themed tool at the Ayu variant fo
     for var in STARSHIP_CONFIG EZA_CONFIG_DIR __theme_btm_config FZF_DEFAULT_OPTS_FILE
         set -e -g $var 2>/dev/null; or true
     end
+    # fzf applies FZF_DEFAULT_OPTS after FZF_DEFAULT_OPTS_FILE, so an inherited
+    # stale copy silently overrides the theme file. Erase it.
+    set -e -g FZF_DEFAULT_OPTS 2>/dev/null; or true
 
     set -Ux STARSHIP_CONFIG ~/.config/starship-$variant.toml
     set -Ux EZA_CONFIG_DIR ~/.config/eza-$variant

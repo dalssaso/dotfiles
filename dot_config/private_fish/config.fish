@@ -90,6 +90,9 @@ set -gx BAT_THEME_LIGHT "Ayu Light"
 for var in STARSHIP_CONFIG EZA_CONFIG_DIR __theme_btm_config FZF_DEFAULT_OPTS_FILE
     set -e -g $var 2>/dev/null; or true
 end
+# fzf applies FZF_DEFAULT_OPTS after FZF_DEFAULT_OPTS_FILE, so an inherited
+# stale copy silently overrides the theme file. Erase it.
+set -e -g FZF_DEFAULT_OPTS 2>/dev/null; or true
 # Emacs as default editor - opens floating frame for git commits etc.
 # Frame closes automatically when editing is done (C-c C-c or save+quit)
 set -xg EDITOR "emacsclient -c -a '' -F '((name . \"Editor\") (width . 80) (height . 25))'"
