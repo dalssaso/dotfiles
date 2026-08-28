@@ -158,7 +158,7 @@ Scripts in `.chezmoiscripts/darwin/` run automatically:
 - `run_once_after_install-mise.fish` - Installs mise version manager
 - `run_once_after_install-rust.fish` - Installs Rust toolchain
 - `run_once_after_install-tpm.fish` - Installs Tmux Plugin Manager
-- `run_once_after_bat-cache-build.fish` - Builds bat cache
+- `run_onchange_after_20-bat-cache.sh.tmpl` - Rebuilds bat cache when a theme changes
 - `run_once_after_enable-fish-vi-keybindings.fish` - Enables vi keybindings
 - `run_once_after_fish-pieces-config.fish` - Configures Fish Pieces
 - `run_once_after_macos_settings.sh` - Applies macOS system preferences
