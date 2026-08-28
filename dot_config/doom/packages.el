@@ -53,9 +53,9 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 
-;; Everforest theme
-(package! doom-everforest-theme
-  :recipe (:host github :repo "Cardoso1994/doom-everforest-theme"))
+;; Kanagawa theme (not in doom-themes)
+(package! kanagawa-themes
+  :recipe (:host github :repo "Fabiokleis/kanagawa-emacs"))
 (package! wakatime-mode)
 
 ;; Org visual enhancements
