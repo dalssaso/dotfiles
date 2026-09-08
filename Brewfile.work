@@ -1,5 +1,7 @@
 # asdf
 tap "argoproj/tap"
+tap "loft-sh/tap"
+tap "tilt-dev/tap"
 
 cask "swiftbar"
 cask "google-drive"
@@ -20,4 +22,6 @@ brew "openjdk@11"
 brew "skaffold"
 brew "steampipe"
 brew "temporal"
+brew "tilt"
+brew "tilt-dev/tap/ctlptl"
 brew "velero"
