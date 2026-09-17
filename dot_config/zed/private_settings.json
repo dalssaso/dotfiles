@@ -28,7 +28,8 @@
   "buffer_font_size": 15,
   "theme": {
     "mode": "system",
-    "light": "Ayu Light",
-    "dark": "Ayu Mirage",
+    "light": "Kanagawa Lotus",
+    "dark": "Kanagawa Wave",
   },
+  "auto_install_extensions": { "kanagawa-themes": true },
 }
