@@ -14,6 +14,7 @@ blue: &blue "{{ .blue }}"
 purple: &purple "{{ .purple }}"
 grey0: &grey0 "{{ .grey0 }}"
 grey1: &grey1 "{{ .grey1 }}"
+accent: &accent "{{ .accent }}"
 
 text: &text "{{ .fg }}"
 base: &base "{{ .bg0 }}"
@@ -25,14 +26,14 @@ k9s:
   body:
     fgColor: *text
     bgColor: *base
-    logoColor: *green
+    logoColor: *accent
   prompt:
     fgColor: *text
     bgColor: *base
-    suggestColor: *green
+    suggestColor: *accent
     border:
       command: *orange
-      default: *blue
+      default: *accent
   info:
     fgColor: *green
     sectionColor: *text
@@ -40,9 +41,9 @@ k9s:
     fgColor: *text
     bgColor: *base
     buttonFgColor: *text
-    buttonBgColor: *green
+    buttonBgColor: *accent
     buttonFocusFgColor: *yellow
-    buttonFocusBgColor: *green
+    buttonFocusBgColor: *accent
     labelFgColor: *yellow
     fieldFgColor: *text
   frame:
@@ -51,8 +52,8 @@ k9s:
       focusColor: *overlay
     menu:
       fgColor: *text
-      keyColor: *green
-      numKeyColor: *green
+      keyColor: *accent
+      numKeyColor: *accent
     crumbs:
       fgColor: *text
       bgColor: *overlay
@@ -69,8 +70,8 @@ k9s:
       fgColor: *text
       bgColor: *overlay
       highlightColor: *yellow
-      counterColor: *green
-      filterColor: *green
+      counterColor: *accent
+      filterColor: *accent
   views:
     charts:
       bgColor: default
