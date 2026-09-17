@@ -43,7 +43,6 @@ Library/Application Support/k9s/skins/tokyonight.yaml
 .config/fzf-lotus.conf
 .config/bat/themes/Kanagawa Dragon.tmTheme
 .config/bat/themes/Kanagawa Lotus.tmTheme
-.config/doom/kanagawa-palette.el
 Library/Application Support/k9s/skins/kanagawa.yaml
 Library/Application Support/k9s/skins/kanagawa-dragon.yaml
 Library/Application Support/k9s/skins/kanagawa-lotus.yaml
