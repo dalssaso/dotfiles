@@ -60,14 +60,14 @@ comments/doc strings. Symbol font stays MesloLGS Nerd Font Mono.
 
 ** Theme
 
-Ayu theme, Mirage variant by default.
+Kanagawa theme, Wave variant by default.
 
 #+begin_src emacs-lisp
 ;; Real value set by `hd/theme-apply-appearance' below, from detection.
-(setq doom-theme 'doom-ayu-mirage)
+(setq doom-theme 'kanagawa-wave)
 
 (add-to-list 'load-path doom-user-dir)
-(require 'ayu-palette)
+(require 'kanagawa-palette)
 
 (defface hd/agenda-overdue-face '((t :weight bold)) "Overdue agenda items.")
 (defface hd/agenda-someday-face '((t)) "Someday agenda items.")
@@ -77,7 +77,7 @@ Ayu theme, Mirage variant by default.
 
 (defun hd/apply-org-faces (variant)
   "Rebuild the org face tables for VARIANT (`dark' or `light')."
-  (cl-flet ((c (role) (hd/ayu-color variant role)))
+  (cl-flet ((c (role) (hd/kanagawa-color variant role)))
     (setq org-priority-faces
           `((?A . (:foreground ,(c 'red) :weight bold))
             (?B . (:foreground ,(c 'yellow)))
@@ -119,7 +119,7 @@ Ayu theme, Mirage variant by default.
 (hd/apply-org-faces 'dark)
 
 (defvar hd/current-variant nil
-  "The Ayu variant currently applied, or nil if none yet.")
+  "The Kanagawa variant currently applied, or nil if none yet.")
 
 (defun hd/detect-appearance ()
   "Return `light' or `dark' for the current macOS appearance.
@@ -135,13 +135,13 @@ and leaves it nil, so fall back to asking macOS directly."
         'light)))
 
 (defun hd/theme-apply-appearance (&optional appearance)
-  "Load the Ayu variant matching APPEARANCE (`dark' or `light').
+  "Load the Kanagawa variant matching APPEARANCE (`dark' or `light').
 With no argument, detect the current appearance."
   (interactive)
   (let ((variant (or appearance (hd/detect-appearance))))
     (unless (eq variant hd/current-variant)
       (setq hd/current-variant variant)
-      (setq doom-theme (if (eq variant 'light) 'doom-ayu-light 'doom-ayu-mirage))
+      (setq doom-theme (if (eq variant 'light) 'kanagawa-lotus 'kanagawa-wave))
       (mapc #'disable-theme custom-enabled-themes)
       (load-theme doom-theme t)
       (hd/apply-org-faces variant))))
@@ -1129,7 +1129,7 @@ Define tag shortcuts for fast tagging.
 
 ** Tag Faces
 
-Colored tag pills matching the active Ayu variant. Set by
+Colored tag pills matching the active Kanagawa variant. Set by
 =hd/apply-org-faces= (see Theme section).
 
 ** Capture Templates
