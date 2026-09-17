@@ -42,8 +42,6 @@ Library/Application Support/k9s/skins/tokyonight.yaml
 .config/fzf-dragon.conf
 .config/fzf-lotus.conf
 .config/bat/themes/Kanagawa Dragon.tmTheme
-.config/bat/themes/Kanagawa Lotus.tmTheme
-Library/Application Support/k9s/skins/kanagawa.yaml
 Library/Application Support/k9s/skins/kanagawa-dragon.yaml
 Library/Application Support/k9s/skins/kanagawa-lotus.yaml
 .config/bat/themes/Ayu Mirage.tmTheme

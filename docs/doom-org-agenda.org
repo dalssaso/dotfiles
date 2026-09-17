@@ -212,7 +212,7 @@ refiled to area notes for longer-term tracking:
 ** Adding a New Tag
 
 1. Add the tag to =org-tag-alist= in =config.org= (pick an unused key)
-2. Add a face to =org-tag-faces= with an Kanagawa Wave color
+2. Add a face to =org-tag-faces= with a Kanagawa Wave color
 3. Add a super-agenda group in the Overview command's =alltodo= block
 4. Add a capture template if quick-capture is wanted
 5. Optionally add a category icon mapping
