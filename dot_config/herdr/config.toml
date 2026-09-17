@@ -39,7 +39,7 @@ resize_pane_up = "ctrl+shift+k"
 resize_pane_right = "ctrl+shift+l"
 
 [ui]
-accent = "green"
+accent = "blue"
 
 # Sort the sidebar as an attention queue so blocked agents float to the top,
 # which is what makes next_agent/previous_agent useful.
