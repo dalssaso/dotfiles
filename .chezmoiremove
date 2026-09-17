@@ -44,7 +44,6 @@ Library/Application Support/k9s/skins/tokyonight.yaml
 .config/bat/themes/Kanagawa Dragon.tmTheme
 .config/bat/themes/Kanagawa Lotus.tmTheme
 .config/doom/kanagawa-palette.el
-.config/nvim/lua/plugins/kanagawa.lua
 Library/Application Support/k9s/skins/kanagawa.yaml
 Library/Application Support/k9s/skins/kanagawa-dragon.yaml
 Library/Application Support/k9s/skins/kanagawa-lotus.yaml
