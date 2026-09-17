@@ -46,3 +46,12 @@ Library/Application Support/k9s/skins/tokyonight.yaml
 Library/Application Support/k9s/skins/kanagawa.yaml
 Library/Application Support/k9s/skins/kanagawa-dragon.yaml
 Library/Application Support/k9s/skins/kanagawa-lotus.yaml
+.config/bat/themes/Ayu Mirage.tmTheme
+.config/bat/themes/Ayu Light.tmTheme
+.config/doom/ayu-palette.el
+.config/nvim/lua/plugins/ayu.lua
+.config/halloy/themes/ayu-dark.toml
+.config/halloy/themes/ayu-light.toml
+Library/Application Support/k9s/skins/ayu.yaml
+Library/Application Support/k9s/skins/ayu-dark.yaml
+Library/Application Support/k9s/skins/ayu-light.yaml
