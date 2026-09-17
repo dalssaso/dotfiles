@@ -81,8 +81,8 @@ set fish_greeting
 
 # Unset BAT_THEME so bat's `auto` detection picks between these two.
 set -e BAT_THEME
-set -gx BAT_THEME_DARK "Ayu Mirage"
-set -gx BAT_THEME_LIGHT "Ayu Light"
+set -gx BAT_THEME_DARK "Kanagawa Wave"
+set -gx BAT_THEME_LIGHT "Kanagawa Lotus"
 
 # theme-sync sets these as universals. An inherited exported copy lands in
 # global scope here, and a global shadows a universal, so a nested fish

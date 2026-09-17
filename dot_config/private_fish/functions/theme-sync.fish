@@ -1,4 +1,4 @@
-function theme-sync --description 'Point every themed tool at the Ayu variant for the current appearance'
+function theme-sync --description 'Point every themed tool at the Kanagawa variant for the current appearance'
     set -l variant $argv[1]
 
     if test -z "$variant"
@@ -38,12 +38,12 @@ function theme-sync --description 'Point every themed tool at the Ayu variant fo
 
     set -l skins ~/Library/Application\ Support/k9s/skins
     if test -d "$skins"
-        ln -sfn ayu-$variant.yaml $skins/ayu.yaml
+        ln -sfn kanagawa-$variant.yaml $skins/kanagawa.yaml
     end
 
     for sock in $TMPDIR/nvim.$USER/*/nvim.*.0
         test -S "$sock"; or continue
-        timeout 2 nvim --server "$sock" --remote-expr "execute('set background=$variant | colorscheme ayu')" >/dev/null 2>&1
+        timeout 2 nvim --server "$sock" --remote-expr "execute('set background=$variant | colorscheme kanagawa')" >/dev/null 2>&1
     end
 
     return 0
