@@ -42,13 +42,13 @@ function theme-doctor --description 'Report the resolved theme of every themed t
         printf '%-10s %s\n' fzf 'FZF_DEFAULT_OPTS_FILE unset'
     end
 
-    set -l k9s_skin ~/Library/Application\ Support/k9s/skins/ayu.yaml
+    set -l k9s_skin ~/Library/Application\ Support/k9s/skins/kanagawa.yaml
     if test -L "$k9s_skin"
         set -l target (readlink "$k9s_skin")
         test -e "$k9s_skin"; or set target "$target (MISSING)"
         printf '%-10s %s\n' k9s $target
     else
-        printf '%-10s %s\n' k9s 'ayu.yaml symlink missing'
+        printf '%-10s %s\n' k9s 'kanagawa.yaml symlink missing'
     end
 
     # Probe a RUNNING nvim, not a fresh headless one. A headless nvim has no
@@ -73,5 +73,5 @@ function theme-doctor --description 'Report the resolved theme of every themed t
 
     echo
     echo "every line above must reflect '$expected' (ghostty names both; nvim names dark/light;"
-    echo "bat and doom show theme display names, not the token -- dark = Mirage, light = Light)"
+    echo "bat and doom show theme display names, not the token -- dark = Wave, light = Lotus)"
 end

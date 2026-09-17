@@ -2,7 +2,7 @@
 # The themes are generated from .chezmoidata/palette.toml, so hash the RENDERED
 # output. Hashing the template source would never change when the palette does,
 # and bat would silently keep serving a stale cache.
-# bat theme hash: {{ includeTemplate "bat-theme.tmpl" (dict "name" "Ayu Mirage" "slug" "mirage" "uuid" "8f3a1c02d94b47e6ae51b7c0d2f68a35" "p" .palette.dark) | sha256sum }}
-# bat theme hash: {{ includeTemplate "bat-theme.tmpl" (dict "name" "Ayu Light" "slug" "light" "uuid" "c47e920b6d1f4a83b5e07c92f81d3a64" "p" .palette.light) | sha256sum }}
+# bat theme hash: {{ includeTemplate "bat-theme.tmpl" (dict "name" "Kanagawa Wave" "slug" "wave" "uuid" "c28c85eefbfb4ac28a57c9711e135172" "p" .palette.dark) | sha256sum }}
+# bat theme hash: {{ includeTemplate "bat-theme.tmpl" (dict "name" "Kanagawa Lotus" "slug" "lotus" "uuid" "ac5d84cfd3924a3bb7f4a18c2957f556" "p" .palette.light) | sha256sum }}
 set -eu
 bat cache --build
