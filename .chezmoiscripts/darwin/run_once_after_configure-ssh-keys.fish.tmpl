@@ -23,4 +23,9 @@ op item get 'SSH - GetTheForkOff' --reveal --fields 'private key' | sed '1{/^"/d
 op item get 'SSH - GetTheForkOff' --fields 'public key' >~/.ssh/oss.pub
 chmod 600 ~/.ssh/oss
 
+# Personal-only: alt key
+op item get 'SSH - Alt' --reveal --fields 'private key' | sed '1{/^"/d};$ {/^"/d}' >~/.ssh/alt
+op item get 'SSH - Alt' --fields 'public key' >~/.ssh/alt.pub
+chmod 600 ~/.ssh/alt
+
 {{ end -}}

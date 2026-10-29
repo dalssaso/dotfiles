@@ -18,4 +18,11 @@ op item get 'GPG Work' --fields public --format json | jq .value -r | gpg --impo
 
 set -l gpg_work_private_id (gpg --list-secret-keys --with-colons {{ .workEmail }} | awk -F: '/^sec/ {print $5}')
 expect -c "spawn gpg --edit-key $gpg_work_private_id trust quit; send \"5\ry\r\"; expect eof"
+{{ else -}}
+# Alt GPG key - personal machines only
+op item get 'GPG Alt' --fields private --format json | jq .value -r | gpg --import
+op item get 'GPG Alt' --fields public --format json | jq .value -r | gpg --import
+
+set -l gpg_alt_private_id (op item get 'GPG Alt' --fields public --format json | jq .value -r | gpg --with-colons --import-options show-only --import | awk -F: '/^pub/ {print $5}')
+expect -c "spawn gpg --edit-key $gpg_alt_private_id trust quit; send \"5\ry\r\"; expect eof"
 {{ end -}}
